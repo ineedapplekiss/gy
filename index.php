@@ -20,10 +20,6 @@ header('Cache-Control:no-cache');
 header('Pragma:no-cache');
 header('Expires:-1');
 
-//设置时区
-date_default_timezone_set('Asia/Shanghai');
-
-
 // 开启调试模式 建议开发阶段开启 部署阶段注释或者设为false
 define('APP_DEBUG',True);
 define('BIND_MODULE', 'Admin');

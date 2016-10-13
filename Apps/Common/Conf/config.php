@@ -3,6 +3,9 @@
 	$config=array(
 		//'配置项'=>'配置值'
 			'DEFAULT_AJAX_RETURN'=>'JSON',
+			'DEFAULT_TIMEZONE'	=>  'Asia/Shanghai',  // 默认时区
+			'COOKIE_EXPIRE'         =>  0,    // Cookie有效期
+			'COOKIE_PATH'           =>  '/',     // Cookie路径
 			'SHOW_PAGE_TRACE'=>true,    // 显示页面Trace信息
 			'URL_MODEL'=>'2', //URL模式
 			'URL_CASE_INSENSITIVE'=>false, //URL访问不再区分大小写
