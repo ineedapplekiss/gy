@@ -5,7 +5,11 @@ class CheckInputController extends Controller{
     public function in($CnName,$name,$CheckType, $default=NULL, $LengMin=0,$LengMax=0){
 		$res=CheckInputFunc($CnName, $name, $CheckType, $default, $LengMin, $LengMax);
 		if($res['ok']==false){
-			$this->error($res['error']);
+			$return = array();
+			$return['message']= $res['error'];
+			$return['status']=false;
+			$this->ajaxReturn($return);
+			//$this->error($res['error']);
 		}
 		return $res['data'];
 	}
