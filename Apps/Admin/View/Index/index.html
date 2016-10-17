@@ -38,9 +38,10 @@
 	<div class="easyui-layout" id="layout" data-options="fit:true">
 		<div  data-options="region:'north'" border="false" >
 			<div class="topLine">
-							<p class="fl"><span class="icon icon-users">&nbsp;</span>用户：管理员({$Think.session.username})&nbsp;&nbsp;&nbsp;<span class="icon icon-role">&nbsp;</span>角色：{$Think.session.gname}&nbsp;&nbsp;&nbsp;<span class="icon icon-clock">&nbsp;</span>登陆时间：{$Think.session.logintime|date='Y-m-d H:i:s',###}</p>
+							<p class="fl"><span class="icon icon-users">&nbsp;</span>用户：管理员({$Think.session.username})&nbsp;&nbsp;&nbsp;<span class="icon icon-role">&nbsp;</span>角色：{$Think.session.gname}&nbsp;&nbsp;&nbsp;<span class="icon icon-clock">&nbsp;</span>登录时间：{$Think.session.logintime|date='Y-m-d H:i:s',###}</p>
 							<p class="fr">
 								<span class="icon icon-arrow_refresh">&nbsp;</span><a  title="更新缓存" href="javascript:void(0)" onclick="clearCache()">更新缓存</a>
+								<span class="icon icon-set">&nbsp;</span>当前店铺：{$Think.session.curshopname}<a title="设置" href="javascript:void(0)" onclick="ShopSelect()">切换店铺</a>
 								<span class="icon icon-door_out">&nbsp;</span><a title="退出" href="javascript:void(0)" onclick="logout()">退出</a>
 							</p>
 			</div>
@@ -70,17 +71,25 @@
 	 
 		<div id="黄药师Tabs" class="easyui-tabs" data-options="region:'center',border:'false'">
 		    <div title="首页" style="padding:10px">
-	            <p style="font-size:14px">jQuery EasyUI framework helps you build your web pages easily.</p>
+	            <p style="font-size:14px">欢迎你，{$Think.session.username}</p>
 	            <ul>
-	                <li>easyui is a collection of user-interface plugin based on jQuery.</li>
-	                <li>easyui provides essential functionality for building modem, interactive, javascript applications.</li>
-	                <li>using easyui you don't need to write many javascript code, you usually defines user-interface by writing some HTML markup.</li>
-	                <li>complete framework for HTML5 web page.</li>
-	                <li>easyui save your time and scales while developing your products.</li>
-	                <li>easyui is very easy but powerful.</li>
+	                <li>当前店铺：{$Think.session.curshopname}</li>
+	                <li>上次登录时间：{$Think.session.logintime|date='Y-m-d H:i:s',###}</li>
 	            </ul>	            
 	       	</div>
 		</div>
+
+		<!-- 店铺选择 -->
+	    <div id="ShopSelect" class="easyui-dialog" style="padding:10px 20px;width:500px;"
+	            closed="true" buttons="#ShopSelectSetButtons" modal="true">
+	        <ul id="ShopSelectSetTree"></ul>
+	    </div>
+	    <!-- /店铺选择 -->
+	    <div id="ShopSelectSetButtons">
+	        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="ShopSelectSet()" style="width:90px">保存</a>
+	        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#ShopSelect').dialog('close')" style="width:90px">取消</a>
+	    </div>  
+
 	<script type="text/javascript">
 		//退出
 		function logout(){
@@ -107,6 +116,56 @@
                 	
                 }
             });
+		}
+
+
+		//选择商铺
+		function ShopSelect(){
+			$('#ShopSelectSetTree').tree({
+		    	url:"{:U('Auth/shopAccessList')}",
+		    	// checkbox:true,
+		    	// checkOnSelect:true,
+		    	lines:true,
+		    	// onlyLeafCheck:true,
+		    	onLoadError:function(data){
+		    		var info=eval('('+data.responseText+')');
+					$.messager.confirm('错误提示',info.message,function(r){
+						$('#authShopAccessSetDialog').dialog('close');
+					});
+		    	}
+		    });	
+		    $('#ShopSelect').dialog({
+				title:'选择商铺&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+				resizable:true,
+				onClose:function(){
+					$('#ShopSelectSetTree').tree('collapseAll');
+				}
+			}).dialog('open');
+		} 
+		function ShopSelectSet(){
+			var url='{:U('Index/ShopSelect')}';
+
+			var row=$('#ShopSelectSetTree').tree('getSelected');
+			if (row){
+		    	$.post(url,{id:row.id,shop_name:row.text},function(result){
+		            if (result.status){
+		                $('#ShopSelect').dialog('close');
+		                $.messager.confirm('提示消息','切换店铺成功!',function(r){location.href="{:U('Index/index')}";}); 
+		            }else{
+		                $.messager.alert('错误提示',result.message,'error');
+		            }
+		        },'json').error(function(data){
+		        	var info=eval('('+data.responseText+')');
+					$.messager.confirm('错误提示',info.message,function(r){
+						$('#ShopSelect').dialog('close');
+					});
+		        });
+            }
+            else
+            {
+                $.messager.confirm('错误提示',"请选择一个商铺");
+            }
+
 		}
 	</script>
 
