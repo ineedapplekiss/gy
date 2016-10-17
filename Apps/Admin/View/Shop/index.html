@@ -1,5 +1,5 @@
 <body>
-    <table id="dg" title="商铺列表" class="easyui-datagrid" style="width:100%;" url="{:U('Shop/shopList')}"  toolbar="#toolbar" pagination="true" pageSize='15' pageNumber='1' multiSort='true' sortOrder="desc" pageList="[2,5,10,15,20,25,30,40,50]" rownumbers="true" fitColumns="true" singleSelect="true">
+    <table id="shopdg" title="商铺列表" class="easyui-datagrid" style="width:100%;" url="{:U('Shop/shopList')}"  toolbar="#shoptoolbar" pagination="true" pageSize='15' pageNumber='1' multiSort='true' sortOrder="desc" pageList="[2,5,10,15,20,25,30,40,50]" rownumbers="true" fitColumns="true" singleSelect="true">
         <thead>
             <tr>
                 <th field="id" width="10" sortable="true">序号</th>
@@ -13,12 +13,12 @@
         </thead>
     </table>
 
-    <div id="toolbar">
+    <div id="shoptoolbar">
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newShop()">添加</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editShop()">编辑</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyShop()">删除</a>
        
-        <form id="fmSearch" method="post" novalidate style="display:inline-block;margin-left:50px;">
+        <form id="shopSearch" method="post" novalidate style="display:inline-block;margin-left:50px;">
              <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon icon-all" plain="true" onclick="showAll()">全部</a>     
             <input id='searchBox' class="easyui-searchbox" data-options="height:30,menu:'#searchboxSelect',searcher:doSearch"  style="width:300px"/>
                 <div id="searchboxSelect">
@@ -30,9 +30,9 @@
     </div>
     
     <!-- 店铺添加 -->
-    <div id="dlg" class="easyui-dialog" title="添加店铺" style="width:400px;padding:10px 20px"
-            closed="true" buttons="#dlg-buttons"  modal="true">
-        <form id="fm" method="post" novalidate>
+    <div id="shopadddlg" class="easyui-dialog" title="添加店铺" style="width:400px;padding:10px 20px"
+            closed="true" buttons="#shopdlg-buttons"  modal="true">
+        <form id="shopadd" method="post" novalidate>
             <div class="fitem">
                 <label>店铺名称</label>
                 <input name="shop_name" class="easyui-textbox" data-options="delay:1000,required:true,height:30,validType:['length[4,20]','exists[\'店铺名称\',\'{:U('Shop/checkShop','','')}\']']" />
@@ -57,14 +57,14 @@
     </div>
     
     <!-- 店铺编辑 -->
-    <div id="dlgEdit" class="easyui-dialog" style="padding:10px 20px;width:500px;"
-            closed="true" buttons="#dlgEdit-buttons" modal="true">
-        <form id="fmEdit" method="post" novalidate>
+    <div id="shopdlgEdit" class="easyui-dialog" style="padding:10px 20px;width:500px;"
+            closed="true" buttons="#shopdlgEdit-buttons" modal="true">
+        <form id="shopEdit" method="post" novalidate>
             <div class="easyui-panel" title="基本信息" style="padding:5px;">
                 <div class="fitem">
                     <label>店铺名称:</label>
                     <input name='id' id="ShopId" type="hidden" />
-                    <input name="shop_name" class="easyui-textbox" data-options="delay:1000,height:30, required:true, validType:['length[4,20]', 'exists[\'店铺名称\',\'{:U('Shop/checkShop','','')}\']']">
+                    <input name="shop_name" class="easyui-textbox" data-options="delay:1000,height:30, required:true, validType:['length[4,20]']">
                 </div>
                 <div class="fitem">
                     <label>联系人</label>
@@ -87,16 +87,16 @@
     </div>
 
     <!-- 添加店铺 -->
-    <div id="dlg-buttons">
+    <div id="shopdlg-buttons">
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="addShop()" style="width:90px">添加</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">取消</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#shopadddlg').dialog('close')" style="width:90px">取消</a>
     </div>
     <!-- /添加店铺 -->  
 
     <!-- 店铺编辑 -->
-    <div id="dlgEdit-buttons">
+    <div id="shopdlgEdit-buttons">
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveShop()" style="width:90px">保存</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlgEdit').dialog('close')" style="width:90px">取消</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#shopdlgEdit').dialog('close')" style="width:90px">取消</a>
     </div>
     <!-- /店铺编辑 -->
 
@@ -104,17 +104,17 @@
         var url;
         //添加店铺对话窗
         function newShop(){
-            $('#dlg').dialog('open').dialog('setTitle','添加店铺');
-            $('#fm').form('clear');
+            $('#shopadddlg').dialog('open').dialog('setTitle','添加店铺');
+            $('#shopadd').form('clear');
             url ="{:U('Shop/addHandle')}";
         }
 
         //编辑店铺对话窗
         function editShop(){
-            var row = $('#dg').datagrid('getSelected');
+            var row = $('#shopdg').datagrid('getSelected');
             if (row){
-                $('#dlgEdit').dialog('open').dialog('setTitle','编辑店铺');
-                $('#fmEdit').form('load',row);
+                $('#shopdlgEdit').dialog('open').dialog('setTitle','编辑店铺');
+                $('#shopEdit').form('load',row);
                 url ="{:U('Shop/editHandle','','')}"+'?id='+row.id;
             }
             else
@@ -125,7 +125,7 @@
 
         //添加店铺
         function addShop(){
-            $('#fm').form('submit',{
+            $('#shopadd').form('submit',{
                 url: url,
                 onSubmit: function(){
                     return $(this).form('validate');
@@ -134,11 +134,11 @@
                      var result=eval('('+result+')');
                     if (!result.status){
                         $.messager.confirm('错误提示',result.message,function(r){
-                            $('#dlg').dialog('close');  
+                            $('#shopadddlg').dialog('close');  
                         });
                     } else {
-                        $('#dlg').dialog('close');        // close the dialog
-                        $('#dg').datagrid('reload');    // reload the user data
+                        $('#shopadddlg').dialog('close');        // close the dialog
+                        $('#shopdg').datagrid('reload');    // reload the user data
                     }
                 }
             });
@@ -146,7 +146,7 @@
 
         //编辑店铺
         function saveShop(){
-            $('#fmEdit').form('submit',{
+            $('#shopEdit').form('submit',{
                 url: url,
                 onSubmit: function(){
                     return $(this).form('validate');
@@ -155,11 +155,11 @@
                      var result=eval('('+result+')');
                     if (!result.status){
                         $.messager.confirm('错误提示',result.message,function(r){
-                            $('#dlgEdit').dialog('close');  
+                            $('#shopdlgEdit').dialog('close');  
                         });
                     }else{
-                        $('#dlgEdit').dialog('close');        // close the dialog
-                        $('#dg').datagrid('reload');    // reload the user data
+                        $('#shopdlgEdit').dialog('close');        // close the dialog
+                        $('#shopdg').datagrid('reload');    // reload the user data
                     }
                 }
             });
@@ -167,14 +167,14 @@
 
         //删除店铺
         function destroyShop(){
-            var row = $('#dg').datagrid('getSelected');
+            var row = $('#shopdg').datagrid('getSelected');
             if (row){
                 $.messager.confirm('删除提示','真的要删除此店铺吗?',function(r){
                     if (r){
                         var durl='{:U("Shop/delHandle")}';
                         $.post(durl,{id:row.id,M:'m'},function(result){
                             if (result.status){
-                                $('#dg').datagrid('reload');    // reload the user data
+                                $('#shopdg').datagrid('reload');    // reload the user data
                             } else {
                                 $.messager.alert('错误提示',result.message,'error');
                             }
@@ -198,12 +198,12 @@
                 var searchValue=$('#searchBox').searchbox('getValue');
                 switch(searchName){
                     case 'shop_name':
-                        $('#dg').datagrid('load',{
+                        $('#shopdg').datagrid('load',{
                             shop_name:searchValue
                         });
                         break;
                     case 'link_tel':
-                        $('#dg').datagrid({ queryParams:{link_tel:searchValue}});
+                        $('#shopdg').datagrid({ queryParams:{link_tel:searchValue}});
                         break;
                 }
             }
@@ -211,7 +211,7 @@
 
         //显示全部数据
         function showAll(){
-            $('#dg').datagrid({ queryParams:''});
+            $('#shopdg').datagrid({ queryParams:''});
         }
 
        

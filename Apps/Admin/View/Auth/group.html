@@ -4,6 +4,7 @@
         var authGroupDelUrl="{:U('Auth/groupDel')}";
         var authGroupShowUrl="{:U('Auth/groupUserList')}";
 		var authAccessListUrl="{:U('Auth/accessList')}";
+        var authShopAccessListUrl="{:U('Auth/shopAccessList')}";
 		using('../../../default/js/authGroup.js');
 	</script>
 	<table id="authGroupDatagrid"></table>
@@ -73,4 +74,16 @@
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="authGroupObj.set('{:U('Auth/AccessSet')}')" style="width:90px">保存</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#authAccessSetDialog').dialog('close')" style="width:90px">取消</a>
     </div>    
+
+    <!-- 店铺权限设置 -->
+    <div id="authShopAccessSetDialog" class="easyui-dialog" style="padding:10px 20px;width:500px;"
+            closed="true" buttons="#authShopAccessSetButtons" modal="true">
+        <ul id="authShopAccessSetTree"></ul>
+    </div>
+    <!-- /店铺权限设置 -->
+    <div id="authShopAccessSetButtons">
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="authGroupObj.setshop('{:U('Auth/ShopAccessSet')}')" style="width:90px">保存</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#authShopAccessSetDialog').dialog('close')" style="width:90px">取消</a>
+    </div>  
+
 </body>

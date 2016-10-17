@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50552
 File Encoding         : 65001
 
-Date: 2016-10-12 17:20:12
+Date: 2016-10-17 17:23:52
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -88,7 +88,7 @@ CREATE TABLE `think_auth_group` (
   `rules` char(80) NOT NULL DEFAULT '' COMMENT '规则id,和rule表关联',
   `describe` char(50) NOT NULL DEFAULT '' COMMENT '角色组描述',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of think_auth_group
@@ -97,8 +97,28 @@ INSERT INTO `think_auth_group` VALUES ('1', '超级管理员', '1', '', '拥有�
 INSERT INTO `think_auth_group` VALUES ('2', '默认组', '1', '3,7,8,22,23,32,37,39,40,41,42,44', '拥有常用权限');
 INSERT INTO `think_auth_group` VALUES ('3', '网站管理员', '1', '37,38,39,40', '拥有相对多的权限');
 INSERT INTO `think_auth_group` VALUES ('4', '编辑组', '1', '1,2,3,4,8,22,23', '拥有文章模块的所有权限');
-INSERT INTO `think_auth_group` VALUES ('5', '发布人员', '1', '3,4,6,8,22,23,35,36,40,41,42', '拥有发布、修改文章的权限');
-INSERT INTO `think_auth_group` VALUES ('6', '测试组', '1', '37,42', '测试专用组');
+INSERT INTO `think_auth_group` VALUES ('5', '发布人员', '1', '', '拥有发布、修改文章的权限');
+INSERT INTO `think_auth_group` VALUES ('6', '测试组', '1', '6', '测试专用组');
+INSERT INTO `think_auth_group` VALUES ('8', 'shang', '1', '4,6', '111');
+
+-- ----------------------------
+-- Table structure for think_auth_group_2_shop
+-- ----------------------------
+DROP TABLE IF EXISTS `think_auth_group_2_shop`;
+CREATE TABLE `think_auth_group_2_shop` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `title` char(100) NOT NULL DEFAULT '' COMMENT '角色组名称',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态(0:禁用;1:启用)',
+  `rules` char(80) NOT NULL DEFAULT '' COMMENT '商铺,和shop表关联',
+  `describe` char(50) NOT NULL DEFAULT '' COMMENT '角色组描述',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='用户组对应的商铺权限';
+
+-- ----------------------------
+-- Records of think_auth_group_2_shop
+-- ----------------------------
+INSERT INTO `think_auth_group_2_shop` VALUES ('8', '', '1', '6,8', '');
+INSERT INTO `think_auth_group_2_shop` VALUES ('6', '', '1', '6,8,9', '');
 
 -- ----------------------------
 -- Table structure for think_auth_group_access
@@ -145,10 +165,10 @@ INSERT INTO `think_auth_rule` VALUES ('7', 'Admin/Auth/groupAdd', '角色添加'
 INSERT INTO `think_auth_rule` VALUES ('8', 'Admin/Auth/groupSave', '角色更新', '1', '1', '', '17', '');
 INSERT INTO `think_auth_rule` VALUES ('22', 'Admin/Auth/index', '用户管理', '1', '1', '', '17', '');
 INSERT INTO `think_auth_rule` VALUES ('15', '系统模块', '系统模块', '1', '1', '', '0', 'closed');
-INSERT INTO `think_auth_rule` VALUES ('16', '文章模块', '文章模块', '1', '1', '', '0', 'closed');
-INSERT INTO `think_auth_rule` VALUES ('17', '权限模块', '权限模块', '1', '1', '', '0', 'closed');
-INSERT INTO `think_auth_rule` VALUES ('18', '会员模块', '会员模块', '1', '1', '', '0', 'closed');
-INSERT INTO `think_auth_rule` VALUES ('19', '积分模块', '积分模块', '1', '1', '', '0', 'closed');
+INSERT INTO `think_auth_rule` VALUES ('16', '运营模块', '运营模块', '1', '1', '', '0', 'closed');
+INSERT INTO `think_auth_rule` VALUES ('17', '订单模块', '订单模块', '1', '1', '', '0', 'closed');
+INSERT INTO `think_auth_rule` VALUES ('18', '商品模块', '商品模块', '1', '1', '', '0', 'closed');
+INSERT INTO `think_auth_rule` VALUES ('19', '顾客模块', '顾客模块', '1', '1', '', '0', 'closed');
 INSERT INTO `think_auth_rule` VALUES ('20', '其他', '其他', '1', '1', '', '0', 'closed');
 INSERT INTO `think_auth_rule` VALUES ('23', 'Admin/Auth/group', '角色管理', '1', '1', '', '17', '');
 INSERT INTO `think_auth_rule` VALUES ('29', 'Admin/Auth/userSave', '更新用户', '1', '1', '', '17', '');
@@ -188,7 +208,7 @@ CREATE TABLE `think_auth_user` (
 -- ----------------------------
 -- Records of think_auth_user
 -- ----------------------------
-INSERT INTO `think_auth_user` VALUES ('1', 'admin', 'e10adc3949ba59abbe56e057f20f', '192.168.56.1', '1476258957', '4445@126.com', '老黄', '6000', '', '');
+INSERT INTO `think_auth_user` VALUES ('1', 'admin', 'e10adc3949ba59abbe56e057f20f', '192.168.56.1', '1476694031', '4445@126.com', '老黄', '6000', '', '');
 INSERT INTO `think_auth_user` VALUES ('2', 'test001', '8a4cbfd19f0de75b55dae46bad0e', '0.0.0.0', '1422791964', 'xdsd@15.com', '黄生', '0', '', '');
 
 -- ----------------------------
@@ -4092,10 +4112,20 @@ CREATE TABLE `think_shop` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0失效 1正常',
   `add_time` int(10) DEFAULT '0' COMMENT '添加时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `shop_name` (`shop_name`,`status`) USING BTREE,
+  KEY `link_tel` (`link_tel`) USING BTREE,
+  KEY `add_time` (`add_time`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of think_shop
 -- ----------------------------
-INSERT INTO `think_shop` VALUES ('1', 'asd', 'asd', 'asd', '2', '1', '1', '0', '2016-10-10 16:26:04');
+INSERT INTO `think_shop` VALUES ('1', 'asd', 'asd', 'asd', '2', '1', '0', '0', '2016-10-14 15:27:24');
+INSERT INTO `think_shop` VALUES ('3', 'a', 'a', 'a', '0', 'a', '0', '123', '2016-10-14 15:26:54');
+INSERT INTO `think_shop` VALUES ('4', '总店111222', 'GY111', '1313131313', '111111', 'wx111', '1', '1476412578', '2016-10-14 10:55:04');
+INSERT INTO `think_shop` VALUES ('5', 'shang11', 'shang11', '111111', 'asdasd', 'shang11', '0', '1476427871', '2016-10-14 17:38:02');
+INSERT INTO `think_shop` VALUES ('6', 'shang11', 'shang11', '11111111', 'shang11', 'shang11', '1', '1476430147', '2016-10-14 15:29:07');
+INSERT INTO `think_shop` VALUES ('7', 'shang22', 'shang22', '1111', 'shang22', 'shang22', '0', '1476672719', '2016-10-17 11:09:25');
+INSERT INTO `think_shop` VALUES ('8', 'shang33', 'shang331', '121212', 'shang33', 'shang33', '1', '1476672910', '2016-10-17 11:09:14');
+INSERT INTO `think_shop` VALUES ('9', 'shang44', 'shang44', '12312313', 'shang44', 'shang44', '1', '1476673778', '2016-10-17 11:09:38');

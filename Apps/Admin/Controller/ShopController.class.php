@@ -28,7 +28,7 @@ class ShopController extends CommonController {
 
     	!empty($name)?$map['shop_name']=array('like','%'.$name.'%'):'';
     	!empty($mobile)?$map['link_tel']=$mobile:'';
-        $map['status'] = 1;
+        $map['status'] = \Common\Model\ShopModel::STATUS_NORMAL;
 
     	$sort=$ck->in('排序','sort','cnennumstr','id',0,0);
     	$order=$ck->in('规则','order','cnennumstr','desc',0,0);
@@ -134,7 +134,7 @@ class ShopController extends CommonController {
             if($M=='m')
             {
                 $data = array();
-                $data['status'] = 0;
+                $data['status'] = \Common\Model\ShopModel::STATUS_DEL;
                 $status=$member->where($map)->save($data);
             }
 			else{

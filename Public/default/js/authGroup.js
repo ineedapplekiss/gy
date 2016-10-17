@@ -10,8 +10,8 @@ $(function(){
 		pageNumber:1,
 		pageList:[10,15,20,25,30,40,50],
 		columns:[[
-		{field:'title',title:'角色名称'},
-		{field:'describe',title:'角色描述'},
+		{field:'title',title:'角色1名称'},
+		{field:'describe',title:'角色1描述'},
 		{field:'status',title:'状态',formatter:checkYesNo},
 		]],
 		pagination:true,
@@ -64,6 +64,36 @@ $(function(){
 		                    }
 	                	});
             		}
+				}
+			},'-',{
+				iconCls:'icon icon-switch',
+				text:'店铺权限设置',
+				handler:function(){
+					var authGroupRow=$('#authGroupDatagrid').datagrid('getSelected');
+					if (authGroupRow&&authGroupRow.id!=1){
+						$('#authShopAccessSetTree').tree({
+					    	url:authShopAccessListUrl,
+					    	checkbox:true,
+					    	checkOnSelect:true,
+					    	lines:true,
+					    	queryParams:{gid:authGroupRow.id},
+					    	//cascadeCheck:true,
+					    	onlyLeafCheck:true,
+					    	onLoadError:function(data){
+					    		var info=eval('('+data.responseText+')');
+								$.messager.confirm('错误提示',info.message,function(r){
+									$('#authShopAccessSetDialog').dialog('close');
+								});
+					    	}
+					    });	
+					    $('#authShopAccessSetDialog').dialog({
+							title:'店铺权限设置&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当前用户组：<font color="red">'+authGroupRow.title+"</font>",
+							resizable:true,
+							onClose:function(){
+								$('#authShopAccessSetTree').tree('collapseAll');
+							}
+						}).dialog('open');		               
+		            }
 				}
 			},'-',{
 				iconCls:'icon-group_go',
@@ -158,6 +188,28 @@ authGroupObj={
         	var info=eval('('+data.responseText+')');
 			$.messager.confirm('错误提示',info.message,function(r){
 				$('#authAccessSetDialog').dialog('close');
+			});
+        });
+	},
+	setshop:function(url){	
+		var authGroupRow=$('#authGroupDatagrid').datagrid('getSelected');
+		var id=authGroupRow.id;
+		var node=$('#authShopAccessSetTree').tree('getChecked');
+		var rule=[];
+		for(var i=0;i<node.length;i++){
+    		rule.push(node[i].id);
+    	}
+    	var rules=rule.join(',');
+    	$.post(url,{id:id,rules:rules},function(result){
+            if (result.status){
+                $('#authShopAccessSetDialog').dialog('close');
+            }else{
+                $.messager.alert('错误提示',result.message,'error');
+            }
+        },'json').error(function(data){
+        	var info=eval('('+data.responseText+')');
+			$.messager.confirm('错误提示',info.message,function(r){
+				$('#authShopAccessSetDialog').dialog('close');
 			});
         });
 	}

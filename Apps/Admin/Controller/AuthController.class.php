@@ -14,7 +14,6 @@ class AuthController extends CommonController{
     }
 
     public function rule(){
-        //dump($isAuth);
         $authRuleInfo=M()->table(C('DB_PREFIX').'auth_rule')->where(array('pid'=>'0'))->field('id as pid,title')->cache('moduleNameB',300)->select();//查询模块信息 pid=0为模块,否则为规则标识
         $this->assign('authRuleInfo',$authRuleInfo);
         $this->display();
@@ -260,7 +259,7 @@ class AuthController extends CommonController{
         !empty($name)?$map['name']=array('like','%'.$name.'%'):'';
         !empty($title)?$map['title']=$title:'';
 
-        $map['pid']=array('neq','0');
+        //$map['pid']=array('neq','0');
 
         $page=$ck->in('当前页','page','intval','1',0,0);   
         $rows=$ck->in('每页记录数','rows','intval','',0,0);  
@@ -473,6 +472,48 @@ class AuthController extends CommonController{
         if($map['id']=='1'&&empty($map['id'])) exit;//超级管理员或空退出
 
         $result=M()->table(C('DB_PREFIX').'auth_group')->where($map)->save($data);
+        if(false===$result){
+            $return['message']='权限设置失败!';
+            $return['status']=false;  
+        }else{
+            $return['message']='权限设置成功!';
+            $return['status']=true;
+        }        
+        $this->ajaxReturn($return);
+    } 
+
+
+    /**
+     *店铺权限设置列表 
+     * 
+     */
+    public function shopAccessList(){
+        $gid=(int)I('gid');//角色组id
+        $map['status'] = \Common\Model\ShopModel::STATUS_NORMAL;
+        $rules=M()->table(C('DB_PREFIX').'auth_group_2_shop')->where(array('id'=>$gid))->getField('rules');//角色组rules
+        $data=M()->table(C('DB_PREFIX').'shop')->where($map)->field('id,shop_name as text,0 as parentId,status as state')->select();
+        if(!empty($rules)){
+            $arr=explode(',', $rules);
+            foreach ($data as $k=>$v) {
+                if(in_array($v['id'], $arr)){
+                    $v['checked']=true;
+                    $data[$k]=$v;
+                }
+            }
+        }
+        $this->ajaxReturn($data);
+    }
+
+    //更新角色拥有的店铺
+    public function shopAccessSet(){
+        if(!IS_POST) exit; 
+        $ck=A('CheckInput');  
+        $data['rules']=$ck->in('权限列表','rules','string','',0,0);
+        $map['id']=$ck->in('角色组id','id','intval','',1,0);
+        $data['id']=$map['id'];
+        if($map['id']=='1'&&empty($map['id'])) exit;//超级管理员或空退出
+
+        $result=M()->table(C('DB_PREFIX').'auth_group_2_shop')->add($data, $map, true);
         if(false===$result){
             $return['message']='权限设置失败!';
             $return['status']=false;  
