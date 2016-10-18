@@ -161,8 +161,8 @@ class ShopController extends CommonController {
     public function checkShop(){
         if(!IS_POST) exit;
         $ck=A('CheckInput');
-        $map['shop_name']=$ck->in('商铺名称','val','cnennumstr','',0,0);
-        $map['status']=1;   
+        $map['shop_name'] = $ck->in('商铺名称','val','cnennumstr','',0,0);
+        $map['status'] = \Common\Model\ShopModel::STATUS_NORMAL;
 
         $result=M()->table(C('DB_PREFIX').'shop')->where($map)->field('id')->cache('shop'.$map['shop_name'],'60')->find(); 
         if($result) {

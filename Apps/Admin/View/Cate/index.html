@@ -1,0 +1,156 @@
+<body>
+    <table id="catedg" title="分类列表" class="easyui-datagrid" style="width:100%;" url="{:U('Cate/cateList')}"    toolbar="#catetoolbar" pagination="true" pageSize='15' pageNumber='1' multiSort='true' sortOrder="desc" pageList="[2,5,10,15,20,25,30,40,50]" rownumbers="true" fitColumns="true" singleSelect="true">
+        <thead>
+            <tr>
+                <th field="id" width="10" sortable="true">序号</th>
+                <th field="name" width="50" sortable="true">类别</th>
+                <th field="add_time" formatter="timestampToDateTime">添加时间</th>
+            </tr>
+        </thead>
+    </table>
+
+    <div id="catetoolbar">
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newCate()">添加</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editCate()">编辑</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyCate()">删除</a>
+    </div>
+    
+    <!-- 添加 -->
+    <div id="cateadddlg" class="easyui-dialog" title="添加" style="width:400px;padding:10px 20px"
+            closed="true" buttons="#catedlg-buttons"  modal="true">
+        <form id="cateadd" method="post" novalidate>
+            <div class="fitem">
+                <label>分类名称</label>
+                <input name="name" class="easyui-textbox" data-options="delay:1000,required:true,height:30,validType:['length[2,20]','exists[\'分类名称\',\'{:U('Cate/checkCate','','')}\']']" />
+                <input name='shop_id' type="hidden" value="0"/>
+            </div>
+        </form>
+    </div>
+    
+    <!-- 分类编辑 -->
+    <div id="catedlgEdit" class="easyui-dialog" style="padding:10px 20px;width:500px;"
+            closed="true" buttons="#catedlgEdit-buttons" modal="true">
+        <form id="cateEdit" method="post" novalidate>
+            <div class="easyui-panel" title="基本信息" style="padding:5px;">
+                <div class="fitem">
+                    <label>分类名称:</label>
+                    <input name='id' id="CateId" type="hidden" />
+                    <input name='shop_id' type="hidden" value="0"/>
+                    <input name="name" class="easyui-textbox" data-options="delay:1000,height:30, required:true, validType:['length[4,20]']">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- 添加按钮 -->
+    <div id="catedlg-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="addCate()" style="width:90px">添加</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#cateadddlg').dialog('close')" style="width:90px">取消</a>
+    </div>
+    <!-- /添加按钮 -->  
+
+    <!-- 编辑按钮 -->
+    <div id="catedlgEdit-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveCate()" style="width:90px">保存</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#catedlgEdit').dialog('close')" style="width:90px">取消</a>
+    </div>
+    <!-- /编辑按钮 -->
+
+   <script type="text/javascript">
+        var url;
+        //添加对话窗
+        function newCate(){
+            $('#cateadddlg').dialog('open').dialog('setTitle','添加分类');
+            $('#cateadd').form('clear');
+            url ="{:U('Cate/addHandle')}";
+        }
+
+        //编辑对话窗
+        function editCate(){
+            var row = $('#catedg').datagrid('getSelected');
+            if (row){
+                $('#catedlgEdit').dialog('open').dialog('setTitle','编辑分类');
+                $('#cateEdit').form('load',row);
+                url ="{:U('Cate/editHandle','','')}"+'?id='+row.id;
+            }
+            else
+            {
+                $.messager.confirm('错误提示',"请选择");
+            }
+        }
+
+        //添加
+        function addCate(){
+            $('#cateadd').form('submit',{
+                url: url,
+                onSubmit: function(){
+                    return $(this).form('validate');
+                },
+                success: function(result){
+                     var result=eval('('+result+')');
+                    if (!result.status){
+                        $.messager.confirm('错误提示',result.message,function(r){
+                            $('#cateadddlg').dialog('close');  
+                        });
+                    } else {
+                        $('#cateadddlg').dialog('close');        // close the dialog
+                        $('#catedg').datagrid('reload');    // reload the user data
+                    }
+                }
+            });
+        }
+
+        //编辑
+        function saveCate(){
+            $('#cateEdit').form('submit',{
+                url: url,
+                onSubmit: function(){
+                    return $(this).form('validate');
+                },
+                success: function(result){
+                     var result=eval('('+result+')');
+                    if (!result.status){
+                        $.messager.confirm('错误提示',result.message,function(r){
+                            $('#catedlgEdit').dialog('close');  
+                        });
+                    }else{
+                        $('#catedlgEdit').dialog('close');        // close the dialog
+                        $('#catedg').datagrid('reload');    // reload the user data
+                    }
+                }
+            });
+        }
+
+        //删除
+        function destroyCate(){
+            var row = $('#catedg').datagrid('getSelected');
+            if (row){
+                $.messager.confirm('删除提示','真的要删除此分类吗?',function(r){
+                    if (r){
+                        var durl='{:U("Cate/delHandle")}';
+                        $.post(durl,{id:row.id,M:'m'},function(result){
+                            if (result.status){
+                                $('#catedg').datagrid('reload');    // reload the user data
+                            } else {
+                                $.messager.alert('错误提示',result.message,'error');
+                            }
+                        },'json').error(function(data){
+                            var info=eval('('+data.responseText+')');
+                            $.messager.confirm('错误提示',info.message,function(r){
+                                
+                            });
+                        });
+                    }
+                });
+            }
+        }
+
+    </script>
+    <style type="text/css">
+        #fm{
+            margin:0;
+            padding:10px;
+        }
+    </style>
+    
+</body>

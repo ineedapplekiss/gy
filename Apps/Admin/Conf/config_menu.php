@@ -22,9 +22,9 @@ return array(
 			'gname' => '商品管理',
 			'gicon' => 'icon-tip',
 			'list' => array(
-				array('url'=>'Member/index', 'icon'=>'icon-users', 'name'=>'商品列表'),
+				array('url'=>'Goods/index', 'icon'=>'icon-users', 'name'=>'商品列表'),
 			    array('url'=>'Member/group', 'icon'=>'icon-group_go', 'name'=>'套餐管理'),
-			    array('url'=>'Member/group', 'icon'=>'icon-group_go', 'name'=>'商品类别管理')
+			    array('url'=>'Cate/index', 'icon'=>'icon-group_go', 'name'=>'商品类别管理')
 			),
 		),
 		array(

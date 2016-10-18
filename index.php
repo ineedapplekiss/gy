@@ -21,7 +21,7 @@ header('Pragma:no-cache');
 header('Expires:-1');
 
 // 开启调试模式 建议开发阶段开启 部署阶段注释或者设为false
-define('APP_DEBUG',True);
+define('APP_DEBUG',true);
 define('BIND_MODULE', 'Admin');
 
 // 定义应用目录
