@@ -23,7 +23,7 @@ return array(
 			'gicon' => 'icon-tip',
 			'list' => array(
 				array('url'=>'Goods/index', 'icon'=>'icon-users', 'name'=>'商品列表'),
-			    array('url'=>'Member/group', 'icon'=>'icon-group_go', 'name'=>'套餐管理'),
+			    array('url'=>'Goods/package', 'icon'=>'icon-group_go', 'name'=>'套餐管理'),
 			    array('url'=>'Cate/index', 'icon'=>'icon-group_go', 'name'=>'商品类别管理')
 			),
 		),

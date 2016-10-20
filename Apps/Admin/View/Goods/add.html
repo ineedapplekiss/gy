@@ -1,0 +1,87 @@
+<body>
+<script>
+function add(url){
+    $('#GoodsAdd').form('submit',{
+        url:url,
+        onSubmit: function(){
+            return $(this).form('validate');
+        },
+        success: function(result){
+            var result=eval('('+result+')');
+            if (!result.status){
+                    $.messager.alert('Warning','添加失败！' + result.message);
+            } else {
+                
+                if($.messager.confirm('提示','添加成功！是否继续添加',function(r){
+                    if(r){
+                        flushTab();
+                    }else{
+                        closeTab();
+                    }
+                
+                }));
+            }
+        }
+    });
+    
+}
+    $(
+        function(){  
+            $("#close").click(function(){  
+                        closeTab();
+                    });  
+            $("#ref").click(function(){  
+                        flushTab();
+                    });
+        }
+    );  
+
+</script>
+<button type="button" id="close">关闭</button>
+
+<button type="button" id="ref">刷新</button>
+<form id="GoodsAdd" method="post" class="bootstrap-frm">
+    <div class="tit-wrap">
+        <h1>基本信息
+        <span></span>
+        </h1>
+        <div class="btn-box">
+            <a href='javascript:;' onclick='add("{:U('Goods/add')}")' class='easyui-linkbutton button'>保存</a>
+        </div>
+    </div>
+    <table>
+        <tr>
+            <td width='10%'>编码：</td>
+            <td width='40%'> <input name="code" class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:['length[2,20]']" style='width:150px' /></td>
+            <td width='10%'>名称：</td>
+            <td width='40%'><input class='easyui-textbox' data-options="required:true,height:30,validType:['length[2,20]']" size='18' style='width:250px' name='name'/></td>
+        </tr>
+        <tr>
+            <td>价格：</td>
+            <td>
+                <input name="price" class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:['length[2,20]']" style='width:150px' />
+            </td>
+            <td>类别</td>
+            <td>
+                <select class="easyui-combobox" name="cate_id" id='cate_id' data-options="required:true,height:30">
+                    <option value="0">请选择</option>
+                    <volist name="cates" id="vo">
+                        <option value="{$vo['id']}">{$vo['name']}</option>
+                    </volist>                        
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>适用店铺：</td>
+            <td>
+                <volist name="shops" id="vo">
+                    <input type="checkbox" name="shop_ids[]" value="{$vo['id']}"  />{$vo['shop_name']}<br />
+                </volist>
+            </td>
+            <td></td>
+            <td></td>
+            
+        </tr>
+    </table>
+</form>
+</body>

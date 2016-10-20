@@ -8,15 +8,7 @@ class GoodsModel extends Model
 {	
 	protected $tableName = 'goods';
 	
-	
-	/**
-	 * @var 正常数据
-	 */
-	const STATUS_NORMAL = 1;
-	
-	/**
-	 * @var 隐藏数据
-	 */
-	const STATUS_DEL = 0;
+	const STATUS_NORMAL = 1;//正常数据
+	const STATUS_DEL = 0;//下架删除
 	
 }

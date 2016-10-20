@@ -119,3 +119,93 @@
 .divide{
 	margin: 5px;
 }
+
+
+.bootstrap-frm {
+	overflow: hidden;
+	margin-left:auto;
+	margin-right:auto;
+	background: #FFF;
+	padding: 20px 30px 20px 30px;
+	font: 12px "Helvetica Neue", Helvetica, Arial, sans-serif;
+	color: #333;
+	text-shadow: 1px 1px 1px #FFF;
+	border:1px solid #DDD;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+}
+.bootstrap-frm .tit-wrap{
+	border-bottom: 1px solid #DADADA;
+	margin: -20px -30px 30px -30px;
+}
+
+.bootstrap-frm .btn-box{
+	float: right;
+	padding: 20px 20px  0
+}
+.bootstrap-frm h1 {
+	font: 25px "Helvetica Neue", Helvetica, Arial, sans-serif;
+	padding: 0px 0px 10px 40px;
+	display: block;
+	float: left;
+	color: #555;
+}
+.bootstrap-frm h1>span {
+	display: block;
+	font-size: 11px;
+}
+.bootstrap-frm label {
+	display: block;
+	margin: 0px 0px 5px;
+}
+.bootstrap-frm label>span {
+float: left;
+width: 20%;
+text-align: right;
+padding-right: 10px;
+margin-top: 10px;
+color: #333;
+font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-weight: bold;
+}
+.bootstrap-frm .button {
+background: #FFF;
+border: 1px solid #CCC;
+padding: 10px 25px 10px 25px;
+color: #333;
+border-radius: 4px;
+margin: 0 0 0 10px
+}
+.bootstrap-frm .button:hover {
+color: #333;
+background-color: #EBEBEB;
+border-color: #ADADAD;
+}
+.bootstrap-frm table {
+width:100%;
+
+}
+.bootstrap-frm table tr{
+	border-bottom:1px solid #000;
+}
+.bootstrap-frm table tr td{
+	height:46px;
+	line-height:46px;
+	font:14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+	color:#555;
+	border-bottom: dashed  1px #ddd;
+}
+
+.bootstrap-frm table tr th{
+	height:46px;
+	line-height:46px;
+	font:14px  "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-weight:bold;
+	color:#555;
+	border-bottom: dashed  1px #ddd;
+	
+}
+
+.input_80{ width:80%;}
+.input_50{ width:50%;height:50px}

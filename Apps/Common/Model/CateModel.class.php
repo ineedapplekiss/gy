@@ -12,4 +12,9 @@ class CateModel extends Model
 
 	const TYPE_GOODS_CATE = 1;//商品分类
 	const TYPE_SHOPS_CATE = 2;//商铺分类
+
+	public function allCate()
+	{
+		return $this->field("id,name")->where(array("status"=>self::STATUS_NORMAL, "type"=>self::TYPE_GOODS_CATE))->select();
+	}
 }

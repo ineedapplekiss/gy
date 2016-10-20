@@ -8,16 +8,14 @@ class GoodsController extends CommonController {
 	}
 
 	/**
-	 * 分类列表
+	 * 列表
 	 * @author shang
 	 * @access public
 	 * @return null
 	 */
-    public function cateList(){
-    	$cate=D('Cate');
+    public function goodsList(){
     	$ck=A('CheckInput');
-    	
-        $map['status'] = \Common\Model\CateModel::STATUS_NORMAL;
+        $map['status'] = \Common\Model\GoodsModel::STATUS_NORMAL;
 
     	$sort=$ck->in('排序','sort','cnennumstr','id',0,0);
     	$order=$ck->in('规则','order','cnennumstr','desc',0,0);
@@ -25,8 +23,8 @@ class GoodsController extends CommonController {
 		$page=$ck->in('当前页','page','intval','1',0,0);	
     	$rows=$ck->in('每页记录数','rows','intval','',0,0);	
     	
-    	$count=$cate->where($map)->cache('cateList','60')->count();
-        $info=$cate->order($sort.' '.$order)->page($page.','.$rows)->where($map)->page($page,$rows)->select();
+    	$count=D('Goods')->where($map)->cache('cateList','60')->count();
+        $info=D('Goods')->order($sort.' '.$order)->page($page.','.$rows)->where($map)->page($page,$rows)->select();
     	
     	if(!empty($info)){
             $data['total']=$count;
@@ -39,28 +37,109 @@ class GoodsController extends CommonController {
     }
 
     /**
-     * 分类添加
+     * 商品添加
      *@author shang
      *
      */
-    public function addHandle(){
-    	$cate=D('Cate');
+    public function add(){
+        if(!IS_POST){
+            $this->assign('cates',D("Cate")->allCate());
+            //$this->assign('shops',D("Shop")->getShopsByUid(session('uid')));
+            $this->assign('shops',D("Shop")->getShopsByUid(2));
+            $this->display();
+        }else{
+            $shopIds = I("post.shop_ids");
+            $cateId = I("post.cate_id");
+            if(!$shopIds || !is_array($shopIds))
+            {
+                $result['message']='请选择商铺';
+                $result['status']=false;  
+                $this->ajaxReturn($result);
+            }
 
-    	$ck=A('CheckInput');
-		$data['name']=$ck->in('分类名称','name','cnennumstr','',2,20);	
-		$data['shop_id']=$ck->in('所属商铺','shop_id','intval','0',0,16);
-		$data['add_time']=NOW_TIME;
+            if(!$cateId)
+            {
+                $result['message']='请选择分类';
+                $result['status']=false;  
+                $this->ajaxReturn($result);
+            }
 
-		$addStatus=$cate->add($data);
-		if($addStatus){
-	    	$result['message']='添加分类成功!';
-	    	$result['status']=true;	
-		}else{
-			$result['message']='添加分类失败!';
-	    	$result['status']=false;	
-		}
-    	$this->ajaxReturn($result);
+            $ck=A('CheckInput');
+            $goodsName=$ck->in('商品名称','name','cnennumstr','',2,20);  
+            $goodsCode=$ck->in('商品代码','code','cnennumstr','0',2,20);
+            $goodsPrice=$ck->in('商品价格','price','float(17,2)','',0,0);
+            $data['add_time']=NOW_TIME;
+            $data = array();
+
+            foreach ($shopIds as $shopId) {
+                $data[] = array(
+                    "shop_id"   => $shopId,
+                    "name"      => $goodsName,
+                    "code"      => $goodsCode,
+                    "cate_id"   => $cateId,
+                    "price"     => $goodsPrice,
+                    "add_time"  => NOW_TIME
+                    );
+            }
+            $addStatus = D("Goods")->addAll($data);
+            if($addStatus){
+                $result['message']='添加分类成功!';
+                $result['status']=true; 
+            }else{
+                $result['message']='添加分类失败!';
+                $result['status']=false;    
+            }
+            $this->ajaxReturn($result);
+        }
+
     }
+
+    /**
+     * 商品编辑
+     *@author shang
+     *
+     */
+    public function edit($id){
+
+        if(!IS_POST){
+        
+            $map['id'] = intval($id);
+        
+            $cont = D('Agent')->where($map)->find();
+        
+            $this->assign('cont',json_encode($cont));
+        
+            $this->display();
+        }else{
+        
+            $model = D('Agent');
+        
+            $data = $model->create();
+             
+            $map['id'] = $data['id'];
+             
+            $insertId = $model->save($data,$map);
+        
+            action_log($this->_user, '修改地理人：名字'.$data['name']);
+             
+            if($insertId){
+                 
+                $return['status']=true;
+        
+                $return['message']='修改成功！';
+                 
+            }else{
+                 
+                $return['status']=false;
+        
+                $return['message']='修改失败！';
+                 
+            }
+             
+            $this->ajaxReturn($return);
+        }
+    }
+
 
     /**
      * 分类编辑
