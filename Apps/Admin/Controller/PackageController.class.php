@@ -1,9 +1,11 @@
 <?php
 namespace Admin\Controller;
 use Admin\Controller\CommonController;
-class GoodsController extends CommonController {
+class PackageController extends CommonController {
 
 	public function index(){
+        //仅允许查询权限下的商铺
+        $this->assign('shops',D("Shop")->getShopsByUid(session('uid')));
 		$this->display();
 	}
 
@@ -13,19 +15,8 @@ class GoodsController extends CommonController {
 	 * @access public
 	 * @return null
 	 */
-    public function goodsList(){
+    public function packageList(){
     	$ck=A('CheckInput');
-        $map = array();
-        $map['g.status'] = \Common\Model\GoodsModel::STATUS_NORMAL;
-
-        //仅允许查询权限下的商铺
-        $shopIds = D("Shop")->getShopsByUid(session('uid'));
-        if($shopIds)
-        {
-            $shopIds = implode(",",array_column($shopIds, "id"));
-            $map['g.shop_id'] = array('IN',$shopIds);
-        }
-        
 
     	$sort=$ck->in('排序','sort','cnennumstr','id',0,0);
     	$order=$ck->in('规则','order','cnennumstr','desc',0,0);
@@ -33,14 +24,52 @@ class GoodsController extends CommonController {
 		$page=$ck->in('当前页','page','intval','1',0,0);	
     	$rows=$ck->in('每页记录数','rows','intval','',0,0);	
 
-        $name=$ck->in('商品名称','name','cnennumstr','',0,0);        
-        $code=$ck->in('商品代码','code','cnennumstr','',0,0);
+        //查询条件
+        $name=$ck->in('套餐名称','name','cnennumstr','',0,0);     
+        $status=$ck->in('状态','status','intval','',0,0);
+        $shopId=$ck->in('状态','shopId','intval','',0,0);
 
-        !empty($name)?$map['g.name']=array('like','%'.$name.'%'):'';
-        !empty($code)?$map['g.code']=array('like','%'.$code.'%'):'';
+        $map = array();
+
+        //仅允许查询权限下的商铺
+        $shopIds = D("Shop")->getShopsByUid(session('uid'));
+        if($shopId>0 && in_array($shopId, array_column($shopIds, "id")))//指定商铺
+        {
+            $map['p.shop_id'] = $shopId;
+        }
+        else
+        {
+            $shopIds = implode(",",array_column($shopIds, "id"));
+            $map['p.shop_id'] = array('IN',$shopIds);
+        }
+
+        !empty($name)?$map['p.name']=array('like','%'.$name.'%'):'';//指定套餐名称
+        switch ($status) {
+            case 1://进行中
+                $map['p.status'] = \Common\Model\PackageModel::STATUS_EN;
+                $map['p.sta_time'] = array("ELT",NOW_TIME);
+                $map['p.end_time'] = array("GT",NOW_TIME);
+                break;
+            case 2://定时
+                $map['p.status'] = array("NEQ", \Common\Model\PackageModel::STATUS_DEL);
+                $map['p.sta_time'] = array("GT",NOW_TIME);
+                break;
+            case 3://失效
+                $map['p.status'] = array("NEQ", \Common\Model\PackageModel::STATUS_DEL);
+                $map['p.end_time'] = array("ELT",NOW_TIME);
+                break;
+            case 4://暂停
+                $map['p.status'] = \Common\Model\PackageModel::STATUS_DIS;
+                $map['p.sta_time'] = array("ELT",NOW_TIME);
+                $map['p.end_time'] = array("GT",NOW_TIME);
+                break;
+            default:
+                $map['p.status'] = array("NEQ", \Common\Model\PackageModel::STATUS_DEL);
+                break;
+        }
 
     	
-    	$count=D('Goods')->alias("g")->where($map)->cache('cateList'.$name.$code,'60')->count();
+    	$count=D('Package')->alias("g")->where($map)->count();
         $info=D('Goods')
             ->alias("g")
             ->field("g.id, g.name, g.code, g.price, g.add_time, g.update_time, s.shop_name, c.name as cate_name")

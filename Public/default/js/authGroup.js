@@ -10,8 +10,8 @@ $(function(){
 		pageNumber:1,
 		pageList:[10,15,20,25,30,40,50],
 		columns:[[
-		{field:'title',title:'角色1名称'},
-		{field:'describe',title:'角色1描述'},
+		{field:'title',title:'角色名称'},
+		{field:'describe',title:'角色描述'},
 		{field:'status',title:'状态',formatter:checkYesNo},
 		]],
 		pagination:true,
@@ -70,7 +70,7 @@ $(function(){
 				text:'店铺权限设置',
 				handler:function(){
 					var authGroupRow=$('#authGroupDatagrid').datagrid('getSelected');
-					if (authGroupRow&&authGroupRow.id!=1){
+					if (authGroupRow){
 						$('#authShopAccessSetTree').tree({
 					    	url:authShopAccessListUrl,
 					    	checkbox:true,
