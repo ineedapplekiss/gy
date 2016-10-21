@@ -2,22 +2,24 @@
     <table id="packagedg" title="套餐列表" class="easyui-datagrid" style="width:100%;" url="{:U('Package/packageList')}"  toolbar="#packagetoolbar" pagination="true" pageSize='15' pageNumber='1' multiSort='true' sortOrder="desc" pageList="[2,5,10,15,20,25,30,40,50]" rownumbers="true" fitColumns="true" singleSelect="true">
         <thead>
             <tr>
-                <th field="code" width="10" sortable="true">套餐名称</th>
-                <th field="price" width="50">价格</th>
-                <th field="name" width="50" sortable="true">商品组合</th>
-                <th field="cate_name" sortable="true">状态</th>
-                <th field="shop_name" width="50">有效期</th>
-                <th field="add_time" formatter="timestampToDateTime">适用店铺</th>
-                <th field="update_time">操作</th>
+                <th field="name" width="10" sortable="true">套餐名称</th>
+                <th field="jf" width="50">价格</th>
+                <th field="goods_info" width="50" sortable="true">商品组合</th>
+                <th field="logic_status" sortable="true">状态</th>
+                <th field="setime" width="50">有效期</th>
+                <th field="shop_name">适用店铺</th>
+                <th field="status" formatter="checkYesNo">启用</th>
+                <th field="update_time">操作时间</th>
             </tr>
         </thead>
     </table>
 
     <div id="packagetoolbar">
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="showTab('{:U(\'Goods/add\')}', '添加商品')">添加</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyGoods()">删除</a>
-       
-        <form id="shopSearch" method="post" novalidate style="display:inline-block;margin-left:50px;">
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="showTab('{:U(\'Package/add\')}', '添加套餐')">添加</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editPackage()">套餐停用（启用）</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyPackage()">删除</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon icon-all" plain="true" onclick="showAll()">全部</a>
+        <form id="packageSearch" method="post" novalidate style="display:inline-block;margin-left:50px;">
             <select name="shopId">
                 <option value="0">全部店铺</option>
                 <volist name="shops" id="vo">
@@ -33,46 +35,56 @@
             </select>
             <span>套餐名称:</span>
             <input name="name" class="easyui-textbox">
-            <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="balanceObj.doSearch()">Search</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="packageObj.doSearch()">Search</a>
         </form>
     </div>
-    
     
 
    <script type="text/javascript">
 
         //搜索
-        function doSearch(value,name){
-            if(value==''){
-                $.messager.alert('搜索提示','搜索内容不能为空!','error');
-            }else{
-                var searchName=$('#searchBox').searchbox('getName');
-                var searchValue=$('#searchBox').searchbox('getValue');
-                switch(searchName){
-                    case 'code':
-                        $('#goodsdg').datagrid('load',{
-                            code:searchValue
-                        });
-                        break;
-                    case 'name':
-                        $('#goodsdg').datagrid('load',{
-                            name:searchValue
-                        });
-                        break;
-                }
+        var packageObj = {
+            'doSearch':function()
+            {
+                $('#packagedg').datagrid('load',$("#packageSearch").serializeObject());
+                return false;
             }
         }
 
-        //删除店铺
-        function destroyGoods(){
-            var row = $('#goodsdg').datagrid('getSelected');
+        //启用停用套餐
+        function editPackage(){
+            var row = $('#packagedg').datagrid('getSelected');
             if (row){
-                $.messager.confirm('删除提示','真的要删除此商品吗?',function(r){
+                $.messager.confirm('状态提示','真的要改变此套餐的状态吗?',function(r){
                     if (r){
-                        var durl='{:U("Goods/delHandle")}';
+                        var durl='{:U("Package/edit")}';
+                        $.post(durl,{id:row.id,status:row.status},function(result){
+                            if (result.status){
+                                $('#packagedg').datagrid('reload');    // reload the user data
+                            } else {
+                                $.messager.alert('错误提示',result.message,'error');
+                            }
+                        },'json').error(function(data){
+                            var info=eval('('+data.responseText+')');
+                            $.messager.confirm('错误提示',info.message,function(r){
+                                
+                            });
+                        });
+                    }
+                });
+            }
+        }
+
+        //删除套餐
+        function destroyPackage(){
+            var row = $('#packagedg').datagrid('getSelected');
+            if (row){
+                $.messager.confirm('删除提示','真的要删除此套餐吗?',function(r){
+                    if (r){
+                        var durl='{:U("Package/delHandle")}';
                         $.post(durl,{id:row.id,M:'m'},function(result){
                             if (result.status){
-                                $('#goodsdg').datagrid('reload');    // reload the user data
+                                $('#packagedg').datagrid('reload');    // reload the user data
                             } else {
                                 $.messager.alert('错误提示',result.message,'error');
                             }
@@ -89,7 +101,7 @@
 
         //显示全部数据
         function showAll(){
-            $('#goodsdg').datagrid({ queryParams:''});
+            $('#packagedg').datagrid({ queryParams:''});
         }
 
        

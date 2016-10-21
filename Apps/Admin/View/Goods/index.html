@@ -21,7 +21,24 @@
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon icon-switch" plain="true" onclick="showTab('{:U(\'Cate/index\')}', '套餐管理')">套餐管理</a>
        
         <form id="shopSearch" method="post" novalidate style="display:inline-block;margin-left:50px;">
-             <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon icon-all" plain="true" onclick="showAll()">全部</a>     
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon icon-all" plain="true" onclick="showAll()">全部</a> 
+
+            <span>店铺:</span>
+            <select class="easyui-combobox" name="shopId" id='shopId' data-options="height:30">
+                <option value="0">请选择</option>
+                <volist name="shops" id="vo">
+                    <option value="{$vo['id']}">{$vo['shop_name']}</option>
+                </volist>  
+            </select>
+
+            <span>类别:</span>
+            <select class="easyui-combobox" name="cateId" id='cateId' data-options="height:30">
+                <option value="0">请选择</option>
+                <volist name="cates" id="vo">
+                    <option value="{$vo['id']}">{$vo['name']}</option>
+                </volist>                        
+            </select>
+
             <input id='searchBox' class="easyui-searchbox" data-options="height:30,menu:'#searchboxSelect',searcher:doSearch"  style="width:300px"/>
                 <div id="searchboxSelect">
                     <div data-options="name:'code',iconCls:'icon-application'">商品编码</div>
@@ -37,6 +54,7 @@
 
         //搜索
         function doSearch(value,name){
+            console.log($('#cateId').combobox("getData"));
             if(value==''){
                 $.messager.alert('搜索提示','搜索内容不能为空!','error');
             }else{

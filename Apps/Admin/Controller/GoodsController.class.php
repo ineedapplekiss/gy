@@ -4,6 +4,8 @@ use Admin\Controller\CommonController;
 class GoodsController extends CommonController {
 
 	public function index(){
+        $this->assign('cates',D("Cate")->allCate());
+        $this->assign('shops',D("Shop")->getShopsByUid(session('uid')));
 		$this->display();
 	}
 
@@ -17,14 +19,6 @@ class GoodsController extends CommonController {
     	$ck=A('CheckInput');
         $map = array();
         $map['g.status'] = \Common\Model\GoodsModel::STATUS_NORMAL;
-
-        //仅允许查询权限下的商铺
-        $shopIds = D("Shop")->getShopsByUid(session('uid'));
-        if($shopIds)
-        {
-            $shopIds = implode(",",array_column($shopIds, "id"));
-            $map['g.shop_id'] = array('IN',$shopIds);
-        }
         
 
     	$sort=$ck->in('排序','sort','cnennumstr','id',0,0);
@@ -35,15 +29,30 @@ class GoodsController extends CommonController {
 
         $name=$ck->in('商品名称','name','cnennumstr','',0,0);        
         $code=$ck->in('商品代码','code','cnennumstr','',0,0);
+        $shopId=$ck->in('商铺','shopId','intval','',0,0);
+        $cateId=$ck->in('分类','cateId','intval','',0,0);
 
         !empty($name)?$map['g.name']=array('like','%'.$name.'%'):'';
         !empty($code)?$map['g.code']=array('like','%'.$code.'%'):'';
+        !empty($cateId) && $map['g.cate_id']=$cateId;
 
+
+        //仅允许查询权限下的商铺
+        $shopIds = D("Shop")->getShopsByUid(session('uid'));
+        if($shopId>0 && in_array($shopId, array_column($shopIds, "id")))//指定商铺
+        {
+            $map['g.shop_id'] = $shopId;
+        }
+        else
+        {
+            $shopIds = implode(",",array_column($shopIds, "id"));
+            $map['g.shop_id'] = array('IN',$shopIds);
+        }
     	
     	$count=D('Goods')->alias("g")->where($map)->cache('cateList'.$name.$code,'60')->count();
         $info=D('Goods')
             ->alias("g")
-            ->field("g.id, g.name, g.code, g.price, g.add_time, g.update_time, s.shop_name, c.name as cate_name")
+            ->field("g.id, g.name, g.code, g.price, g.add_time, g.update_time, g.shop_id, s.shop_name, c.name as cate_name")
             ->join("left join ".C('DB_PREFIX')."shop as s on g.shop_id=s.id")
             ->join("left join ".C('DB_PREFIX')."g_cate as c on g.cate_id=c.id")
             ->order($sort.' '.$order)->page($page.','.$rows)->where($map)->page($page,$rows)->select();

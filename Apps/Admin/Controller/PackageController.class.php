@@ -27,7 +27,7 @@ class PackageController extends CommonController {
         //查询条件
         $name=$ck->in('套餐名称','name','cnennumstr','',0,0);     
         $status=$ck->in('状态','status','intval','',0,0);
-        $shopId=$ck->in('状态','shopId','intval','',0,0);
+        $shopId=$ck->in('商铺','shopId','intval','',0,0);
 
         $map = array();
 
@@ -69,13 +69,20 @@ class PackageController extends CommonController {
         }
 
     	
-    	$count=D('Package')->alias("g")->where($map)->count();
-        $info=D('Goods')
-            ->alias("g")
-            ->field("g.id, g.name, g.code, g.price, g.add_time, g.update_time, s.shop_name, c.name as cate_name")
-            ->join("left join ".C('DB_PREFIX')."shop as s on g.shop_id=s.id")
-            ->join("left join ".C('DB_PREFIX')."g_cate as c on g.cate_id=c.id")
+    	$count=D('Package')->alias("p")->where($map)->count();
+        $info=D('Package')
+            ->alias("p")
+            ->field("p.id, p.name, p.shop_id, p.jf, p.sta_time, p.end_time, p.add_time, p.update_time, p.goods_info, p.status, s.shop_name")
+            ->join("left join ".C('DB_PREFIX')."shop as s on p.shop_id=s.id")
             ->order($sort.' '.$order)->page($page.','.$rows)->where($map)->page($page,$rows)->select();
+
+        //格式化输出
+        foreach ($info as $k => $v) {
+            $info[$k]['logic_status'] = D('Package')->getStatus($v["status"]);
+            $info[$k]['logic_status'] = D('Package')->formatStatus($info[$k]['logic_status']);
+            $info[$k]['setime'] = date("Y-m-d H:i:s", $v["sta_time"]) . "~" . date("Y-m-d H:i:s", $v["end_time"]);
+            $info[$k]['goods_info'] = implode("+", array_column(json_decode($v["goods_info"],true), "name"));
+        }
     	
     	if(!empty($info)){
             $data['total']=$count;
@@ -88,7 +95,7 @@ class PackageController extends CommonController {
     }
 
     /**
-     * 商品添加
+     * 套餐添加
      *@author shang
      *
      */
@@ -98,45 +105,31 @@ class PackageController extends CommonController {
             $this->assign('shops',D("Shop")->getShopsByUid(session('uid')));
             $this->display();
         }else{
-            $shopIds = I("post.shop_ids");
-            $cateId = I("post.cate_id");
-            if(!$shopIds || !is_array($shopIds))
-            {
-                $result['message']='请选择商铺';
-                $result['status']=false;  
-                $this->ajaxReturn($result);
-            }
-
-            if(!$cateId)
-            {
-                $result['message']='请选择分类';
-                $result['status']=false;  
-                $this->ajaxReturn($result);
-            }
 
             $ck=A('CheckInput');
-            $goodsName=$ck->in('商品名称','name','cnennumstr','',2,20);  
-            $goodsCode=$ck->in('商品代码','code','cnennumstr','0',2,20);
-            $goodsPrice=$ck->in('商品价格','price','float(17,2)','',0,0);
-            $data['add_time']=NOW_TIME;
-            $data = array();
+            $name=$ck->in('套餐名称','name','cnennumstr','',2,20);
+            $shopId=$ck->in('商铺','shopId','intval','',0,0);
+            $price=$ck->in('套餐价格','price','float(17,2)','',0,0);
+            $stime=$ck->in('开始时间','stime','datetime','',0,0);
+            $etime=$ck->in('结束时间','etime','datetime','',0,0);
+            $goodsIds=I('post.goodsid');
 
-            foreach ($shopIds as $shopId) {
-                $data[] = array(
-                    "shop_id"   => $shopId,
-                    "name"      => $goodsName,
-                    "code"      => $goodsCode,
-                    "cate_id"   => $cateId,
-                    "price"     => $goodsPrice,
-                    "add_time"  => NOW_TIME
-                    );
-            }
-            $addStatus = D("Goods")->addAll($data);
+            $goods_info = D("Goods")->where(array("id"=>array("in",$goodsIds)))->select();
+
+            $data = array();
+            $data['shop_id']    = $shopId;
+            $data['name']       = $name;
+            $data['jf']         = $price;
+            $data['goods_info'] = json_encode($goods_info);
+            $data['sta_time']   = strtotime($stime);
+            $data['end_time']   = strtotime($etime);
+            $data['add_time']   = NOW_TIME;
+            $addStatus = D("Package")->add($data);
             if($addStatus){
-                $result['message']='添加分类成功!';
+                $result['message']='添加套餐成功!';
                 $result['status']=true; 
             }else{
-                $result['message']='添加分类失败!';
+                $result['message']='添加套餐失败!';
                 $result['status']=false;    
             }
             $this->ajaxReturn($result);
@@ -145,34 +138,32 @@ class PackageController extends CommonController {
     }
 
     /**
-     * 商品编辑
+     * 套餐启用停用
      *@author shang
      *
      */
-    public function edit($id){
+    public function edit($id, $status){
 
-        if(!IS_POST){
-        
-        
-            $this->display();
+        if(!IS_POST||$issystem=='1') exit;
+        $map['id']=(int)$id;
+
+        if(empty($map['id'])){
+            $return['message']='id不能为空!';
+            $return['status']=false;
         }else{
-             
-            if($insertId){
-                 
-                $return['status']=true;
-        
-                $return['message']='修改成功！';
-                 
-            }else{
-                 
+            $data = array();
+            $data['status'] = $status == \Common\Model\PackageModel::STATUS_DIS ? \Common\Model\PackageModel::STATUS_EN : \Common\Model\PackageModel::STATUS_DIS;
+            $status=D('Package')->where($map)->save($data);
+
+            if(false===$status){
+                $return['message']='删除出错!';
                 $return['status']=false;
-        
-                $return['message']='修改失败！';
-                 
+            }else{
+                $return['message']='删除成功!';
+                $return['status']=true;
             }
-             
-            $this->ajaxReturn($return);
         }
+        $this->ajaxReturn($return);
     }
 
     /**
@@ -191,8 +182,8 @@ class PackageController extends CommonController {
 			$return['status']=false;
 		}else{
             $data = array();
-            $data['status'] = \Common\Model\GoodsModel::STATUS_DEL;
-            $status=D('Goods')->where($map)->save($data);
+            $data['status'] = \Common\Model\PackageModel::STATUS_DEL;
+            $status=D('Package')->where($map)->save($data);
 
 			if(false===$status){
                 $return['message']='删除出错!';
@@ -205,25 +196,4 @@ class PackageController extends CommonController {
 		$this->ajaxReturn($return);
     }
 
-
-    /**
-     * ajax检查分类是否存在
-     * @author shang
-     */
-    public function checkCate(){
-        if(!IS_POST) exit;
-        $ck=A('CheckInput');
-        $map['name'] = $ck->in('分类名称','val','cnennumstr','',2,20);  
-        $map['status'] = \Common\Model\CateModel::STATUS_NORMAL;  
-
-        $result= D('Cate')->where($map)->field('id')->cache('cate'.$map['name'],'60')->find(); 
-        if($result) {
-            $return['status']=false;
-            $return['id']=$result['id'];
-        }else {
-            $return['status']=true;
-            $return['id']='0';
-        }
-        $this->ajaxReturn($return);
-    }
 }	

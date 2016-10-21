@@ -14,7 +14,7 @@ function add(url){
                 
                 if($.messager.confirm('提示','添加成功！是否继续添加',function(r){
                     if(r){
-                        flushTab();
+                        closeTab();
                     }else{
                         closeTab();
                     }
@@ -30,7 +30,7 @@ function add(url){
             $("#close").click(function(){  
                         closeTab();
                     });  
-            $("#ref").click(function(){  
+            $("#ref").click(function(){
                         flushTab();
                     });
         }

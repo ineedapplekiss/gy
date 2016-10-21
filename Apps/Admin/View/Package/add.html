@@ -1,9 +1,11 @@
 <body>
 <script>
 function add(url){
-    $('#GoodsAdd').form('submit',{
+    $('#PackageAdd').form('submit',{
         url:url,
-        onSubmit: function(){
+        onSubmit: function(param){
+            param.goodsid = packageObj.goodsid;
+            param.shopId = packageObj.shopid;
             return $(this).form('validate');
         },
         success: function(result){
@@ -14,7 +16,7 @@ function add(url){
                 
                 if($.messager.confirm('提示','添加成功！是否继续添加',function(r){
                     if(r){
-                        flushTab();
+                        closeTab();
                     }else{
                         closeTab();
                     }
@@ -25,63 +27,138 @@ function add(url){
     });
     
 }
-    $(
-        function(){  
-            $("#close").click(function(){  
-                        closeTab();
-                    });  
-            $("#ref").click(function(){  
-                        flushTab();
-                    });
+$(function(){  
+        $("#addgoods").click(function(){
+            $('#pgoodsdlg').dialog('open').dialog('setTitle','选择商品');
+                });
+    }
+); 
+
+
+packageObj = {
+    'doSearch':function(){
+        $('#pgoodsdg').datagrid({
+            url:"{:U('Goods/goodsList')}",
+            queryParams:$("#packageSearch").serializeObject()
+        });
+        return false;
+    },
+
+    saveGoods:function(){
+        var goodsRow=$('#pgoodsdg').datagrid('getSelections');
+        var str='';
+        if(goodsRow.length>0){
+            var ids=[];
+            for(var i=0;i<goodsRow.length;i++){
+                str+="<span class=\"span_黄药师\">"+goodsRow[i].name+'</span>&nbsp;';
+                ids.push(goodsRow[i].id);
+                packageObj.shopid = goodsRow[i].shop_id;
+            }
+            packageObj.goodsid=ids.join(',');
+            $('#packageGoodsPanel').html(str);
+            $('#pgoodsdlg').dialog('close');
         }
-    );  
+        else
+        {
+            $.messager.alert('提示','请选择套餐商品!','info');
+            return false;
+        }
+    },
+    cancelSave:function(){
+        packageObj.goodsid="";
+        $('#packageGoodsPanel').html("");
+        $('#pgoodsdlg').dialog('close');
+    }
+}
 
 </script>
-<button type="button" id="close">关闭</button>
-
-<button type="button" id="ref">刷新</button>
-<form id="GoodsAdd" method="post" class="bootstrap-frm">
+<form id="PackageAdd" method="post" class="bootstrap-frm">
     <div class="tit-wrap">
         <h1>基本信息
         <span></span>
         </h1>
         <div class="btn-box">
-            <a href='javascript:;' onclick='add("{:U('Goods/add')}")' class='easyui-linkbutton button'>保存</a>
+            <a href='javascript:;' onclick='add("{:U('Package/add')}")' class='easyui-linkbutton button'>保存</a>
         </div>
     </div>
     <table>
         <tr>
-            <td width='10%'>编码：</td>
-            <td width='40%'> <input name="code" class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:['length[2,20]']" style='width:150px' /></td>
             <td width='10%'>名称：</td>
-            <td width='40%'><input class='easyui-textbox' data-options="required:true,height:30,validType:['length[2,20]']" size='18' style='width:250px' name='name'/></td>
+            <td width='40%'> <input name="name" class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:['length[2,20]']" style='width:150px' /></td>
+            <td width='10%'></td>
+            <td width='40%'></td>
         </tr>
         <tr>
             <td>价格：</td>
             <td>
                 <input name="price" class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:['length[2,20]']" style='width:150px' />
             </td>
-            <td>类别</td>
+            <td></td>
             <td>
-                <select class="easyui-combobox" name="cate_id" id='cate_id' data-options="required:true,height:30">
-                    <option value="0">请选择</option>
-                    <volist name="cates" id="vo">
-                        <option value="{$vo['id']}">{$vo['name']}</option>
-                    </volist>                        
-                </select>
             </td>
         </tr>
         <tr>
-            <td>适用店铺：</td>
+            <td>商品：</td>
             <td>
-                <volist name="shops" id="vo">
-                    <input type="checkbox" name="shop_ids[]" value="{$vo['id']}"  />{$vo['shop_name']}<br />
-                </volist>
+                <button type="button" id="addgoods">添加商品</button>
+                <div id="packageGoodsPanel" class="easyui-panel" title="商品"></div>
+                <div class="divide"></div>
             </td>
             <td></td>
             <td></td>
             
         </tr>
+        <tr>
+            <td>有效期：</td>
+            <td>
+                <input name="stime" class = 'easyui-datetimebox' title='开始时间'>至
+                <input name="etime" class = 'easyui-datetimebox' title='结束时间'>
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
     </table>
 </form>
+<div id="pgoodsdlg" class="easyui-dialog" style="width: 600px; height: auto; padding: 10px 20px"  
+         data-options="closed:true,buttons:'#dlg-buttons'">
+    <table id="pgoodsdg" title="选择商品" class="easyui-datagrid" style="width:550px;height:250px" toolbar="#pgoodstoolbar" singleSelect="false" modal="true">
+        <thead>
+            <tr>
+                <th field="code" sortable="true">编码</th>
+                <th field="name" sortable="true">商品名称</th>
+                <th field="cate_name" sortable="true">类别</th>
+                <th field="shop_name">商铺</th>
+                <th field="price">单价（积分）</th>
+            </tr>
+        </thead>
+    </table>
+
+    <div id="pgoodstoolbar">
+       <form id="packageSearch" method="post" novalidate style="display:inline-block;margin-left:50px;">
+            <span>店铺:</span>
+            <select class="easyui-combobox" name="shopId" id='shopId' data-options="required:true,height:30">
+                <volist name="shops" id="vo">
+                    <option value="{$vo['id']}">{$vo['shop_name']}</option>
+                </volist>  
+            </select>
+
+            <span>类别:</span>
+            <select class="easyui-combobox" name="cateId" id='cateId' data-options="required:true,height:30">
+                <option value="0">请选择</option>
+                <volist name="cates" id="vo">
+                    <option value="{$vo['id']}">{$vo['name']}</option>
+                </volist>                        
+            </select>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="packageObj.doSearch()">Search</a>
+        </form>
+    </div>
+
+    <div id="dlg-buttons">  
+        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" onclick="packageObj.saveGoods()">保存</a>  
+        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="packageObj.cancelSave()">关闭</a>  
+    </div>
+</div>
+    
+
+
 </body>
