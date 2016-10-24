@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50552
 File Encoding         : 65001
 
-Date: 2016-10-21 18:42:23
+Date: 2016-10-24 18:43:22
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -211,7 +211,7 @@ CREATE TABLE `think_auth_user` (
 -- ----------------------------
 -- Records of think_auth_user
 -- ----------------------------
-INSERT INTO `think_auth_user` VALUES ('1', 'admin', 'e10adc3949ba59abbe56e057f20f', '192.168.56.1', '1477028563', '4445@126.com', '老黄', '6000', '', '');
+INSERT INTO `think_auth_user` VALUES ('1', 'admin', 'e10adc3949ba59abbe56e057f20f', '192.168.56.1', '1477296485', '4445@126.com', '老黄', '6000', '', '');
 INSERT INTO `think_auth_user` VALUES ('2', 'test001', 'e10adc3949ba59abbe56e057f20f', '0.0.0.0', '1422791964', 'xdsd@15.com', '黄生', '0', '', '');
 INSERT INTO `think_auth_user` VALUES ('10', 'test002', '8d014dee20a374dc7ad97e4d9809', '192.168.56.1', '1476943784', '', '', '0', '', '');
 
@@ -631,25 +631,6 @@ CREATE TABLE `think_order_detail` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for think_p2goods
--- ----------------------------
-DROP TABLE IF EXISTS `think_p2goods`;
-CREATE TABLE `think_p2goods` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `p_id` int(10) NOT NULL DEFAULT '0',
-  `jf` decimal(19,2) NOT NULL DEFAULT '0.00' COMMENT '商品原价',
-  `goods_id` int(10) NOT NULL DEFAULT '0',
-  `add_time` int(10) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of think_p2goods
--- ----------------------------
-INSERT INTO `think_p2goods` VALUES ('1', '1', '0.00', '3', '0');
-INSERT INTO `think_p2goods` VALUES ('2', '1', '0.00', '4', '0');
-
--- ----------------------------
 -- Table structure for think_package
 -- ----------------------------
 DROP TABLE IF EXISTS `think_package`;
@@ -660,7 +641,7 @@ CREATE TABLE `think_package` (
   `jf` decimal(19,2) NOT NULL DEFAULT '0.00' COMMENT '套餐价格',
   `goods_info` text NOT NULL COMMENT 'goods id name price 冗余信息',
   `m_id` int(10) NOT NULL DEFAULT '0' COMMENT '创建人',
-  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0无效 1有效',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0无效 1有效',
   `sta_time` int(10) NOT NULL DEFAULT '0',
   `end_time` int(10) NOT NULL DEFAULT '0',
   `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '创建时间',
@@ -669,7 +650,7 @@ CREATE TABLE `think_package` (
   KEY `shop_id` (`shop_id`) USING BTREE,
   KEY `name` (`name`) USING BTREE,
   KEY `t` (`sta_time`,`end_time`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of think_package
@@ -678,6 +659,7 @@ INSERT INTO `think_package` VALUES ('1', '6', '11', '0.00', '', '0', '1', '1', '
 INSERT INTO `think_package` VALUES ('2', '8', '12', '0.00', '', '0', '0', '1', '1', '0', '2016-10-21 17:19:00');
 INSERT INTO `think_package` VALUES ('4', '9', '打折', '100.00', '[{\"id\":\"4\",\"shop_id\":\"9\",\"name\":\"\\u9762\\u819c\",\"code\":\"bj1234543\",\"cate_id\":\"8\",\"price\":\"30.00\",\"status\":\"1\",\"m_id\":\"0\",\"add_time\":\"1476871249\",\"update_time\":\"2016-10-19 18:00:49\"},{\"id\":\"7\",\"shop_id\":\"6\",\"name\":\"\\u9762\\u819c\",\"code\":\"bj1234543\",\"cate_id\":\"8\",\"price\":\"30.00\",\"status\":\"1\",\"m_id\":\"0\",\"add_time\":\"1476871355\",\"update_time\":\"2016-10-19 18:02:35\"},{\"id\":\"10\",\"shop_id\":\"9\",\"name\":\"aaaa\",\"code\":\"aaa\",\"cate_id\":\"7\",\"price\":\"1.20\",\"status\":\"1\",\"m_id\":\"0\",\"add_time\":\"1476871831\",\"update_time\":\"2016-10-19 18:10:31\"}]', '0', '1', '1475251200', '1477040872', '1477040876', '2016-10-21 17:07:56');
 INSERT INTO `think_package` VALUES ('5', '9', '打折', '100.00', '[{\"id\":\"4\",\"shop_id\":\"9\",\"name\":\"\\u9762\\u819c\",\"code\":\"bj1234543\",\"cate_id\":\"8\",\"price\":\"30.00\",\"status\":\"1\",\"m_id\":\"0\",\"add_time\":\"1476871249\",\"update_time\":\"2016-10-19 18:00:49\"},{\"id\":\"7\",\"shop_id\":\"6\",\"name\":\"\\u9762\\u819c\",\"code\":\"bj1234543\",\"cate_id\":\"8\",\"price\":\"30.00\",\"status\":\"1\",\"m_id\":\"0\",\"add_time\":\"1476871355\",\"update_time\":\"2016-10-19 18:02:35\"},{\"id\":\"10\",\"shop_id\":\"9\",\"name\":\"aaaa\",\"code\":\"aaa\",\"cate_id\":\"7\",\"price\":\"1.20\",\"status\":\"1\",\"m_id\":\"0\",\"add_time\":\"1476871831\",\"update_time\":\"2016-10-19 18:10:31\"}]', '0', '1', '1475251200', '1477040872', '1477040952', '2016-10-21 17:09:12');
+INSERT INTO `think_package` VALUES ('6', '6', 'shang特价', '10.00', '[{\"id\":\"11\",\"shop_id\":\"6\",\"name\":\"11\",\"code\":\"111\",\"cate_id\":\"7\",\"price\":\"12.00\",\"status\":\"1\",\"m_id\":\"0\",\"add_time\":\"1476871847\",\"update_time\":\"2016-10-19 18:10:47\"}]', '0', '-1', '1475725853', '1507175458', '1477281132', '2016-10-24 11:52:40');
 
 -- ----------------------------
 -- Table structure for think_region
@@ -4127,23 +4109,101 @@ INSERT INTO `think_region` VALUES ('3424', '136', '五指山', '3');
 DROP TABLE IF EXISTS `think_sale`;
 CREATE TABLE `think_sale` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '类型 1直降 2折扣 3满减  4满折',
-  `shop_id` int(10) NOT NULL DEFAULT '0' COMMENT '0全部商铺',
-  `goods_id` int(10) NOT NULL DEFAULT '0' COMMENT '0全部商品',
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '类型 1商品直降 2商品折扣 3店铺满减  4店铺满折',
+  `shop_id` int(10) NOT NULL DEFAULT '0' COMMENT '商铺',
+  `goods_id` int(10) NOT NULL DEFAULT '0' COMMENT '商品',
   `price` decimal(19,2) NOT NULL DEFAULT '0.00' COMMENT '促销价（积分）',
   `full` decimal(19,2) DEFAULT '0.00' COMMENT '满',
   `cut` decimal(19,2) DEFAULT '0.00' COMMENT '减',
+  `rule_gender` tinyint(1) NOT NULL DEFAULT '0' COMMENT '性别限制 0不限 1男 2女',
+  `rule_age` varchar(255) NOT NULL DEFAULT '' COMMENT '年龄限制 18-20',
   `status` tinyint(1) DEFAULT '0' COMMENT '0',
   `sta_time` int(10) NOT NULL DEFAULT '0' COMMENT '促销开始时间',
   `end_time` int(10) NOT NULL DEFAULT '0' COMMENT '促销结束时间',
+  `add_time` int(10) NOT NULL DEFAULT '0',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='促销表';
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8 COMMENT='促销表';
 
 -- ----------------------------
 -- Records of think_sale
 -- ----------------------------
-INSERT INTO `think_sale` VALUES ('1', '127', '0', '0', '0.00', '0.00', '0.00', '127', '0', '0');
-INSERT INTO `think_sale` VALUES ('2', '1', '9', '0', '0.00', '0.00', '0.00', '0', '0', '0');
+INSERT INTO `think_sale` VALUES ('7', '特价', '0', '6', '0', '50.00', '0.00', '0.00', '0', '', '0', '0', '0', '0', '0000-00-00 00:00:00');
+INSERT INTO `think_sale` VALUES ('9', '特价', '0', '6', '0', '50.00', '0.00', '0.00', '0', '', '0', '0', '0', '0', '0000-00-00 00:00:00');
+INSERT INTO `think_sale` VALUES ('10', '特价1', '0', '6', '0', '50.00', '0.00', '0.00', '0', '', '0', '0', '0', '0', '0000-00-00 00:00:00');
+INSERT INTO `think_sale` VALUES ('11', '特价1', '1', '6', '0', '50.00', '0.00', '0.00', '0', '', '0', '0', '0', '0', '2016-10-24 17:53:05');
+INSERT INTO `think_sale` VALUES ('12', '特价1', '2', '6', '0', '50.00', '0.00', '0.00', '0', '', '0', '0', '0', '0', '2016-10-24 17:53:05');
+INSERT INTO `think_sale` VALUES ('15', '特价15', '2', '6', '0', '50.00', '0.00', '0.00', '0', '', '0', '0', '0', '0', '2016-10-24 17:53:06');
+INSERT INTO `think_sale` VALUES ('16', '特价15', '3', '6', '0', '50.00', '0.00', '0.00', '0', '', '0', '0', '0', '0', '2016-10-24 17:53:07');
+INSERT INTO `think_sale` VALUES ('17', '特价15', '0', '6', '0', '50.00', '0.00', '0.00', '0', '', '0', '0', '0', '0', '0000-00-00 00:00:00');
+INSERT INTO `think_sale` VALUES ('18', '特价15', '4', '6', '0', '50.00', '0.00', '0.00', '0', '', '0', '0', '0', '0', '2016-10-24 17:53:10');
+INSERT INTO `think_sale` VALUES ('19', '特价15', '0', '6', '0', '50.00', '0.00', '0.00', '0', '', '0', '0', '0', '0', '0000-00-00 00:00:00');
+INSERT INTO `think_sale` VALUES ('20', '特价15', '0', '6', '0', '50.00', '0.00', '0.00', '0', '', '0', '0', '0', '0', '0000-00-00 00:00:00');
+INSERT INTO `think_sale` VALUES ('21', '特价15', '0', '6', '0', '50.00', '0.00', '0.00', '0', '', '0', '0', '0', '0', '0000-00-00 00:00:00');
+INSERT INTO `think_sale` VALUES ('22', '特价15', '0', '9', '0', '50.00', '0.00', '0.00', '0', '', '0', '0', '0', '0', '0000-00-00 00:00:00');
+INSERT INTO `think_sale` VALUES ('23', '特价15', '0', '9', '0', '50.00', '0.00', '0.00', '0', '', '0', '1476090265', '1477645469', '0', '0000-00-00 00:00:00');
+INSERT INTO `think_sale` VALUES ('26', '特价15', '0', '6', '0', '0.00', '0.00', '0.00', '0', '1-2', '0', '0', '0', '0', '0000-00-00 00:00:00');
+INSERT INTO `think_sale` VALUES ('27', '特价15', '0', '6', '0', '0.00', '0.00', '0.00', '0', '1-222', '0', '0', '0', '0', '0000-00-00 00:00:00');
+INSERT INTO `think_sale` VALUES ('28', '特价15', '0', '6', '0', '0.00', '0.00', '0.00', '0', '1-22222', '0', '0', '0', '0', '0000-00-00 00:00:00');
+INSERT INTO `think_sale` VALUES ('29', '特价15', '0', '6', '0', '0.00', '0.00', '0.00', '0', '1-22222', '0', '0', '0', '0', '0000-00-00 00:00:00');
+INSERT INTO `think_sale` VALUES ('30', '特价15', '0', '6', '0', '0.00', '0.00', '0.00', '0', '1-22', '0', '0', '0', '0', '0000-00-00 00:00:00');
+INSERT INTO `think_sale` VALUES ('31', '特价15', '0', '6', '0', '0.00', '0.00', '0.00', '0', '1-22', '0', '0', '0', '0', '0000-00-00 00:00:00');
+INSERT INTO `think_sale` VALUES ('32', '特价15', '0', '6', '0', '0.00', '0.00', '0.00', '0', '1-22', '0', '1477301105', '0', '0', '0000-00-00 00:00:00');
+INSERT INTO `think_sale` VALUES ('33', '特价15', '0', '6', '0', '1.00', '0.00', '0.00', '0', '1-22', '0', '1477301105', '1477560588', '0', '0000-00-00 00:00:00');
+INSERT INTO `think_sale` VALUES ('34', '特价15', '0', '6', '0', '0.00', '1.00', '1.00', '0', '1-22', '0', '1477301105', '1477560588', '0', '0000-00-00 00:00:00');
+INSERT INTO `think_sale` VALUES ('35', '特价15', '3', '6', '0', '0.00', '1.00', '1.00', '0', '1-22', '1', '1477301105', '1477560588', '0', '2016-10-24 17:58:19');
+INSERT INTO `think_sale` VALUES ('36', '双11', '1', '6', '0', '11.00', '0.00', '0.00', '1', '18-20', '1', '1477216742', '1478880000', '1477303156', '2016-10-24 18:01:29');
+
+-- ----------------------------
+-- Table structure for think_sale_goods
+-- ----------------------------
+DROP TABLE IF EXISTS `think_sale_goods`;
+CREATE TABLE `think_sale_goods` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `s_id` int(10) NOT NULL DEFAULT '0',
+  `jf` decimal(19,2) NOT NULL DEFAULT '0.00' COMMENT '商品原价',
+  `goods_id` int(10) NOT NULL DEFAULT '0',
+  `add_time` int(10) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of think_sale_goods
+-- ----------------------------
+INSERT INTO `think_sale_goods` VALUES ('36', '0', '0.00', '0', '0');
+INSERT INTO `think_sale_goods` VALUES ('37', '0', '0.00', '0', '0');
+INSERT INTO `think_sale_goods` VALUES ('38', '0', '0.00', '3', '0');
+INSERT INTO `think_sale_goods` VALUES ('39', '0', '0.00', '5', '0');
+INSERT INTO `think_sale_goods` VALUES ('40', '0', '0.00', '3', '0');
+INSERT INTO `think_sale_goods` VALUES ('41', '0', '0.00', '5', '0');
+INSERT INTO `think_sale_goods` VALUES ('42', '0', '0.00', '3', '0');
+INSERT INTO `think_sale_goods` VALUES ('43', '0', '0.00', '5', '0');
+INSERT INTO `think_sale_goods` VALUES ('44', '0', '0.00', '3', '0');
+INSERT INTO `think_sale_goods` VALUES ('45', '0', '0.00', '5', '0');
+INSERT INTO `think_sale_goods` VALUES ('46', '19', '30.00', '3', '1477298295');
+INSERT INTO `think_sale_goods` VALUES ('47', '19', '30.00', '5', '1477298295');
+INSERT INTO `think_sale_goods` VALUES ('48', '20', '30.00', '3', '1477299620');
+INSERT INTO `think_sale_goods` VALUES ('49', '20', '30.00', '5', '1477299620');
+INSERT INTO `think_sale_goods` VALUES ('50', '20', '30.00', '7', '1477299620');
+INSERT INTO `think_sale_goods` VALUES ('51', '21', '30.00', '3', '1477299637');
+INSERT INTO `think_sale_goods` VALUES ('52', '21', '30.00', '5', '1477299637');
+INSERT INTO `think_sale_goods` VALUES ('53', '21', '30.00', '7', '1477299637');
+INSERT INTO `think_sale_goods` VALUES ('54', '22', '333.22', '2', '1477299661');
+INSERT INTO `think_sale_goods` VALUES ('55', '22', '30.00', '4', '1477299661');
+INSERT INTO `think_sale_goods` VALUES ('56', '23', '333.22', '2', '1477299873');
+INSERT INTO `think_sale_goods` VALUES ('57', '23', '30.00', '4', '1477299873');
+INSERT INTO `think_sale_goods` VALUES ('58', '26', '12.00', '11', '1477300532');
+INSERT INTO `think_sale_goods` VALUES ('59', '27', '12.00', '11', '1477300551');
+INSERT INTO `think_sale_goods` VALUES ('60', '28', '12.00', '11', '1477300577');
+INSERT INTO `think_sale_goods` VALUES ('61', '29', '12.00', '11', '1477300616');
+INSERT INTO `think_sale_goods` VALUES ('62', '30', '12.00', '11', '1477300953');
+INSERT INTO `think_sale_goods` VALUES ('63', '31', '12.00', '11', '1477301041');
+INSERT INTO `think_sale_goods` VALUES ('64', '32', '12.00', '11', '1477301108');
+INSERT INTO `think_sale_goods` VALUES ('65', '33', '12.00', '11', '1477301403');
+INSERT INTO `think_sale_goods` VALUES ('66', '34', '12.00', '11', '1477301419');
+INSERT INTO `think_sale_goods` VALUES ('67', '35', '12.00', '11', '1477301472');
+INSERT INTO `think_sale_goods` VALUES ('68', '36', '12.00', '11', '1477303156');
 
 -- ----------------------------
 -- Table structure for think_shop
