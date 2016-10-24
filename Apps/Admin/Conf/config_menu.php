@@ -38,7 +38,7 @@ return array(
 			'gname' => '运营管理',
 			'gicon' => 'icon-tip',
 			'list' => array(
-				array('url'=>'Member/index', 'icon'=>'icon-users', 'name'=>'促销活动'),
+				array('url'=>'Sale/index', 'icon'=>'icon-users', 'name'=>'促销活动'),
 				array('url'=>'Member/index', 'icon'=>'icon-users', 'name'=>'充值活动'),
 				array('url'=>'Member/index', 'icon'=>'icon-users', 'name'=>'积分兑换设置'),
 				array('url'=>'Member/index', 'icon'=>'icon-users', 'name'=>'数据报表'),

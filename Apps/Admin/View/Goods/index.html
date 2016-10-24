@@ -54,8 +54,9 @@
 
         //搜索
         function doSearch(value,name){
-            console.log($('#cateId').combobox("getData"));
-            if(value==''){
+            var shopId = $('#shopId').combobox("getValue");
+            var cateId = $('#cateId').combobox("getValue");
+            if(value=='' && shopId == 0 && cateId == 0){
                 $.messager.alert('搜索提示','搜索内容不能为空!','error');
             }else{
                 var searchName=$('#searchBox').searchbox('getName');
@@ -63,12 +64,16 @@
                 switch(searchName){
                     case 'code':
                         $('#goodsdg').datagrid('load',{
-                            code:searchValue
+                            code:searchValue,
+                            shopId : shopId,
+                            cateId : cateId
                         });
                         break;
                     case 'name':
                         $('#goodsdg').datagrid('load',{
-                            name:searchValue
+                            name:searchValue,
+                            shopId : shopId,
+                            cateId : cateId
                         });
                         break;
                 }
