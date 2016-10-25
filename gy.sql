@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50552
 File Encoding         : 65001
 
-Date: 2016-10-24 18:43:22
+Date: 2016-10-25 17:56:55
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -211,7 +211,7 @@ CREATE TABLE `think_auth_user` (
 -- ----------------------------
 -- Records of think_auth_user
 -- ----------------------------
-INSERT INTO `think_auth_user` VALUES ('1', 'admin', 'e10adc3949ba59abbe56e057f20f', '192.168.56.1', '1477296485', '4445@126.com', '老黄', '6000', '', '');
+INSERT INTO `think_auth_user` VALUES ('1', 'admin', 'e10adc3949ba59abbe56e057f20f', '192.168.56.1', '1477389139', '4445@126.com', '老黄', '6000', '', '');
 INSERT INTO `think_auth_user` VALUES ('2', 'test001', 'e10adc3949ba59abbe56e057f20f', '0.0.0.0', '1422791964', 'xdsd@15.com', '黄生', '0', '', '');
 INSERT INTO `think_auth_user` VALUES ('10', 'test002', '8d014dee20a374dc7ad97e4d9809', '192.168.56.1', '1476943784', '', '', '0', '', '');
 
@@ -241,12 +241,20 @@ CREATE TABLE `think_c_level` (
   `name` varchar(255) NOT NULL COMMENT '等级名称',
   `money` decimal(19,2) NOT NULL DEFAULT '0.00' COMMENT '卡面金额',
   `rebate` decimal(11,2) NOT NULL DEFAULT '0.00' COMMENT '折扣',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员等级';
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0',
+  `add_time` int(10) NOT NULL DEFAULT '0',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`,`status`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='会员等级';
 
 -- ----------------------------
 -- Records of think_c_level
 -- ----------------------------
+INSERT INTO `think_c_level` VALUES ('1', '金牌', '10000.00', '80.00', '1', '1477384743', '2016-10-25 17:54:54');
+INSERT INTO `think_c_level` VALUES ('2', '银牌', '100.00', '60.00', '1', '1477384808', '2016-10-25 16:52:30');
+INSERT INTO `think_c_level` VALUES ('3', '铜牌', '10.00', '20.00', '0', '1477384821', '2016-10-25 16:57:54');
+INSERT INTO `think_c_level` VALUES ('6', '铜牌1', '19.00', '20.00', '1', '1477389212', '2016-10-25 17:55:14');
 
 -- ----------------------------
 -- Table structure for think_card
@@ -360,6 +368,25 @@ CREATE TABLE `think_consumer` (
 -- ----------------------------
 -- Records of think_consumer
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for think_erate
+-- ----------------------------
+DROP TABLE IF EXISTS `think_erate`;
+CREATE TABLE `think_erate` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `k` varchar(255) NOT NULL DEFAULT '',
+  `rate` decimal(19,2) NOT NULL DEFAULT '1.00' COMMENT '汇率',
+  `add_time` int(10) NOT NULL DEFAULT '0',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `k` (`k`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COMMENT='exchange rate\r\n货币汇率表';
+
+-- ----------------------------
+-- Records of think_erate
+-- ----------------------------
+INSERT INTO `think_erate` VALUES ('14', 'erate', '1.00', '1477381173', '2016-10-25 16:19:50');
 
 -- ----------------------------
 -- Table structure for think_g_cate
@@ -655,11 +682,46 @@ CREATE TABLE `think_package` (
 -- ----------------------------
 -- Records of think_package
 -- ----------------------------
-INSERT INTO `think_package` VALUES ('1', '6', '11', '0.00', '', '0', '1', '1', '1', '0', '2016-10-21 14:10:13');
+INSERT INTO `think_package` VALUES ('1', '6', '金牌', '0.00', '', '0', '1', '1', '1', '0', '2016-10-25 17:53:51');
 INSERT INTO `think_package` VALUES ('2', '8', '12', '0.00', '', '0', '0', '1', '1', '0', '2016-10-21 17:19:00');
 INSERT INTO `think_package` VALUES ('4', '9', '打折', '100.00', '[{\"id\":\"4\",\"shop_id\":\"9\",\"name\":\"\\u9762\\u819c\",\"code\":\"bj1234543\",\"cate_id\":\"8\",\"price\":\"30.00\",\"status\":\"1\",\"m_id\":\"0\",\"add_time\":\"1476871249\",\"update_time\":\"2016-10-19 18:00:49\"},{\"id\":\"7\",\"shop_id\":\"6\",\"name\":\"\\u9762\\u819c\",\"code\":\"bj1234543\",\"cate_id\":\"8\",\"price\":\"30.00\",\"status\":\"1\",\"m_id\":\"0\",\"add_time\":\"1476871355\",\"update_time\":\"2016-10-19 18:02:35\"},{\"id\":\"10\",\"shop_id\":\"9\",\"name\":\"aaaa\",\"code\":\"aaa\",\"cate_id\":\"7\",\"price\":\"1.20\",\"status\":\"1\",\"m_id\":\"0\",\"add_time\":\"1476871831\",\"update_time\":\"2016-10-19 18:10:31\"}]', '0', '1', '1475251200', '1477040872', '1477040876', '2016-10-21 17:07:56');
 INSERT INTO `think_package` VALUES ('5', '9', '打折', '100.00', '[{\"id\":\"4\",\"shop_id\":\"9\",\"name\":\"\\u9762\\u819c\",\"code\":\"bj1234543\",\"cate_id\":\"8\",\"price\":\"30.00\",\"status\":\"1\",\"m_id\":\"0\",\"add_time\":\"1476871249\",\"update_time\":\"2016-10-19 18:00:49\"},{\"id\":\"7\",\"shop_id\":\"6\",\"name\":\"\\u9762\\u819c\",\"code\":\"bj1234543\",\"cate_id\":\"8\",\"price\":\"30.00\",\"status\":\"1\",\"m_id\":\"0\",\"add_time\":\"1476871355\",\"update_time\":\"2016-10-19 18:02:35\"},{\"id\":\"10\",\"shop_id\":\"9\",\"name\":\"aaaa\",\"code\":\"aaa\",\"cate_id\":\"7\",\"price\":\"1.20\",\"status\":\"1\",\"m_id\":\"0\",\"add_time\":\"1476871831\",\"update_time\":\"2016-10-19 18:10:31\"}]', '0', '1', '1475251200', '1477040872', '1477040952', '2016-10-21 17:09:12');
 INSERT INTO `think_package` VALUES ('6', '6', 'shang特价', '10.00', '[{\"id\":\"11\",\"shop_id\":\"6\",\"name\":\"11\",\"code\":\"111\",\"cate_id\":\"7\",\"price\":\"12.00\",\"status\":\"1\",\"m_id\":\"0\",\"add_time\":\"1476871847\",\"update_time\":\"2016-10-19 18:10:47\"}]', '0', '-1', '1475725853', '1507175458', '1477281132', '2016-10-24 11:52:40');
+
+-- ----------------------------
+-- Table structure for think_recharge_config
+-- ----------------------------
+DROP TABLE IF EXISTS `think_recharge_config`;
+CREATE TABLE `think_recharge_config` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `shop_id` int(10) NOT NULL DEFAULT '0' COMMENT '商铺',
+  `cond_egt` decimal(19,2) NOT NULL DEFAULT '0.00' COMMENT '充值范围min',
+  `cond_elt` decimal(19,2) DEFAULT '0.00' COMMENT '充值范围max',
+  `return` decimal(19,2) DEFAULT '0.00' COMMENT '返还',
+  `rule_gender` tinyint(1) NOT NULL DEFAULT '0' COMMENT '性别限制 0不限 1男 2女',
+  `rule_age` varchar(255) NOT NULL DEFAULT '' COMMENT '年龄限制 18-20',
+  `status` tinyint(1) DEFAULT '0' COMMENT '0',
+  `sta_time` int(10) NOT NULL DEFAULT '0' COMMENT '促销开始时间',
+  `end_time` int(10) NOT NULL DEFAULT '0' COMMENT '促销结束时间',
+  `add_time` int(10) NOT NULL DEFAULT '0',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `shop_id` (`shop_id`) USING BTREE,
+  KEY `setime` (`sta_time`,`end_time`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8 COMMENT='充值活动配置';
+
+-- ----------------------------
+-- Records of think_recharge_config
+-- ----------------------------
+INSERT INTO `think_recharge_config` VALUES ('38', '充100以上返10', '6', '100.00', '1000.00', '0.10', '0', '', '0', '0', '0', '1477375928', '2016-10-25 14:12:08');
+INSERT INTO `think_recharge_config` VALUES ('39', '充100以上返10', '8', '100.00', '1000.00', '0.10', '0', '', '0', '0', '0', '1477375928', '2016-10-25 14:12:08');
+INSERT INTO `think_recharge_config` VALUES ('40', '充100以上返10', '9', '100.00', '1000.00', '0.10', '0', '', '0', '0', '0', '1477375928', '2016-10-25 14:12:08');
+INSERT INTO `think_recharge_config` VALUES ('41', '充100以上返10', '4', '100.00', '1000.00', '0.10', '0', '', '0', '0', '0', '1477375928', '2016-10-25 14:12:08');
+INSERT INTO `think_recharge_config` VALUES ('42', '充100返50', '6', '100.00', '100.00', '50.00', '0', '', '0', '0', '0', '1477375969', '2016-10-25 14:12:49');
+INSERT INTO `think_recharge_config` VALUES ('43', '充100返50', '8', '100.00', '100.00', '50.00', '0', '', '0', '0', '0', '1477375969', '2016-10-25 14:12:49');
+INSERT INTO `think_recharge_config` VALUES ('44', '充100返50', '9', '100.00', '100.00', '50.00', '0', '', '0', '0', '0', '1477375969', '2016-10-25 14:12:49');
+INSERT INTO `think_recharge_config` VALUES ('45', '充100返50', '4', '100.00', '100.00', '50.00', '0', '', '0', '0', '0', '1477375969', '2016-10-25 14:12:49');
 
 -- ----------------------------
 -- Table structure for think_region
@@ -4124,7 +4186,7 @@ CREATE TABLE `think_sale` (
   `add_time` int(10) NOT NULL DEFAULT '0',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8 COMMENT='促销表';
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8 COMMENT='促销表';
 
 -- ----------------------------
 -- Records of think_sale
@@ -4154,6 +4216,7 @@ INSERT INTO `think_sale` VALUES ('33', '特价15', '0', '6', '0', '1.00', '0.00'
 INSERT INTO `think_sale` VALUES ('34', '特价15', '0', '6', '0', '0.00', '1.00', '1.00', '0', '1-22', '0', '1477301105', '1477560588', '0', '0000-00-00 00:00:00');
 INSERT INTO `think_sale` VALUES ('35', '特价15', '3', '6', '0', '0.00', '1.00', '1.00', '0', '1-22', '1', '1477301105', '1477560588', '0', '2016-10-24 17:58:19');
 INSERT INTO `think_sale` VALUES ('36', '双11', '1', '6', '0', '11.00', '0.00', '0.00', '1', '18-20', '1', '1477216742', '1478880000', '1477303156', '2016-10-24 18:01:29');
+INSERT INTO `think_sale` VALUES ('37', 'shang状态1', '2', '9', '0', '0.80', '0.00', '0.00', '0', '', '1', '1477363145', '1477621636', '1477362442', '2016-10-25 10:27:34');
 
 -- ----------------------------
 -- Table structure for think_sale_goods
@@ -4166,7 +4229,7 @@ CREATE TABLE `think_sale_goods` (
   `goods_id` int(10) NOT NULL DEFAULT '0',
   `add_time` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of think_sale_goods
@@ -4204,6 +4267,8 @@ INSERT INTO `think_sale_goods` VALUES ('65', '33', '12.00', '11', '1477301403');
 INSERT INTO `think_sale_goods` VALUES ('66', '34', '12.00', '11', '1477301419');
 INSERT INTO `think_sale_goods` VALUES ('67', '35', '12.00', '11', '1477301472');
 INSERT INTO `think_sale_goods` VALUES ('68', '36', '12.00', '11', '1477303156');
+INSERT INTO `think_sale_goods` VALUES ('69', '37', '333.22', '2', '1477362442');
+INSERT INTO `think_sale_goods` VALUES ('70', '37', '30.00', '4', '1477362442');
 
 -- ----------------------------
 -- Table structure for think_shop
