@@ -29,7 +29,7 @@ function add(url){
 }
 $(
 function(){  
-    $("#addgoods").click(function(){
+    $("#saddgoods").click(function(){
         $('#sgoodsdlg').dialog('open').dialog('setTitle','选择商品');
     });
     $('#type').combobox({
@@ -59,10 +59,12 @@ function(){
 
 saleObj = {
     'doSearch':function(){
-        console.log($("#saleSearch").serializeObject());
         $('#sgoodsdg').datagrid({
             url:"{:U('Goods/goodsList')}",
-            queryParams:$("#saleSearch").serializeObject()
+            queryParams:{
+                shopId: $("#shopId").combobox("getValue"),
+                cateId: $("#cateId").combobox("getValue")
+            }
         });
         return false;
     },
@@ -139,7 +141,7 @@ saleObj = {
         <tr>
             <td>商品：</td>
             <td>
-                <button type="button" id="addgoods">添加商品</button>
+                <button type="button" id="saddgoods">添加商品</button>
                 <div id="saleGoodsPanel" class="easyui-panel" title="商品"></div>
                 <div class="divide"></div>
             </td>

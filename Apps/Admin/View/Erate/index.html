@@ -1,0 +1,58 @@
+<body>
+<script>
+function add(url){
+    $('#ErateAdd').form('submit',{
+        url:url,
+        onSubmit: function(param){
+            return $(this).form('validate');
+        },
+        success: function(result){
+            var result=eval('('+result+')');
+            if (!result.status){
+                    $.messager.alert('Warning','添加失败！' + result.message);
+            } else {
+                
+                if($.messager.confirm('提示','添加成功！是否继续添加',function(r){
+                    if(r){
+                        closeTab();
+                    }else{
+                        closeTab();
+                    }
+                
+                }));
+            }
+        }
+    });
+    
+}
+</script>
+<form id="ErateAdd" method="post" class="bootstrap-frm">
+    <div class="tit-wrap">
+        <h1>积分兑换设置
+        <span></span>
+        </h1>
+        <div class="btn-box">
+            <a href='javascript:;' onclick='add("{:U('Erate/index')}")' class='easyui-linkbutton button'>保存</a>
+        </div>
+    </div>
+    <table>
+        <tr>
+            <td width='10%'>兑换比例</td>
+            <td width='40%'> 1元 = {$erate}积分</td>
+            <td width='10%'></td>
+            <td width='40%'></td>
+        </tr>
+        <tr>
+            <td>设置：</td>
+            <td>
+                1元 = <input name="rate" class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:['length[1,20]'], prompt:'积分'" style='width:150px' />
+            </td>
+            <td></td>
+            <td>
+            </td>
+        </tr>
+        
+    </table>
+</form>
+
+</body>

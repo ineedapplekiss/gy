@@ -39,8 +39,8 @@ return array(
 			'gicon' => 'icon-tip',
 			'list' => array(
 				array('url'=>'Sale/index', 'icon'=>'icon-users', 'name'=>'促销活动'),
-				array('url'=>'Member/index', 'icon'=>'icon-users', 'name'=>'充值活动'),
-				array('url'=>'Member/index', 'icon'=>'icon-users', 'name'=>'积分兑换设置'),
+				array('url'=>'Recharge/index', 'icon'=>'icon-users', 'name'=>'充值活动'),
+				array('url'=>'Erate/index', 'icon'=>'icon-users', 'name'=>'积分兑换设置'),
 				array('url'=>'Member/index', 'icon'=>'icon-users', 'name'=>'数据报表'),
 			),
 		),

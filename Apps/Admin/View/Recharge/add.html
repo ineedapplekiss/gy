@@ -1,0 +1,100 @@
+<body>
+<script>
+function add(url){
+    $('#RconfigAdd').form('submit',{
+        url:url,
+        onSubmit: function(){
+            return $(this).form('validate');
+        },
+        success: function(result){
+            var result=eval('('+result+')');
+            if (!result.status){
+                    $.messager.alert('Warning','添加失败！' + result.message);
+            } else {
+                
+                if($.messager.confirm('提示','添加成功！是否继续添加',function(r){
+                    if(r){
+                        closeTab();
+                    }else{
+                        closeTab();
+                    }
+                
+                }));
+            }
+        }
+    });
+    
+}
+</script>
+<form id="RconfigAdd" method="post" class="bootstrap-frm">
+    <div class="tit-wrap">
+        <h1>添加充值策略
+        <span></span>
+        </h1>
+        <div class="btn-box">
+            <a href='javascript:;' onclick='add("{:U('Recharge/add')}")' class='easyui-linkbutton button'>保存</a>
+        </div>
+    </div>
+    <table>
+        <tr>
+            <td width='10%'>策略名称：</td>
+            <td width='40%'> <input name='name' class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:['length[2,20]']" style='width:150px'/></td>
+            <td width='10%'></td>
+            <td width='40%'></td>
+        </tr>
+        <tr>
+            <td>具体策略：</td>
+            <td>
+                充<input name="cond_egt" class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:['length[1,20]'], prompt:'元'" style='width:150px' />~
+                <input name="cond_elt" class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:['length[1,20]'], prompt:'元'" style='width:150px' />
+            </td>
+            <td>送</td>
+            <td>
+                <input name="return" class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:['length[1,20]'], prompt:'%'" style='width:150px' value='123'/>
+            </td>
+        </tr>
+        <tr>
+            <td>适用店铺：</td>
+            <td>
+                <volist name="shops" id="vo">
+                    <input type="checkbox" name="shop_ids[]" value="{$vo['id']}"  />{$vo['shop_name']}<br />
+                </volist>
+            </td>
+            <td></td>
+            <td></td>
+            
+        </tr>
+        <tr>
+            <td>会员性别：</td>
+            <td>
+                <select class="easyui-combobox" name="gender" id='gender' data-options="required:true,height:30">
+                    <option value="0">不限</option>
+                    <option value="1">男</option>
+                    <option value="2">女</option>              
+                </select>
+            </td>
+            <td></td>
+            <td></td>
+            
+        </tr>
+        <tr>
+            <td>会员年龄：</td>
+            <td>
+                <input name="age" class="easyui-textbox" data-options="delay:1000,height:30,validType:['length[0,20]']" style='width:150px' />(中横线分割 例“18-20”，不限则留空)
+            </td>
+            <td></td>
+            <td></td>
+            
+        </tr>
+        <tr>
+            <td>有效期：</td>
+            <td>
+                <input name="stime" class = 'easyui-datetimebox' title='开始时间'>至
+                <input name="etime" class = 'easyui-datetimebox' title='结束时间'>
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+</form>
+</body>

@@ -37,9 +37,14 @@ $(function(){
 
 packageObj = {
     'doSearch':function(){
+        console.log($("#shopId").combobox("getValue"));
+        console.log($("#cateId").combobox("getValue"));
         $('#pgoodsdg').datagrid({
             url:"{:U('Goods/goodsList')}",
-            queryParams:$("#packageSearch").serializeObject()
+            queryParams:{
+                shopId: $("#shopId").combobox("getValue"),
+                cateId: $("#cateId").combobox("getValue")
+            }
         });
         return false;
     },
