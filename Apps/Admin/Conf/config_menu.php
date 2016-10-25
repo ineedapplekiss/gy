@@ -2,20 +2,19 @@
 return array(
 	"MENU" => array(
 		array(
-			'gname' => '会员模块',
+			'gname' => '快速操作',
 			'gicon' => 'icon-search',
 			'list' => array(
-				array('url'=>'Member/index', 'icon'=>'icon-users', 'name'=>'会员列表'),
-			    array('url'=>'Member/group', 'icon'=>'icon-group_go', 'name'=>'会员组管理')
+				array('url'=>'Pay/index', 'icon'=>'icon-users', 'name'=>'消费')
 			),
 		),
 		array(
 			'gname' => '顾客管理',
 			'gicon' => 'icon-man',
 			'list' => array(
-				array('url'=>'Member/index', 'icon'=>'icon-users', 'name'=>'会员列表'),
-				array('url'=>'Member/index', 'icon'=>'icon-users', 'name'=>'会员等级'),
-			    array('url'=>'Member/group', 'icon'=>'icon-group_go', 'name'=>'生成会员卡')
+				array('url'=>'Cus/index', 'icon'=>'icon-users', 'name'=>'会员列表'),
+				array('url'=>'Level/index', 'icon'=>'icon-users', 'name'=>'会员等级'),
+			    array('url'=>'Card/index', 'icon'=>'icon-group_go', 'name'=>'生成会员卡')
 			),
 		),
 		array(

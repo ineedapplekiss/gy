@@ -1,0 +1,67 @@
+<body>
+<script>
+function add(url){
+    $('#LevelAdd').form('submit',{
+        url:url,
+        onSubmit: function(param){
+            return $(this).form('validate');
+        },
+        success: function(result){
+            var result=eval('('+result+')');
+            if (!result.status){
+                    $.messager.alert('Warning','添加失败！' + result.message);
+            } else {
+                
+                if($.messager.confirm('提示','添加成功！是否继续添加',function(r){
+                    if(r){
+                        closeTab();
+                    }else{
+                        closeTab();
+                    }
+                
+                }));
+            }
+        }
+    });
+    
+}
+
+</script>
+<form id="LevelAdd" method="post" class="bootstrap-frm">
+    <div class="tit-wrap">
+        <h1>会员等级 - 新建等级
+        <span></span>
+        </h1>
+        <div class="btn-box">
+            <a href='javascript:;' onclick='add("{:U('Level/add')}")' class='easyui-linkbutton button'>保存</a>
+        </div>
+    </div>
+    <table>
+        <tr>
+            <td width='10%'>等级名称：</td>
+            <td width='40%'> <input name="name" class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:['length[2,20]']" style='width:150px' /></td>
+            <td width='10%'></td>
+            <td width='40%'></td>
+        </tr>
+        <tr>
+            <td>卡面金额：</td>
+            <td>
+                <input name="money" class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:['length[2,20]']" style='width:150px' />
+            </td>
+            <td></td>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <td>折扣系数：</td>
+            <td>
+                 <input name="rebate" class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:['length[2,20]'], prompt:'80%'" style='width:150px' />
+            </td>
+            <td></td>
+            <td></td>
+            
+        </tr>
+    </table>
+</form>
+
+</body>

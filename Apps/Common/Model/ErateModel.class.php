@@ -25,6 +25,7 @@ class ErateModel extends Model
 		$cond = array(
 			"k"	=> \Common\Model\ErateModel::RATE_KEY
 			);
-		return $this->where($cond)->add($data, $cond, true);
+		$this->where($cond)->add($data, $cond, 'rate');
+		return $this->where($cond)->add($data, $cond, 'rate');
 	}
 }

@@ -1,0 +1,69 @@
+<body>
+    <table id="leveldg" title="会员等级列表" class="easyui-datagrid" style="width:100%;" url="{:U('Level/levelList')}"  toolbar="#leveltoolbar" pagination="true" pageSize='15' pageNumber='1' multiSort='true' sortOrder="desc" pageList="[2,5,10,15,20,25,30,40,50]" rownumbers="true" fitColumns="true" singleSelect="true">
+        <thead>
+            <tr>
+                <th field="name" width="10" sortable="true">等级名称</th>
+                <th field="money" width="50">卡面金额</th>
+                <th field="rebate" width="50" sortable="true">折扣系数</th>
+                <th field="update_time">操作时间</th>
+            </tr>
+        </thead>
+    </table>
+
+    <div id="leveltoolbar">
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="showTab('{:U(\'Level/add\')}', '添加等级')">添加</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editLevel()">编辑</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyLevel()">删除</a>
+    </div>
+    
+
+   <script type="text/javascript">
+
+        //启用停用套餐
+        function editLevel(){
+            var row = $('#leveldg').datagrid('getSelected');
+            if (row){
+                $.messager.confirm('状态提示','真的要修改吗?',function(r){
+                    if (r){
+                        var durl='{:U("Level/edit")}'+'?id='+row.id;
+                        showTab(durl, '编辑等级');
+                    }
+                });
+            }
+        }
+
+        //删除套餐
+        function destroyLevel(){
+            var row = $('#leveldg').datagrid('getSelected');
+            if (row){
+                $.messager.confirm('删除提示','真的要删除此等级吗?',function(r){
+                    if (r){
+                        var durl='{:U("Level/delHandle")}';
+                        $.post(durl,{id:row.id,M:'m'},function(result){
+                            if (result.status){
+                                $('#leveldg').datagrid('reload');    // reload the user data
+                            } else {
+                                $.messager.alert('错误提示',result.message,'error');
+                            }
+                        },'json').error(function(data){
+                            var info=eval('('+data.responseText+')');
+                            $.messager.confirm('错误提示',info.message,function(r){
+                                
+                            });
+                        });
+                    }
+                });
+            }
+        }
+
+       
+
+    </script>
+    <style type="text/css">
+        #fm{
+            margin:0;
+            padding:10px;
+        }
+    </style>
+    
+</body>
