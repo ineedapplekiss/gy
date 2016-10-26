@@ -1,7 +1,7 @@
 <?php
 namespace Admin\Controller;
 use Admin\Controller\CommonController;
-class PackageController extends CommonController {
+class CardController extends CommonController {
 
 	public function index(){
         //仅允许查询权限下的商铺
@@ -15,7 +15,7 @@ class PackageController extends CommonController {
 	 * @access public
 	 * @return null
 	 */
-    public function packageList(){
+    public function cardList(){
     	$ck=A('CheckInput');
 
     	$sort=$ck->in('排序','sort','cnennumstr','id',0,0);
@@ -24,66 +24,14 @@ class PackageController extends CommonController {
 		$page=$ck->in('当前页','page','intval','1',0,0);	
     	$rows=$ck->in('每页记录数','rows','intval','',0,0);	
 
-        //查询条件
-        $name=$ck->in('套餐名称','name','cnennumstr','',0,0);     
-        $status=$ck->in('状态','status','intval','',0,0);
-        $shopId=$ck->in('商铺','shopId','intval','',0,0);
-
-        $map = array();
-
-        //仅允许查询权限下的商铺
-        $shopIds = D("Shop")->getShopsByUid(session('uid'));
-        if($shopId>0 && in_array($shopId, array_column($shopIds, "id")))//指定商铺
-        {
-            $map['p.shop_id'] = $shopId;
-        }
-        else
-        {
-            $shopIds = implode(",",array_column($shopIds, "id"));
-            $map['p.shop_id'] = array('IN',$shopIds);
-        }
-
-        !empty($name)?$map['p.name']=array('like','%'.$name.'%'):'';//指定套餐名称
-        switch ($status) {
-            case 1://进行中
-                $map['p.status'] = \Common\Model\PackageModel::STATUS_EN;
-                $map['p.sta_time'] = array("ELT",NOW_TIME);
-                $map['p.end_time'] = array("GT",NOW_TIME);
-                break;
-            case 2://定时
-                $map['p.status'] = array("NEQ", \Common\Model\PackageModel::STATUS_DEL);
-                $map['p.sta_time'] = array("GT",NOW_TIME);
-                break;
-            case 3://失效
-                $map['p.status'] = array("NEQ", \Common\Model\PackageModel::STATUS_DEL);
-                $map['p.end_time'] = array("ELT",NOW_TIME);
-                break;
-            case 4://暂停
-                $map['p.status'] = \Common\Model\PackageModel::STATUS_DIS;
-                $map['p.sta_time'] = array("ELT",NOW_TIME);
-                $map['p.end_time'] = array("GT",NOW_TIME);
-                break;
-            default:
-                $map['p.status'] = array("NEQ", \Common\Model\PackageModel::STATUS_DEL);
-                break;
-        }
-
     	
-    	$count=D('Package')->alias("p")->where($map)->count();
-        $info=D('Package')
-            ->alias("p")
-            ->field("p.id, p.name, p.shop_id, p.jf, p.sta_time, p.end_time, p.add_time, p.update_time, p.goods_info, p.status, s.shop_name")
-            ->join("left join ".C('DB_PREFIX')."shop as s on p.shop_id=s.id")
-            ->order($sort.' '.$order)->page($page.','.$rows)->where($map)->page($page,$rows)->select();
+    	$count=D('Card')->count();
+        $info=D('Card')
+            ->alias("c")
+            ->field("c.*,u.username")
+            ->join("left join ".C('DB_PREFIX')."auth_user as u on c.uid=u.uid")
+            ->order($sort.' '.$order)->page($page,$rows)->select();
 
-        //格式化输出
-        foreach ($info as $k => $v) {
-            $info[$k]['logic_status'] = D('Package')->getStatus($v["status"]);
-            $info[$k]['logic_status'] = D('Package')->formatStatus($info[$k]['logic_status']);
-            $info[$k]['setime'] = date("Y-m-d H:i:s", $v["sta_time"]) . "~" . date("Y-m-d H:i:s", $v["end_time"]);
-            $info[$k]['goods_info'] = implode("+", array_column(json_decode($v["goods_info"],true), "name"));
-        }
-    	
     	if(!empty($info)){
             $data['total']=$count;
             $data['rows']=$info;
@@ -95,7 +43,44 @@ class PackageController extends CommonController {
     }
 
     /**
-     * 套餐添加
+     * 列表
+     * @author shang
+     * @access public
+     * @return null
+     */
+    public function carddetailList(){
+        $ck=A('CheckInput');
+
+        $sort=$ck->in('排序','sort','cnennumstr','id',0,0);
+        $order=$ck->in('规则','order','cnennumstr','desc',0,0);
+
+        $page=$ck->in('当前页','page','intval','1',0,0);   
+        $rows=$ck->in('每页记录数','rows','intval','',0,0);
+
+        $cardId=$ck->in('每页记录数','cardId','intval','',0,0); 
+
+        $map["c.card_id"] = $cardId;
+        
+        $count=D('CardDetail')->alias("c")->where($map)->count();
+        $info=D('CardDetail')
+            ->alias("c")
+            ->field("c.*,u.name")
+            ->join("left join ".C('DB_PREFIX')."customer as u on c.card_no=u.card_no")
+            ->where($map)
+            ->order($sort.' '.$order)->page($page,$rows)->select();
+
+        if(!empty($info)){
+            $data['total']=$count;
+            $data['rows']=$info;
+        }else{
+            $data['total']=0;
+            $data['rows']=0;
+        }
+        $this->ajaxReturn($data);
+    }
+
+    /**
+     * 添加
      *@author shang
      *
      */
@@ -107,29 +92,26 @@ class PackageController extends CommonController {
         }else{
 
             $ck=A('CheckInput');
-            $name=$ck->in('套餐名称','name','cnennumstr','',2,20);
-            $shopId=$ck->in('商铺','shopId','intval','',0,0);
-            $price=$ck->in('套餐价格','price','float(17,2)','',0,0);
-            $stime=$ck->in('开始时间','stime','datetime','',0,0);
-            $etime=$ck->in('结束时间','etime','datetime','',0,0);
-            $goodsIds=I('post.goodsid');
+            $activityName=$ck->in('活动名称','activity_name','cnennumstr','',2,20);
+            $cardNumber=$ck->in('会员卡数量','card_number','intval','',0,0);
 
-            $goods_info = D("Goods")->where(array("id"=>array("in",$goodsIds)))->select();
+            if ($cardNumber < 1) {
+                $result['message']='请填写会员卡数量';
+                $result['status']=false;  
+                $this->ajaxReturn($result);
+            }
 
             $data = array();
-            $data['shop_id']    = $shopId;
-            $data['name']       = $name;
-            $data['jf']         = $price;
-            $data['goods_info'] = json_encode($goods_info);
-            $data['sta_time']   = strtotime($stime);
-            $data['end_time']   = strtotime($etime);
-            $data['add_time']   = NOW_TIME;
-            $addStatus = D("Package")->add($data);
+            $data['activity_name']  = $activityName;
+            $data['card_number']    = $cardNumber;
+            $data['add_time']       = NOW_TIME;
+            $data['uid']            = $_SESSION['uid'];
+            $addStatus = D("Card")->addCard($data);
             if($addStatus){
-                $result['message']='添加套餐成功!';
+                $result['message']='添加会员卡成功!';
                 $result['status']=true; 
             }else{
-                $result['message']='添加套餐失败!';
+                $result['message']='添加会员卡失败!';
                 $result['status']=false;    
             }
             $this->ajaxReturn($result);

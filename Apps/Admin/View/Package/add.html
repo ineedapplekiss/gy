@@ -37,8 +37,6 @@ $(function(){
 
 packageObj = {
     'doSearch':function(){
-        console.log($("#shopId").combobox("getValue"));
-        console.log($("#cateId").combobox("getValue"));
         $('#pgoodsdg').datagrid({
             url:"{:U('Goods/goodsList')}",
             queryParams:{

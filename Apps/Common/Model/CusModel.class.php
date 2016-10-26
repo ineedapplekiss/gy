@@ -2,7 +2,7 @@
 namespace Common\Model;
 use Think\Model;
 /**
- * 充值策略
+ * 会员
  */
 class RechargeModel extends Model
 {	
