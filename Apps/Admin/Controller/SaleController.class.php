@@ -140,9 +140,9 @@ class SaleController extends CommonController {
             $name=$ck->in('促销名称','name','cnennumstr','',2,20);
             $type=$ck->in('活动类型','type','intval','',1,20);
             $shopId=$ck->in('商铺','shopId','intval','',0,0);
-            $price=$ck->in('价格（折扣）','price','float(17,2)','',0,0);
-            $full=$ck->in('满','full','float(17,2)','',0,0);
-            $cut=$ck->in('减价格（折扣）','cut','float(17,2)','',0,0);
+            $price=$ck->in('价格（折扣）','price','float(17,2)','0.00',0,0);
+            $full=$ck->in('满','full','float(17,2)','0.00',0,0);
+            $cut=$ck->in('减价格（折扣）','cut','float(17,2)','0.00',0,0);
             $gender=$ck->in('性别限制','gender','intval','',0,0);
             $age=I('post.age');
             $stime=$ck->in('开始时间','stime','datetime','',0,0);

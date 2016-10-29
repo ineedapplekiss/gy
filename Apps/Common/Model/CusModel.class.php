@@ -34,6 +34,14 @@ class CusModel extends Model
 			$map["card_no"]	= $info["card_no"];
 			$res = D("CardDetail")->where($map)->save($cardDetail);
 			if(!$res) throw new \Exception("会员卡激活失败", 1);
+
+			//添加流水
+			$cbcInfo["type"]	= \Common\Model\CbcModel::TYPE_RECHARGE;
+			$cbcInfo["jf"]		= $info["jf"];
+			$cbcInfo["act_id"]	= $cusId;
+			$cbcInfo["add_time"]= NOW_TIME;
+			$res = D("Cbc")->add($cbcInfo);
+			if(!$res) throw new \Exception("流水添加失败", 1);
 			
 			$this->commit();
 		} catch(Exception $e) {
