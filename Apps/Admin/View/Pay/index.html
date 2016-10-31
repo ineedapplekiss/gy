@@ -34,9 +34,9 @@
     <table id="paydg" title="消费列表" class="easyui-datagrid" style="width:100%;" toolbar="#paytoolbar" rownumbers="true" fitColumns="false" singleSelect="true">
         <thead>
             <tr>
-                <th field="type" width="50">类型</th>
+                <th field="type_format" width="50">类型</th>
                 <th field="name"  width="150">商品（套餐）名称</th>
-                <th field="jf" width="150">单价（积分）</th>
+                <th field="yj" width="150">单价（积分）</th>
                 <th field="count" width="150">数量</th>
                 <th field="use_c_level" width="150" formatter="checkYesNo">会员折扣</th>
                 <th field="use_sale" width="150" formatter="checkYesNo">商品特价</th>
@@ -50,6 +50,7 @@
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="orderObj.addpackage()">添加套餐</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="orderObj.edit()">设置</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="orderObj.del()">删除</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="orderObj.total()">test</a>
     </div>
 
     <div class="easyui-panel" title="合计" style="width:100%">
@@ -58,10 +59,11 @@
             <table cellpadding="5" style="width:100%;">
                 <tr>
                     <td width="5%">备注:</td>
-                    <td width="45%"><input class="easyui-textbox" type="text" name="name" data-options="required:true"></input></td>
+                    <td width="45%"><input class="easyui-textbox" type="text" id="remark" name="remark" data-options="required:true"></input></td>
                     <td width="25%"></td>
                     <td width="25%">
-                        选择优惠:<select class="easyui-combobox" name="saleId" id='saleId' data-options="required:true,height:30">
+                        选择优惠:<select class="easyui-combobox" name="orderSaleId" id='orderSaleId' data-options="required:true,height:30,width:100">
+                        <option value="0">无</option>
                         </select>
                     </td>
                 </tr>
@@ -77,7 +79,7 @@
                     <td></td>
                     <td>
                         <div style="text-align:right;padding:5px">
-                            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">Submit</a>
+                            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="orderObj.pay()">结账</a>
                         </div>
                     </td>
                 </tr>
@@ -139,7 +141,10 @@
             </div>
             <div class="fitem">
                 <label>是否享受会员折扣</label>
-                <input name="use_c_level" id="use_c_level" class="easyui-textbox" data-options="height:30" />
+                <select id="use_c_level" class="easyui-combobox" name="use_c_level" style="width:200px;">
+                    <option value="0">否</option>
+                    <option value="1">是</option>
+                </select>
             </div>
             
             <div class="fitem">
@@ -173,6 +178,9 @@
                             url:"{:U('Pay/detailList')}",
                             queryParams:{
                                 cus_id: orderObj.cus_id
+                            },
+                            onLoadSuccess: function(data){
+                                orderObj.total();
                             }
                         });
                     }else{
@@ -216,7 +224,7 @@
                         function(result){
                             if (result.status){
                                 $('#paygoodsdlg').dialog('close');
-                                $('#paydg').datagrid('reload');  
+                                $('#paydg').datagrid('reload');
                             }else{
                                 $.messager.alert('错误提示',result.message,'error');
                                 orderObj.cleanDg();
@@ -246,12 +254,19 @@
             edit:function(){
                 var odRow=$('#paydg').datagrid('getSelected');
                 if(odRow){
-                    console.log(odRow);
                     //初始化促销下拉框
                     $('#sale_id').combobox({
-                        url:'{:U('Pay/getGoodsSales')}'+'?goods_id='+odRow.goods_id,
+                        url:'{:U('Pay/getGoodsSales')}'+'?goods_id='+odRow.goods_id+'&cus_id='+orderObj.cus_id+'&type='+odRow.type,
+                        method:'get',
                         valueField:'id',
                         textField:'name'
+                    });
+                    //初始化编辑数据
+                    $('#payEditForm').form('load',{
+                        od_id:odRow.id,
+                        payEditCount: odRow.count,
+                        use_c_level:odRow.use_c_level,
+                        sale_id:odRow.sale_id,
                     });
                     $('#payeditdlg').dialog('open').dialog('setTitle','设置');
                 }
@@ -262,9 +277,54 @@
                 }
             },
             saveEdit:function(){
-                $('#paygoodsdlg').dialog('open').dialog('setTitle','选择套餐');
+                $('#payEditForm').form('submit',{
+                    url: '{:U('Pay/saveOd')}',
+                    onSubmit: function(){
+                        return $(this).form('validate');
+                    },
+                    success: function(result){
+                         var result=eval('('+result+')');
+                        if (!result.status){
+                            $.messager.confirm('错误提示',result.message,function(r){
+                                //$('#payeditdlg').dialog('close');
+                            });
+                        }else{
+                            $('#payEditForm').form('clear');
+                            $('#payeditdlg').dialog('close'); 
+                            $('#paydg').datagrid('reload');  
+                        }
+                    }
+                });
+            },
+            del:function(){
+                var row = $('#paydg').datagrid('getSelected');
+                if (row){
+                    $.messager.confirm('删除提示','真的要删除吗?',function(r){
+                        if (r){
+                            var durl='{:U("Pay/delHandle")}';
+                            $.post(durl,{id:row.id},function(result){
+                                if (result.status){
+                                    $('#paydg').datagrid('reload');
+                                } else {
+                                    $.messager.alert('错误提示',result.message,'error');
+                                }
+                            },'json').error(function(data){
+                                var info=eval('('+data.responseText+')');
+                                $.messager.confirm('错误提示',info.message,function(r){
+                                    
+                                });
+                            });
+                        }
+                    });
+                }
+                else
+                {
+                    $.messager.alert('提示','请选择要删除的数据!','info');
+                    return false;
+                }
             },
             cancelEdit:function(){
+                $('#payEditForm').form('clear');
                 $('#payeditdlg').dialog('close');
             },
             // 清空结果
@@ -275,6 +335,82 @@
                 $("#cusmobile").html("");
                 orderObj.cus_id = 0;
                 $('#paydg').datagrid('loadData', { total: 0, rows: [] });
+            },
+            // 计算总和
+            total:function(){
+                var data = $('#paydg').datagrid('getData');
+                var total = 0;
+                var sale_total = 0;
+                for(var i=0; i<data.total; i++){
+                    var row = data.rows[i];
+                    total += parseFloat(row.jf);
+                }
+                $("#total").html("合计："+total);
+                //初始化店铺促销下拉框
+                $('#orderSaleId').combobox({
+                    url:'{:U('Pay/getShopSales')}'+'?cus_id='+orderObj.cus_id,
+                    method:'get',
+                    valueField:'id',
+                    textField:'name',
+                    onSelect: function(rec){
+                        orderObj.sale_id = rec.id;
+                        total = 0;
+                        sale_total = 0;
+                        for(var i=0; i<data.total; i++){
+                            var row = data.rows[i];
+                            if(parseInt(row.use_c_level) == 0 && parseInt(row.sale_id) == 0)
+                            {
+                                sale_total += parseFloat(row.jf);
+                            }
+                            else
+                            {
+                                total += parseFloat(row.jf);
+                            }
+                        }
+                        //判断满减条件
+                        if(sale_total>=parseFloat(rec.full))
+                        {
+                            if(parseInt(rec.full) == 3)
+                            {
+                                total = total + sale_total - parseFloat(rec.cut);
+                            }
+                            else
+                            {
+                                total = total + (sale_total * parseFloat(rec.cut));
+                            }
+                        }
+                        else
+                        {
+                            total = total + sale_total;
+                        }
+
+
+                        $("#total").html("合计："+total.toFixed(2));
+                    }
+                });
+            },
+            pay:function(){
+                $.post('{:U('Pay/pay')}',
+                    {
+                        cus_id:orderObj.cus_id,
+                        sale_id:orderObj.sale_id,
+                        remark:$("#remark").val()
+                    },
+                    function(result){
+                    if (result.status){
+                        orderObj.cus_id = 0;
+                        orderObj.sale_id = 0;
+                        closeTab();
+                    }else{
+                        $.messager.alert('错误提示',result.message,'error');
+                    }
+                },'json').error(function(data){
+                    var info=eval('('+data.responseText+')');
+                    $.messager.confirm('错误提示',info.message,function(r){
+                        //orderObj.cleanDg();
+                    });
+                });
+
             }
 
             
