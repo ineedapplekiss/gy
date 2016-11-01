@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : 虚拟ubuntu
-Source Server Version : 50552
-Source Host           : 127.0.0.1:3306
+Source Server         : localhost
+Source Server Version : 50716
+Source Host           : 192.168.200.101:3306
 Source Database       : gy
 
 Target Server Type    : MYSQL
-Target Server Version : 50552
+Target Server Version : 50716
 File Encoding         : 65001
 
-Date: 2016-11-01 17:55:05
+Date: 2016-11-01 23:54:47
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -221,19 +221,21 @@ INSERT INTO `think_auth_user` VALUES ('10', 'test002', '8d014dee20a374dc7ad97e4d
 DROP TABLE IF EXISTS `think_c_balance_change`;
 CREATE TABLE `think_c_balance_change` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
+  `c_id` int(10) NOT NULL DEFAULT '0',
   `type` int(10) NOT NULL DEFAULT '0' COMMENT '1 充值 2消费',
   `jf` decimal(19,2) NOT NULL DEFAULT '0.00' COMMENT '积分 +增加 -减少',
   `act_id` int(10) NOT NULL DEFAULT '0' COMMENT '关联id',
   `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '流水时间',
   PRIMARY KEY (`id`),
-  KEY `act_id` (`act_id`,`add_time`) USING BTREE
+  KEY `act_id` (`act_id`,`add_time`) USING BTREE,
+  KEY `c_id` (`c_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='顾客流水表';
 
 -- ----------------------------
 -- Records of think_c_balance_change
 -- ----------------------------
-INSERT INTO `think_c_balance_change` VALUES ('1', '2', '-47.20', '13', '1477993638');
-INSERT INTO `think_c_balance_change` VALUES ('2', '3', '47.20', '13', '1477993667');
+INSERT INTO `think_c_balance_change` VALUES ('1', '13', '2', '-47.20', '13', '1477993638');
+INSERT INTO `think_c_balance_change` VALUES ('2', '13', '3', '47.20', '13', '1477993667');
 
 -- ----------------------------
 -- Table structure for think_c_level

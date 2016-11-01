@@ -87,6 +87,19 @@
             }
         }
 
+        //查看会员
+        function viewCus(){
+            var oRow=$('#cusdg').datagrid('getSelected');
+            if(oRow){
+                showTab('{:U(\'Cus/detail\')}'+'?id='+oRow.id, '订单详情');
+            }
+            else
+            {
+                $.messager.alert('提示','请选择要查看的数据!','info');
+                return false;
+            }
+        }
+
         //删除
         function destroyCus(){
             var row = $('#cusdg').datagrid('getSelected');

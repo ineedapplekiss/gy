@@ -286,18 +286,22 @@ class CusController extends CommonController {
      */
     public function detail(){
         $id = I("get.id", 0, "intval");
-        $order = D('Order')
-            ->alias("o")
-            ->field("o.*, c.name as uname, c.card_no, s.shop_name")
-            ->join("left join ".C('DB_PREFIX')."customer as c on o.c_id=c.id")
-            ->join("left join ".C('DB_PREFIX')."shop as s on o.shop_id=s.id")
-            ->where(array("o.id"=>$id))
-            ->find();
-        $od = D("OrderDetail")->where(array("order_id"=>$id))->select();
         
-        $this->assign('order',$order);
-        $this->assign('status',$status);
-        $this->assign('od',$od);
+        $info=D('Cus')
+            ->alias("c")
+            ->field("c.*, s.shop_name, l.name as l_name")
+            ->join("left join ".C('DB_PREFIX')."shop as s on c.shop_id=s.id")
+            ->join("left join ".C('DB_PREFIX')."c_level as l on c.level_id=l.id")
+            ->where(array("c.id"=>$id))
+            ->find();
+        $gMap = array(
+            0 => "未选",
+            1 => "男",
+            2 => "女"
+            );
+        $info["gender"] = $gMap[$info["gender"]];
+        
+        $this->assign('info',$info);
         $this->display();
     }
 
@@ -309,16 +313,39 @@ class CusController extends CommonController {
     public function balanceChange(){
         if(!IS_POST)
         {
+            $id = I("get.id",0,"intval");
+            $this->assign('id',$id);
             $this->display();
         }
         else
         {
-            $count=D('Cus')->alias("c")->where($map)->count();
-            $info=D('Cus')
-                ->alias("c")
-                ->field("c.*, s.shop_name")
-                ->join("left join ".C('DB_PREFIX')."shop as s on c.shop_id=s.id")
-                ->order($sort.' '.$order)->page($page.','.$rows)->where($map)->page($page,$rows)->select();
+            $id = I("get.id",0,"intval");
+
+            $map["o.c_id"] = $id;
+
+            $count=D('Order')->alias("o")
+                ->field("o.*, c.name as uname, c.card_no, s.shop_name")
+                ->join("left join ".C('DB_PREFIX')."customer as c on o.c_id=c.id")
+                ->join("left join ".C('DB_PREFIX')."shop as s on o.shop_id=s.id")
+                ->where($map)->count();
+            $info=D('Order')
+                ->alias("o")
+                ->field("o.*, c.name as uname, c.card_no, s.shop_name")
+                ->join("left join ".C('DB_PREFIX')."customer as c on o.c_id=c.id")
+                ->join("left join ".C('DB_PREFIX')."shop as s on o.shop_id=s.id")
+                ->order('o.add_time desc')->where($map)->select();
+
+            $odInfo = D("OrderDetail")->where(array("order_id"=>array("in", implode(",", array_column($info, "id")))))->select();
+
+            $map = array();
+            foreach ($odInfo as $v) {
+                $map[$v["order_id"]][] = sprintf("%s(%s)", $v["name"], $v["type"]==1 ? "商品" : "套餐");
+            }
+
+            //格式化输出
+            foreach ($info as $k => $v) {
+                $info[$k]['order_info'] = implode("+",$map[$v["id"]]);
+            }
 
             if(!empty($info)){
                 $data['total']=$count;

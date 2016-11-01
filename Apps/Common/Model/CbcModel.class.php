@@ -44,6 +44,7 @@ class CbcModel extends Model
 		}
 		//产生流水
 		$data = array(
+			"c_id"=>$id,
 			"type"=>$type,
 			"jf"=>$jf,
 			"act_id"=>$act_id,
@@ -53,5 +54,15 @@ class CbcModel extends Model
 		if(!$res) throw new \Exception("添加流水失败", 1);
 
 		return true;
+	}
+
+	public function formatType($type)
+	{
+		$arr = array(
+			\Common\Model\CbcModel::TYPE_RECHARGE 	=> "充值",
+			\Common\Model\CbcModel::TYPE_CONSUMER 	=> "消费",
+			\Common\Model\CbcModel::TYPE_REFUND 	=> "退款"
+			);
+		return $arr[$type];
 	}
 }

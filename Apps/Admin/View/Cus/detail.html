@@ -32,52 +32,72 @@ function add(url){
 <div class="easyui-tabs" data-options="tools:'#tab-tools'" style="width:100%">
         <div title="基本信息" style="padding:10px;">
             <form id="od" method="post" class="bootstrap-frm">
-                <div class="tit-wrap">
-                    <h1>订单详情
-                    <span><input type='hidden' name='id' value='{$order.id}'/></span>
-                    </h1>
-                </div>
                 <table>
                     <tr>
-                        <td width='30%'>订单号：{$order.order_sn}</td>
-                        <td width='30%'>消费店铺：{$order.shop_name}</td>
-                        <td width='30%'></td>
-                        <td width='10%'></td>
+                        <td width='50%'><img src="__ROOT__.{$info.photo}" style="width:100px;"></td>
+                        <td width='50%'></td>
                     </tr>
                     <tr>
-                        <td>订单时间：{$order.add_time|date="Y-m-d H:i:s",###}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <volist name="od" id="vo">
-                        <tr>
-                            <td>{$vo["type"]==1 ? "商品" : "套餐"}：{$vo.name}</td>
-                            <td>数量： {$vo.count}</td>
-                            <td>消费积分：{$vo.jf}</td>
-                            <td></td>
-                        </tr>
-                    </volist>  
-                    
-                    <tr>
-                        <td>总消费积分：{$order.jf}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>会员卡号：{$info.card_no}</td>
+                        <td>会员姓名：{$info.name}</td>
                     </tr>
                     <tr>
-                        <td>状态：{$status}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>会员等级：{$info.l_name}</td>
+                        <td>性别：{$info.gender}</td>
+                    </tr>
+                    <tr>
+                        <td>身份证号：{$info.id_no}</td>
+                        <td>生日：{$info.birthday}</td>
+                    </tr>
+                    <tr>
+                        <td>手机号：{$info.mobile}</td>
+                        <td>等级店铺：{$info.shop_name}</td>
+                    </tr>
+                    <tr>
+                        <td>登记时间：{$info.add_time|date="Y-m-d H:i:s",###}</td>
+                        <td>可用积分：{$info.jf}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">联系地址：{$info.address}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="btn-box">
+                                <a href='javascript:;' onclick='add("{:U('Order/refund')}")' class='easyui-linkbutton button'>换卡</a>
+                            </div>
+                            <div class="btn-box">
+                                <a href='javascript:;' onclick='add("{:U('Order/refund')}")' class='easyui-linkbutton button'>修改密码</a>
+                            </div>
+                            <div class="btn-box">
+                                <a href='javascript:;' onclick='add("{:U('Order/refund')}")' class='easyui-linkbutton button'>充值</a>
+                            </div>
+                            <div class="btn-box">
+                                <a href='javascript:;' onclick='add("{:U('Order/refund')}")' class='easyui-linkbutton button'>消费</a>
+                            </div>
+                            <div class="btn-box">
+                                <a href='javascript:;' onclick='add("{:U('Order/refund')}")' class='easyui-linkbutton button'>会员升级</a>
+                            </div>
+                        </td>
+                        <td>
+                        </td>
                     </tr>
                 </table>
-                    <div class="btn-box">
-                        <a href='javascript:;' onclick='add("{:U('Order/refund')}")' class='easyui-linkbutton button'>退款</a>
-                    </div>
             </form>
         </div>
-        <div title="消费明细" data-options="href:'{:U('Cus/balanceChange',array('a'=>$order['jf']))}',closable:true" style="padding:10px"></div>
+        <div title="消费明细" data-options="closable:true" style="padding:10px">
+            <table id="cusbalancechangedg" title="会员列表" class="easyui-datagrid" style="width:100%;" url="{:U('Cus/balanceChange', array('id'=>$info['id']))}" rownumbers="true" fitColumns="true" singleSelect="true">
+                <thead>
+                    <tr>
+                        <th field="order_sn" width="10" sortable="true">订单号</th>
+                        <th field="shop_name">店铺</th>
+                        <th field="order_info">商品</th>
+                        <th field="jf" width="50">消费积分</th>
+                        <th field="uname" sortable="true">会员姓名</th>
+                        <th field="add_time" formatter="timestampToDateTime">时间</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
 </div>
 
 

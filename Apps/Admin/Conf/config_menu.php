@@ -51,8 +51,8 @@ return array(
 				array('url'=>'Auth/group', 'icon'=>'icon-group_go', 'name'=>'角色管理'),
 				array('url'=>'Auth/rule', 'icon'=>'icon-rule', 'name'=>'规则管理'),
 				array('url'=>'Shop/index', 'icon'=>'icon-rule', 'name'=>'店铺管理'),
-				array('url'=>'Auth/rule', 'icon'=>'icon-rule', 'name'=>'修改密码'),
-				array('url'=>'Auth/log', 'icon'=>'icon-rule', 'name'=>'日志列表'),
+				array('url'=>'Admin/pw', 'icon'=>'icon-rule', 'name'=>'修改密码'),
+				array('url'=>'Admin/log', 'icon'=>'icon-rule', 'name'=>'日志列表'),
 			),
 		),
 	)
