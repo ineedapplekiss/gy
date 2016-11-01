@@ -188,6 +188,7 @@ class CusController extends CommonController {
             $data['gender']     = $gender;
             $data['id_no']      = $idNo;
             $data['birthday']   = $birthday;
+            $data['birthday_cond'] = substr($birthday,5,2).substr($birthday,-2);
             $data['mobile']     = $mobile;
             $data['shop_id']    = $shopId;
             $data['address']    = $address;
