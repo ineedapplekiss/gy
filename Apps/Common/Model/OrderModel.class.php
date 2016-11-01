@@ -145,11 +145,17 @@ class OrderModel extends Model
 			$data = array();
 			$data["order_id"] = $order_id;
 			$res = D("OrderDetail")->where(array("id"=>array("in", implode(",", array_column($ods, "id")))))->save($data);
-			if(!$res) throw new \Exception("更新订单商品商品失败", 1);
+			if(!$res) throw new \Exception("更新订单商品失败", 1);
 
-			//退还积分
+			//消费积分
 			$res = D("Cbc")->balanceChange($cusId, \Common\Model\CbcModel::TYPE_CONSUMER, $jf, $order_id);
 
+			//更新cus表最近消费时间字段
+			$data = array();
+			$data["pay_num"] = $cusDetail["pay_num"]+1;
+			$data["last_pay_time"] = NOW_TIME;
+			$res = D("Cus")->where(array("id"=>$cusId,"pay_num"=>$cusDetail["pay_num"]))->save($data);
+			if(!$res) throw new \Exception("更新用户支付次数失败", 1);
 			
 			$this->commit();
 		} catch(Exception $e) {

@@ -1,0 +1,88 @@
+<body>
+<script>
+function add(url){
+    $('#od').form('submit',{
+        url:url,
+        onSubmit: function(param){
+            return $(this).form('validate');
+        },
+        success: function(result){
+            var result=eval('('+result+')');
+            if (!result.status){
+                    $.messager.alert('Warning','退款失败！' + result.message);
+            } else {
+                
+                if($.messager.confirm('提示','退款成功！',function(r){
+                    if(r){
+                        closeTab();
+                    }else{
+                        closeTab();
+                    }
+                
+                }));
+            }
+        }
+    });
+    
+}
+
+
+</script>
+
+<div class="easyui-tabs" data-options="tools:'#tab-tools'" style="width:100%">
+        <div title="基本信息" style="padding:10px;">
+            <form id="od" method="post" class="bootstrap-frm">
+                <div class="tit-wrap">
+                    <h1>订单详情
+                    <span><input type='hidden' name='id' value='{$order.id}'/></span>
+                    </h1>
+                </div>
+                <table>
+                    <tr>
+                        <td width='30%'>订单号：{$order.order_sn}</td>
+                        <td width='30%'>消费店铺：{$order.shop_name}</td>
+                        <td width='30%'></td>
+                        <td width='10%'></td>
+                    </tr>
+                    <tr>
+                        <td>订单时间：{$order.add_time|date="Y-m-d H:i:s",###}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <volist name="od" id="vo">
+                        <tr>
+                            <td>{$vo["type"]==1 ? "商品" : "套餐"}：{$vo.name}</td>
+                            <td>数量： {$vo.count}</td>
+                            <td>消费积分：{$vo.jf}</td>
+                            <td></td>
+                        </tr>
+                    </volist>  
+                    
+                    <tr>
+                        <td>总消费积分：{$order.jf}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>状态：{$status}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+                    <div class="btn-box">
+                        <a href='javascript:;' onclick='add("{:U('Order/refund')}")' class='easyui-linkbutton button'>退款</a>
+                    </div>
+            </form>
+        </div>
+        <div title="消费明细" data-options="href:'{:U('Cus/balanceChange',array('a'=>$order['jf']))}',closable:true" style="padding:10px"></div>
+</div>
+
+
+
+    
+
+
+</body>

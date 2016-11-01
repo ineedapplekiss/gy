@@ -1,0 +1,14 @@
+
+<table id="cusdg" title="会员列表" class="easyui-datagrid" style="width:100%;" url="{:U('Cus/cusList')}"  toolbar="#custoolbar" pagination="true" pageSize='15' pageNumber='1' multiSort='true' sortOrder="desc" pageList="[2,5,10,15,20,25,30,40,50]" rownumbers="true" fitColumns="true" singleSelect="true">
+    <thead>
+        <tr>
+            <th field="name" width="10" sortable="true">姓名</th>
+            <th field="mobile" width="50" sortable="true">手机号</th>
+            <th field="card_no" width="50">会员卡号</th>
+            <th field="birthday">生日</th>
+            <th field="status" formatter="checkYesNo">状态</th>
+            <th field="last_pay_time" width="50" formatter="timestampToDateTime">最后消费时间</th>
+            <th field="pay_num" width="50">消费次数</th>
+        </tr>
+    </thead>
+</table>

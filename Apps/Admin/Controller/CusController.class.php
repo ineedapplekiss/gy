@@ -279,4 +279,57 @@ class CusController extends CommonController {
         $this->ajaxReturn($res);
     }
 
+    /**
+     * 会员详细
+     *@author shang
+     *
+     */
+    public function detail(){
+        $id = I("get.id", 0, "intval");
+        $order = D('Order')
+            ->alias("o")
+            ->field("o.*, c.name as uname, c.card_no, s.shop_name")
+            ->join("left join ".C('DB_PREFIX')."customer as c on o.c_id=c.id")
+            ->join("left join ".C('DB_PREFIX')."shop as s on o.shop_id=s.id")
+            ->where(array("o.id"=>$id))
+            ->find();
+        $od = D("OrderDetail")->where(array("order_id"=>$id))->select();
+        
+        $this->assign('order',$order);
+        $this->assign('status',$status);
+        $this->assign('od',$od);
+        $this->display();
+    }
+
+    /**
+     * 会员流水
+     *@author shang
+     *
+     */
+    public function balanceChange(){
+        if(!IS_POST)
+        {
+            $this->display();
+        }
+        else
+        {
+            $count=D('Cus')->alias("c")->where($map)->count();
+            $info=D('Cus')
+                ->alias("c")
+                ->field("c.*, s.shop_name")
+                ->join("left join ".C('DB_PREFIX')."shop as s on c.shop_id=s.id")
+                ->order($sort.' '.$order)->page($page.','.$rows)->where($map)->page($page,$rows)->select();
+
+            if(!empty($info)){
+                $data['total']=$count;
+                $data['rows']=$info;
+            }else{
+                $data['total']=0;
+                $data['rows']=0;
+            }
+            $this->ajaxReturn($data);
+        }
+        
+    }
+
 }	
