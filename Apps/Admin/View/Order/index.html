@@ -1,0 +1,72 @@
+<body>
+    <table id="orderdg" title="订单列表" class="easyui-datagrid" style="width:100%;" url="{:U('Order/orderList')}"  toolbar="#ordertoolbar" pagination="true" pageSize='15' pageNumber='1' multiSort='true' sortOrder="desc" pageList="[2,5,10,15,20,25,30,40,50]" rownumbers="true" fitColumns="true" singleSelect="true">
+        <thead>
+            <tr>
+                <th field="order_sn" width="10" sortable="true">订单号</th>
+                <th field="shop_name">店铺</th>
+                <th field="add_time" formatter="timestampToDateTime">时间</th>
+                <th field="order_info">商品</th>
+                <th field="jf" width="50">消费积分</th>
+                <th field="uname" sortable="true">会员姓名</th>
+            </tr>
+        </thead>
+    </table>
+
+    <div id="ordertoolbar">
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="orderObj.detail()">查看</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon icon-all" plain="true" onclick="showAll()">全部</a>
+        <form id="orderSearch" method="post" novalidate style="display:inline-block;margin-left:50px;">
+            <select name="shopId">
+                <option value="0">全部店铺</option>
+                <volist name="shops" id="vo">
+                    <option value="{$vo['id']}">{$vo['shop_name']}</option>
+                </volist>  
+            </select>
+            <input name="uname" class="easyui-textbox" data-options="prompt:'会员姓名'">
+            <input name="card_no" class="easyui-textbox" data-options="prompt:'会员卡号'">
+            <input name="stime" class = 'easyui-datetimebox' title='年-月-日' data-options="prompt:'年-月-日'">&nbsp;
+            <input name="etime" class = 'easyui-datetimebox' title='年-月-日' data-options="prompt:'年-月-日'">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="orderObj.doSearch()">Search</a>
+        </form>
+    </div>
+    
+
+   <script type="text/javascript">
+
+        //搜索
+        var orderObj = {
+            'doSearch':function()
+            {
+                $('#orderdg').datagrid('load',$("#orderSearch").serializeObject());
+                return false;
+            },
+            'detail':function()
+            {
+                var oRow=$('#orderdg').datagrid('getSelected');
+                if(oRow){
+                    showTab('{:U(\'Order/detail\')}'+'?id='+oRow.id, '订单详情');
+                }
+                else
+                {
+                    $.messager.alert('提示','请选择要查看的数据!','info');
+                    return false;
+                }
+            }
+        }
+
+        //显示全部数据
+        function showAll(){
+            $('#orderdg').datagrid({ queryParams:''});
+        }
+
+       
+
+    </script>
+    <style type="text/css">
+        #fm{
+            margin:0;
+            padding:10px;
+        }
+    </style>
+    
+</body>

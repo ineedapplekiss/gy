@@ -30,7 +30,7 @@ return array(
 			'gname' => '订单管理',
 			'gicon' => 'icon-tip',
 			'list' => array(
-				array('url'=>'Member/index', 'icon'=>'icon-users', 'name'=>'订单列表'),
+				array('url'=>'Order/index', 'icon'=>'icon-users', 'name'=>'订单列表'),
 			),
 		),
 		array(

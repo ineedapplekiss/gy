@@ -9,7 +9,8 @@ class OrderModel extends Model
 	protected $tableName = 'order';
 
 	const STATUS_EN = 1;//正常数据
-	const STATUS_DIS = 0;//删除
+	const STATUS_DIS = 0;//错误订单
+	const STATUS_REFUND = -1;//退款订单
 
 	/**
      * @describe 添加订单
@@ -135,14 +136,20 @@ class OrderModel extends Model
 			$data["yj"] = $yj;
 			$data["jf"] = $jf;
 			$data["status"] = \Common\Model\OrderModel::STATUS_EN;
+			$data["order_sn"] = uniqid($order_id);
 			$res = $this->where(array("id"=>$order_id))->save($data);
 			if(!$res) throw new \Exception("更新订单失败", 1);
 
-			//更新订单商品
+			//更新订单商品 
+			//todo 考虑同一会员卡在两店同时消费
 			$data = array();
 			$data["order_id"] = $order_id;
 			$res = D("OrderDetail")->where(array("id"=>array("in", implode(",", array_column($ods, "id")))))->save($data);
 			if(!$res) throw new \Exception("更新订单商品商品失败", 1);
+
+			//退还积分
+			$res = D("Cbc")->balanceChange($cusId, \Common\Model\CbcModel::TYPE_CONSUMER, $jf, $order_id);
+
 			
 			$this->commit();
 		} catch(Exception $e) {
@@ -151,5 +158,54 @@ class OrderModel extends Model
             return false;
         }
         return true;
+	}
+
+	/**
+     * @describe 订单退款
+     * @param $order_id
+     * @return boolean
+     */
+	public function refund($id)
+	{
+		$oInfo = $this->find($id);
+		if(!$oInfo)
+		{
+			$this->error = "订单数据错误";
+			return false;
+		}
+		if($oInfo["status"] == \Common\Model\OrderModel::STATUS_REFUND)
+        {
+            $this->error = "已退款";
+            return false;
+        }
+        if($oInfo["status"] == \Common\Model\OrderModel::STATUS_DIS)
+        {
+            $this->error = "无效订单";
+            return false;
+        }
+        if(date("Y-m-d") != date("Y-m-d", $oInfo["add_time"]))
+        {
+            $this->error = "订单不允许退款";
+            return false;
+        }
+
+        try{
+			$this->startTrans();
+			//更新订单表
+			$data = array();
+			$data["status"] = \Common\Model\OrderModel::STATUS_REFUND;
+			$res = $this->where(array("id"=>$id))->save($data);
+			if(!$res) throw new \Exception("修改订单状态失败", 1);
+
+			//退还积分
+			$res = D("Cbc")->balanceChange($oInfo["c_id"], \Common\Model\CbcModel::TYPE_REFUND, $oInfo["jf"], $id);
+
+			$this->commit();
+        } catch(Exception $e) {
+            $this->error = $e->getMessage();
+            $this->rollback();
+            return false;
+        }
+		return true;
 	}
 }
