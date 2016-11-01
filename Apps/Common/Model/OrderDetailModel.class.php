@@ -48,6 +48,41 @@ class OrderDetailModel extends Model
 	}
 
 	/**
+     * @describe 添加订单套餐
+     * @param $goodsList 提交的数据
+     * @return boolean
+     */
+	public function addPack($pList, $cusId)
+	{
+		try{
+			$this->startTrans();
+
+			foreach ($pList as $p) {
+				$data = array(
+					"cus_id" 	=> $cusId,
+					"name" 		=> $p["name"],
+					"pack_id" 	=> $p["id"],
+					"shop_id"	=> $p["shop_id"],
+					"type" 		=> \Common\Model\OrderDetailModel::TYPE_PACKAGE,
+					"sale_id" 	=> 0,
+					"count"		=> 1,
+					"yj"		=> $p["jf"],
+					"jf"		=> $p["jf"],
+					"add_time"	=> NOW_TIME
+					);
+				$res = $this->add($data);
+				if(!$res) throw new \Exception("添加套餐失败", 1);
+			}
+			$this->commit();
+		} catch(Exception $e) {
+            $this->error = $e->getMessage();
+            $this->rollback();
+            return false;
+        }
+        return true;
+	}
+
+	/**
      * @describe 查询商品可用促销
      * @param $goods 
      * @param $cusId 
@@ -114,6 +149,7 @@ class OrderDetailModel extends Model
 			->field("s.id, s.name, s.price,s.full,s.cut,s.type,s.rule_gender, s.rule_age")
 			->join("left join ".C('DB_PREFIX')."sale as s on sg.s_id = s.id")
 			->where($map)
+			->group("s.id")
 			->select();
 		if(!$sales)return array();
 		//过滤年龄限制
@@ -150,6 +186,11 @@ class OrderDetailModel extends Model
 		if($use_c_level && $sale_id)
 		{
 			$this->error = "会员折扣和促销不可同时使用";
+			return false;
+		}
+		if($odRes["type"] == \Common\Model\OrderDetailModel::TYPE_PACKAGE && ($use_c_level || $sale_id))
+		{
+			$this->error = "套餐不可使用会员折扣和促销";
 			return false;
 		}
 

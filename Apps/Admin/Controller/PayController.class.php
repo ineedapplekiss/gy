@@ -139,6 +139,71 @@ class PayController extends CommonController {
 
     }
 
+    //添加订单套餐
+    public function addP()
+    {
+        $ck=A('CheckInput');
+        $cus_id=$ck->in('会员id','cus_id','intval','',0,0);
+
+        if(!$cus_id)
+        {
+            $result['message']='选择一个会员';
+            $result['status']=false;
+            $this->ajaxReturn($result);
+        }
+
+        $pIds=I('post.p_ids');
+
+        //检测重复套餐
+        $pCount = D("OrderDetail")->where(
+            array(
+                "cus_id"=>$cus_id,
+                "pack_id"=>array("in",$pIds),
+                "order_id" => array("eq", 0)
+                )
+            )->count();
+        if($pCount){
+            $result['message']='不要添加重复套餐!';
+            $result['status']=false; 
+            $this->ajaxReturn($result);
+        }
+
+        $p_info = D("Package")->where(array("id"=>array("in",$pIds), "status"=>\Common\Model\PackageModel::STATUS_EN))->select();
+
+        //检测不同商铺商品
+        $shop_ids = array_unique(array_column($p_info, "shop_id"));
+        if(count($shop_ids) > 1)
+        {
+            $result['message']='请选择同一个商铺套餐';
+            $result['status']=false;
+            $this->ajaxReturn($result);
+        }
+        $goodsCount = D("OrderDetail")->where(
+            array(
+                "cus_id"=>$cus_id,
+                "shop_id"=>array("not in",implode(",", $shop_ids)),
+                "order_id" => array("eq", 0)
+                )
+            )->count();
+        if($goodsCount){
+            $result['message']='不要添加不同商铺套餐!';
+            $result['status']=false; 
+            $this->ajaxReturn($result);
+        }
+
+
+        $addStatus = D("OrderDetail")->addPack($p_info, $cus_id);
+        if($addStatus){
+            $result['message']='添加套餐成功!';
+            $result['status']=true; 
+        }else{
+            $result['message']=D("OrderDetail")->getError();
+            $result['status']=false;    
+        }
+        $this->ajaxReturn($result);
+
+    }
+
     //获取订单商品促销信息
     public function getGoodsSales()
     {

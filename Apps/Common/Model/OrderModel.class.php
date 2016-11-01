@@ -46,35 +46,38 @@ class OrderModel extends Model
 		$sg_goods_ids = array_column($sg, "goods_id");
 
 
-		if($sale["status"] != \Common\Model\SaleModel::STATUS_EN)
+		if($sale_id)
 		{
-			$this->error = "促销状态不正确";
-			return false;
-		}
-		if($sale["type"] != \Common\Model\SaleModel::TYPE_S_MJ && $sale["type"] != \Common\Model\SaleModel::TYPE_S_MZ)
-		{
-			$this->error = "促销类型不正确";
-			return false;
-		}
-		if($sale["sta_time"] > NOW_TIME ||  $sale["end_time"] < NOW_TIME)
-		{
-			$this->error = "促销时间不正确";
-			return false;
-		}
-		if($sale["rule_gender"] && $sale["rule_gender"] != $cusDetail["gender"])
-		{
-			$this->error = "性别限定不符合";
-			return false;
-		}
-		if($sale["rule_age"])
-		{
-			$age = date("Y") - substr($cusDetail["birthday"], 0, 4);
-			list($min,$max) = explode("-", $cusDetail["rule_age"]);
-			if(($max!=0 && $age>$max) || ($min!=0 &&$age<$min))
+			if($sale["status"] != \Common\Model\SaleModel::STATUS_EN)
 			{
-				$this->error = "年龄限定不符合";
+				$this->error = "促销状态不正确";
 				return false;
-			}		
+			}
+			if($sale["type"] != \Common\Model\SaleModel::TYPE_S_MJ && $sale["type"] != \Common\Model\SaleModel::TYPE_S_MZ)
+			{
+				$this->error = "促销类型不正确";
+				return false;
+			}
+			if($sale["sta_time"] > NOW_TIME ||  $sale["end_time"] < NOW_TIME)
+			{
+				$this->error = "促销时间不正确";
+				return false;
+			}
+			if($sale["rule_gender"] && $sale["rule_gender"] != $cusDetail["gender"])
+			{
+				$this->error = "性别限定不符合";
+				return false;
+			}
+			if($sale["rule_age"])
+			{
+				$age = date("Y") - substr($cusDetail["birthday"], 0, 4);
+				list($min,$max) = explode("-", $cusDetail["rule_age"]);
+				if(($max!=0 && $age>$max) || ($min!=0 &&$age<$min))
+				{
+					$this->error = "年龄限定不符合";
+					return false;
+				}		
+			}
 		}
 
 		$data = array();
@@ -99,15 +102,14 @@ class OrderModel extends Model
 				//有促销，会员价，不在促销名单里的，不参与打折计算
 				if($od["use_c_level"] || $od["sale_id"] || !in_array($od["goods_id"], $sg_goods_ids))
 				{
-					$total = bcadd($total, $od["jf"]);//不打折的总价
+					$total = bcadd($total, $od["jf"], 4);//不打折的总价
 				}
 				else
 				{
-					$saleTotal = bcadd($saleTotal, $od["jf"]);//打折的总价
+					$saleTotal = bcadd($saleTotal, $od["jf"], 4);//打折的总价
 				}
 			}
-			$yj = bcadd($total, $saleTotal);
-
+			$yj = bcadd($total, $saleTotal, 2);
 			if($saleTotal >= $sale["full"])//价位符合
 			{
 				if($sale["type"] == \Common\Model\SaleModel::TYPE_S_MJ)//满减(不考虑每满减)
@@ -141,7 +143,7 @@ class OrderModel extends Model
 			$data["order_id"] = $order_id;
 			$res = D("OrderDetail")->where(array("id"=>array("in", implode(",", array_column($ods, "id")))))->save($data);
 			if(!$res) throw new \Exception("更新订单商品商品失败", 1);
-
+			
 			$this->commit();
 		} catch(Exception $e) {
             $this->error = $e->getMessage();
