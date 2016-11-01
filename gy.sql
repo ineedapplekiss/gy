@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50552
 File Encoding         : 65001
 
-Date: 2016-10-31 18:38:17
+Date: 2016-11-01 17:55:05
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -211,7 +211,7 @@ CREATE TABLE `think_auth_user` (
 -- ----------------------------
 -- Records of think_auth_user
 -- ----------------------------
-INSERT INTO `think_auth_user` VALUES ('1', 'admin', 'e10adc3949ba59abbe56e057f20f', '192.168.56.1', '1477909740', '4445@126.com', '老黄', '6000', '', '');
+INSERT INTO `think_auth_user` VALUES ('1', 'admin', 'e10adc3949ba59abbe56e057f20f', '192.168.56.1', '1477993513', '4445@126.com', '老黄', '6000', '', '');
 INSERT INTO `think_auth_user` VALUES ('2', 'test001', 'e10adc3949ba59abbe56e057f20f', '0.0.0.0', '1422791964', 'xdsd@15.com', '黄生', '0', '', '');
 INSERT INTO `think_auth_user` VALUES ('10', 'test002', '8d014dee20a374dc7ad97e4d9809', '192.168.56.1', '1476943784', '', '', '0', '', '');
 
@@ -225,12 +225,15 @@ CREATE TABLE `think_c_balance_change` (
   `jf` decimal(19,2) NOT NULL DEFAULT '0.00' COMMENT '积分 +增加 -减少',
   `act_id` int(10) NOT NULL DEFAULT '0' COMMENT '关联id',
   `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '流水时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='顾客流水表';
+  PRIMARY KEY (`id`),
+  KEY `act_id` (`act_id`,`add_time`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='顾客流水表';
 
 -- ----------------------------
 -- Records of think_c_balance_change
 -- ----------------------------
+INSERT INTO `think_c_balance_change` VALUES ('1', '2', '-47.20', '13', '1477993638');
+INSERT INTO `think_c_balance_change` VALUES ('2', '3', '47.20', '13', '1477993667');
 
 -- ----------------------------
 -- Table structure for think_c_level
@@ -506,7 +509,7 @@ INSERT INTO `think_customer` VALUES ('20', '3_45810792f1f5b5', './Public/Uploads
 INSERT INTO `think_customer` VALUES ('21', '3_45810792f1f5b5', './Public/Uploads/2016-10-27/5811b0044aae2.jpg', '张三', '2', '1', '111111111111111111', '2016-10-26', '0', '11111111120', '6', '贵州六盘水水城县1401', '12.00', '123456', '0', '0', '0', '1477554180', '2016-10-27 15:45:25');
 INSERT INTO `think_customer` VALUES ('22', '3_45810792f1f5b5', './Public/Uploads/2016-10-27/5811b010e8c1d.jpg', '张三', '2', '1', '111111111111111111', '2016-10-26', '0', '11111111121', '6', '贵州六盘水水城县1401', '12.00', '123456', '0', '0', '1', '1477554192', '2016-10-27 16:56:41');
 INSERT INTO `think_customer` VALUES ('23', '3_45810792f1f5b5', './Public/Uploads/2016-10-27/5811b03daa8ce.jpg', '张三', '2', '1', '111111111111111111', '2016-10-26', '0', '11111111122', '6', '贵州六盘水水城县1401', '12.00', '123456', '0', '0', '1', '1477554237', '2016-10-27 16:56:37');
-INSERT INTO `think_customer` VALUES ('24', '3_55810792f1f9e6', './Public/Uploads/2016-10-27/5811b052d39e1.jpg', '张三', '2', '1', '111111111111111111', '2016-10-26', '0', '11111111123', '6', '贵州六盘水水城县1401', '12.00', '123456', '0', '0', '1', '1477554258', '2016-10-27 16:56:33');
+INSERT INTO `think_customer` VALUES ('24', '3_55810792f1f9e6', './Public/Uploads/2016-10-27/5811b052d39e1.jpg', '张三', '2', '1', '111111111111111111', '2016-10-26', '0', '11111111123', '6', '贵州六盘水水城县1401', '112.00', '123456', '0', '0', '1', '1477554258', '2016-11-01 17:47:47');
 INSERT INTO `think_customer` VALUES ('25', '3_65810792f1fea9', './Public/Uploads/2016-10-27/5811b0570a023.jpg', '张三', '2', '1', '111111111111111111', '2016-10-26', '0', '11111111124', '6', '贵州六盘水水城县1401', '12.00', '123456', '0', '0', '1', '1477554263', '2016-10-27 16:56:17');
 
 -- ----------------------------
@@ -769,13 +772,17 @@ CREATE TABLE `think_order` (
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '订单状态',
   `add_time` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of think_order
 -- ----------------------------
-INSERT INTO `think_order` VALUES ('1', '24', '1', '6', '40', '', '31.00', '7.16', 'first', '1', '1477909873');
-INSERT INTO `think_order` VALUES ('2', '24', '1', '6', '40', '', '13.00', '9.10', '', '1', '1477910233');
+INSERT INTO `think_order` VALUES ('1', '24', '1', '6', '40', 'aaa', '31.00', '7.16', 'first', '1', '1477909873');
+INSERT INTO `think_order` VALUES ('2', '24', '1', '6', '40', 'bbb', '13.00', '9.10', '', '1', '1477910233');
+INSERT INTO `think_order` VALUES ('10', '24', '1', '6', '40', 'ccc', '12.72', '9.12', 'asda', '1', '1477967891');
+INSERT INTO `think_order` VALUES ('11', '24', '1', '6', '0', 'dddd', '47.20', '47.20', '', '1', '1477971167');
+INSERT INTO `think_order` VALUES ('12', '24', '1', '6', '0', '', '0.00', '0.00', '', '0', '1477993539');
+INSERT INTO `think_order` VALUES ('13', '24', '1', '6', '0', '13581864a6ee9ed', '47.20', '47.20', '', '-1', '1477993638');
 
 -- ----------------------------
 -- Table structure for think_order_detail
@@ -797,8 +804,13 @@ CREATE TABLE `think_order_detail` (
   `count` int(10) NOT NULL DEFAULT '1',
   `snapshot` text NOT NULL COMMENT '商品快照',
   `add_time` int(10) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`),
+  KEY `cus_id` (`cus_id`) USING BTREE,
+  KEY `order_id` (`order_id`) USING BTREE,
+  KEY `goods_id` (`goods_id`) USING BTREE,
+  KEY `pack_id` (`pack_id`) USING BTREE,
+  KEY `add_time` (`add_time`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of think_order_detail
@@ -807,6 +819,14 @@ INSERT INTO `think_order_detail` VALUES ('3', '24', 'aaaa', '1', '1', '9', '6', 
 INSERT INTO `think_order_detail` VALUES ('4', '24', '11', '1', '1', '11', '6', '0', '0', '1', '12.00', '7.20', '1', '', '1477896353');
 INSERT INTO `think_order_detail` VALUES ('8', '24', 'aaaa', '1', '2', '9', '6', '0', '0', '0', '1.20', '1.20', '1', '', '1477910200');
 INSERT INTO `think_order_detail` VALUES ('9', '24', '11', '1', '2', '11', '6', '0', '0', '0', '12.00', '12.00', '1', '', '1477910200');
+INSERT INTO `think_order_detail` VALUES ('10', '24', 'aaaa', '1', '10', '9', '6', '0', '0', '1', '1.20', '0.72', '1', '', '1477967234');
+INSERT INTO `think_order_detail` VALUES ('11', '24', '11', '1', '10', '11', '6', '0', '0', '0', '12.00', '12.00', '1', '', '1477967234');
+INSERT INTO `think_order_detail` VALUES ('12', '24', 'aaaa', '1', '11', '9', '6', '0', '0', '0', '1.20', '1.20', '1', '', '1477970202');
+INSERT INTO `think_order_detail` VALUES ('13', '24', '11', '1', '11', '11', '6', '0', '0', '0', '12.00', '12.00', '1', '', '1477970202');
+INSERT INTO `think_order_detail` VALUES ('14', '24', '1101test1', '2', '11', '0', '6', '0', '7', '0', '34.00', '34.00', '1', '', '1477970886');
+INSERT INTO `think_order_detail` VALUES ('15', '24', 'aaaa', '1', '13', '9', '6', '0', '0', '0', '1.20', '1.20', '1', '', '1477971530');
+INSERT INTO `think_order_detail` VALUES ('16', '24', '11', '1', '13', '11', '6', '0', '0', '0', '12.00', '12.00', '1', '', '1477971530');
+INSERT INTO `think_order_detail` VALUES ('18', '24', '1101test1', '2', '13', '0', '6', '0', '7', '0', '34.00', '34.00', '1', '', '1477971770');
 
 -- ----------------------------
 -- Table structure for think_package
@@ -828,7 +848,7 @@ CREATE TABLE `think_package` (
   KEY `shop_id` (`shop_id`) USING BTREE,
   KEY `name` (`name`) USING BTREE,
   KEY `t` (`sta_time`,`end_time`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of think_package
@@ -838,6 +858,7 @@ INSERT INTO `think_package` VALUES ('2', '8', '12', '0.00', '', '0', '0', '1', '
 INSERT INTO `think_package` VALUES ('4', '9', '打折', '100.00', '[{\"id\":\"4\",\"shop_id\":\"9\",\"name\":\"\\u9762\\u819c\",\"code\":\"bj1234543\",\"cate_id\":\"8\",\"price\":\"30.00\",\"status\":\"1\",\"m_id\":\"0\",\"add_time\":\"1476871249\",\"update_time\":\"2016-10-19 18:00:49\"},{\"id\":\"7\",\"shop_id\":\"6\",\"name\":\"\\u9762\\u819c\",\"code\":\"bj1234543\",\"cate_id\":\"8\",\"price\":\"30.00\",\"status\":\"1\",\"m_id\":\"0\",\"add_time\":\"1476871355\",\"update_time\":\"2016-10-19 18:02:35\"},{\"id\":\"10\",\"shop_id\":\"9\",\"name\":\"aaaa\",\"code\":\"aaa\",\"cate_id\":\"7\",\"price\":\"1.20\",\"status\":\"1\",\"m_id\":\"0\",\"add_time\":\"1476871831\",\"update_time\":\"2016-10-19 18:10:31\"}]', '0', '1', '1475251200', '1477040872', '1477040876', '2016-10-21 17:07:56');
 INSERT INTO `think_package` VALUES ('5', '9', '打折', '100.00', '[{\"id\":\"4\",\"shop_id\":\"9\",\"name\":\"\\u9762\\u819c\",\"code\":\"bj1234543\",\"cate_id\":\"8\",\"price\":\"30.00\",\"status\":\"1\",\"m_id\":\"0\",\"add_time\":\"1476871249\",\"update_time\":\"2016-10-19 18:00:49\"},{\"id\":\"7\",\"shop_id\":\"6\",\"name\":\"\\u9762\\u819c\",\"code\":\"bj1234543\",\"cate_id\":\"8\",\"price\":\"30.00\",\"status\":\"1\",\"m_id\":\"0\",\"add_time\":\"1476871355\",\"update_time\":\"2016-10-19 18:02:35\"},{\"id\":\"10\",\"shop_id\":\"9\",\"name\":\"aaaa\",\"code\":\"aaa\",\"cate_id\":\"7\",\"price\":\"1.20\",\"status\":\"1\",\"m_id\":\"0\",\"add_time\":\"1476871831\",\"update_time\":\"2016-10-19 18:10:31\"}]', '0', '1', '1475251200', '1477040872', '1477040952', '2016-10-21 17:09:12');
 INSERT INTO `think_package` VALUES ('6', '6', 'shang特价', '10.00', '[{\"id\":\"11\",\"shop_id\":\"6\",\"name\":\"11\",\"code\":\"111\",\"cate_id\":\"7\",\"price\":\"12.00\",\"status\":\"1\",\"m_id\":\"0\",\"add_time\":\"1476871847\",\"update_time\":\"2016-10-19 18:10:47\"}]', '0', '-1', '1475725853', '1507175458', '1477281132', '2016-10-24 11:52:40');
+INSERT INTO `think_package` VALUES ('7', '6', '1101test1', '34.00', '[{\"id\":\"5\",\"shop_id\":\"6\",\"name\":\"\\u9762\\u819c\",\"code\":\"bj1234543\",\"cate_id\":\"8\",\"price\":\"30.00\",\"status\":\"1\",\"m_id\":\"0\",\"add_time\":\"1476871335\",\"update_time\":\"2016-10-19 18:02:15\"},{\"id\":\"7\",\"shop_id\":\"6\",\"name\":\"\\u9762\\u819c\",\"code\":\"bj1234543\",\"cate_id\":\"8\",\"price\":\"30.00\",\"status\":\"1\",\"m_id\":\"0\",\"add_time\":\"1476871355\",\"update_time\":\"2016-10-19 18:02:35\"},{\"id\":\"9\",\"shop_id\":\"6\",\"name\":\"aaaa\",\"code\":\"aaa\",\"cate_id\":\"7\",\"price\":\"1.20\",\"status\":\"1\",\"m_id\":\"0\",\"add_time\":\"1476871831\",\"update_time\":\"2016-10-19 18:10:31\"},{\"id\":\"11\",\"shop_id\":\"6\",\"name\":\"11\",\"code\":\"111\",\"cate_id\":\"7\",\"price\":\"12.00\",\"status\":\"1\",\"m_id\":\"0\",\"add_time\":\"1476871847\",\"update_time\":\"2016-10-19 18:10:47\"}]', '0', '1', '1477884289', '1480476293', '1477970696', '2016-11-01 11:25:15');
 
 -- ----------------------------
 -- Table structure for think_recharge_config
@@ -4342,29 +4363,11 @@ CREATE TABLE `think_sale` (
 -- ----------------------------
 -- Records of think_sale
 -- ----------------------------
-INSERT INTO `think_sale` VALUES ('7', '特价', '0', '6', '0', '50.00', '0.00', '0.00', '0', '', '0', '0', '0', '0', '0000-00-00 00:00:00');
-INSERT INTO `think_sale` VALUES ('9', '特价', '0', '6', '0', '50.00', '0.00', '0.00', '0', '', '0', '0', '0', '0', '0000-00-00 00:00:00');
-INSERT INTO `think_sale` VALUES ('10', '特价1', '0', '6', '0', '50.00', '0.00', '0.00', '0', '', '0', '0', '0', '0', '0000-00-00 00:00:00');
 INSERT INTO `think_sale` VALUES ('11', '特价1', '1', '6', '0', '50.00', '0.00', '0.00', '0', '', '0', '0', '0', '0', '2016-10-24 17:53:05');
 INSERT INTO `think_sale` VALUES ('12', '特价1', '2', '6', '0', '50.00', '0.00', '0.00', '0', '', '0', '0', '0', '0', '2016-10-24 17:53:05');
 INSERT INTO `think_sale` VALUES ('15', '特价15', '2', '6', '0', '50.00', '0.00', '0.00', '0', '', '0', '0', '0', '0', '2016-10-24 17:53:06');
 INSERT INTO `think_sale` VALUES ('16', '特价15', '3', '6', '0', '50.00', '0.00', '0.00', '0', '', '0', '0', '0', '0', '2016-10-24 17:53:07');
-INSERT INTO `think_sale` VALUES ('17', '特价15', '0', '6', '0', '50.00', '0.00', '0.00', '0', '', '0', '0', '0', '0', '0000-00-00 00:00:00');
 INSERT INTO `think_sale` VALUES ('18', '特价15', '4', '6', '0', '50.00', '0.00', '0.00', '0', '', '0', '0', '0', '0', '2016-10-24 17:53:10');
-INSERT INTO `think_sale` VALUES ('19', '特价15', '0', '6', '0', '50.00', '0.00', '0.00', '0', '', '0', '0', '0', '0', '0000-00-00 00:00:00');
-INSERT INTO `think_sale` VALUES ('20', '特价15', '0', '6', '0', '50.00', '0.00', '0.00', '0', '', '0', '0', '0', '0', '0000-00-00 00:00:00');
-INSERT INTO `think_sale` VALUES ('21', '特价15', '0', '6', '0', '50.00', '0.00', '0.00', '0', '', '0', '0', '0', '0', '0000-00-00 00:00:00');
-INSERT INTO `think_sale` VALUES ('22', '特价15', '0', '9', '0', '50.00', '0.00', '0.00', '0', '', '0', '0', '0', '0', '0000-00-00 00:00:00');
-INSERT INTO `think_sale` VALUES ('23', '特价15', '0', '9', '0', '50.00', '0.00', '0.00', '0', '', '0', '1476090265', '1477645469', '0', '0000-00-00 00:00:00');
-INSERT INTO `think_sale` VALUES ('26', '特价15', '0', '6', '0', '0.00', '0.00', '0.00', '0', '1-2', '0', '0', '0', '0', '0000-00-00 00:00:00');
-INSERT INTO `think_sale` VALUES ('27', '特价15', '0', '6', '0', '0.00', '0.00', '0.00', '0', '1-222', '0', '0', '0', '0', '0000-00-00 00:00:00');
-INSERT INTO `think_sale` VALUES ('28', '特价15', '0', '6', '0', '0.00', '0.00', '0.00', '0', '1-22222', '0', '0', '0', '0', '0000-00-00 00:00:00');
-INSERT INTO `think_sale` VALUES ('29', '特价15', '0', '6', '0', '0.00', '0.00', '0.00', '0', '1-22222', '0', '0', '0', '0', '0000-00-00 00:00:00');
-INSERT INTO `think_sale` VALUES ('30', '特价15', '0', '6', '0', '0.00', '0.00', '0.00', '0', '1-22', '0', '0', '0', '0', '0000-00-00 00:00:00');
-INSERT INTO `think_sale` VALUES ('31', '特价15', '0', '6', '0', '0.00', '0.00', '0.00', '0', '1-22', '0', '0', '0', '0', '0000-00-00 00:00:00');
-INSERT INTO `think_sale` VALUES ('32', '特价15', '0', '6', '0', '0.00', '0.00', '0.00', '0', '1-22', '0', '1477301105', '0', '0', '0000-00-00 00:00:00');
-INSERT INTO `think_sale` VALUES ('33', '特价15', '0', '6', '0', '1.00', '0.00', '0.00', '0', '1-22', '0', '1477301105', '1477560588', '0', '0000-00-00 00:00:00');
-INSERT INTO `think_sale` VALUES ('34', '特价15', '0', '6', '0', '0.00', '1.00', '1.00', '0', '1-22', '0', '1477301105', '1477560588', '0', '0000-00-00 00:00:00');
 INSERT INTO `think_sale` VALUES ('35', '特价15', '3', '6', '0', '0.00', '1.00', '1.00', '0', '1-22', '1', '1477301105', '1477560588', '0', '2016-10-24 17:58:19');
 INSERT INTO `think_sale` VALUES ('36', '双11', '1', '6', '0', '11.00', '0.00', '0.00', '1', '18-20', '1', '1477216742', '1478880000', '1477303156', '2016-10-24 18:01:29');
 INSERT INTO `think_sale` VALUES ('37', 'shang状态1', '2', '9', '0', '0.80', '0.00', '0.00', '0', '', '1', '1477363145', '1477621636', '1477362442', '2016-10-25 10:27:34');
