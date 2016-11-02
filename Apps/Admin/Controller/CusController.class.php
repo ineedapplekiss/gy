@@ -300,13 +300,14 @@ class CusController extends CommonController {
             2 => "女"
             );
         $info["gender"] = $gMap[$info["gender"]];
-        
+        $this->assign('levels',D("Level")->where(array("status"=>\Common\Model\LevelModel::STATUS_EN))->select());
+        $this->assign('card_nos',D("CardDetail")->getCs());
         $this->assign('info',$info);
         $this->display();
     }
 
     /**
-     * 会员流水
+     * 会员订单详细
      *@author shang
      *
      */
@@ -335,17 +336,21 @@ class CusController extends CommonController {
                 ->join("left join ".C('DB_PREFIX')."shop as s on o.shop_id=s.id")
                 ->order('o.add_time desc')->where($map)->select();
 
-            $odInfo = D("OrderDetail")->where(array("order_id"=>array("in", implode(",", array_column($info, "id")))))->select();
+            if($count)
+            {
+                $odInfo = D("OrderDetail")->where(array("order_id"=>array("in", implode(",", array_column($info, "id")))))->select();
 
-            $map = array();
-            foreach ($odInfo as $v) {
-                $map[$v["order_id"]][] = sprintf("%s(%s)", $v["name"], $v["type"]==1 ? "商品" : "套餐");
-            }
+                $map = array();
+                foreach ($odInfo as $v) {
+                    $map[$v["order_id"]][] = sprintf("%s(%s)", $v["name"], $v["type"]==1 ? "商品" : "套餐");
+                }
 
-            //格式化输出
-            foreach ($info as $k => $v) {
-                $info[$k]['order_info'] = implode("+",$map[$v["id"]]);
+                //格式化输出
+                foreach ($info as $k => $v) {
+                    $info[$k]['order_info'] = implode("+",$map[$v["id"]]);
+                }
             }
+            
 
             if(!empty($info)){
                 $data['total']=$count;
@@ -357,6 +362,96 @@ class CusController extends CommonController {
             $this->ajaxReturn($data);
         }
         
+    }
+
+    //换卡
+    public function changeCard()
+    {
+        if(!IS_POST) exit;
+
+        $ck=A('CheckInput');
+        $cid=$ck->in('cid','cid','intval','',2,20);
+        $card_no=$ck->in('新卡号','card_no','cnennumstr','',1,20);
+        $old_card_no=$ck->in('旧卡号','old_card_no','cnennumstr','',1,20);
+
+        $status = D("Cus")->changeCard($cid, $old_card_no, $card_no);
+        if(false===$status){
+            $return['message']=D("Cus")->getError();
+            $return['status']=false;
+        }else{
+            $return['message']='修改成功!';
+            $return['status']=true;
+        }
+        $this->ajaxReturn($return);
+
+    }
+
+    //充值
+    public function recharge()
+    {
+        if(!IS_POST) exit;
+
+        $ck=A('CheckInput');
+        $cid=$ck->in('cid','cid','intval','',2,20);
+        $jf=$ck->in('充值金额','jf','float(17,2)','',0,0);
+        if($jf<=0)
+        {
+            $return['message']=D("Cus")->getError();
+            $return['status']=false;
+            $this->ajaxReturn($return);
+        }
+
+        $status = D("Cbc")->balanceChange($cid, \Common\Model\CbcModel::TYPE_RECHARGE, $jf);
+        if(false===$status){
+            $return['message']=D("Cus")->getError();
+            $return['status']=false;
+        }else{
+            $return['message']='修改成功!';
+            $return['status']=true;
+        }
+        $this->ajaxReturn($return);
+
+    }
+
+    //改密码
+    public function pw()
+    {
+        if(!IS_POST) exit;
+
+        $ck=A('CheckInput');
+        $cid=$ck->in('cid','cid','intval','',2,20);
+        $pwd=$ck->in('新密码','pwd','cnennumstr','',1,20);
+        $opwd=$ck->in('旧密码','opwd','cnennumstr','',1,20);
+
+        $status = D("Cus")->where(array("id"=>$cid, "pw"=>$opwd))->save(array("pw"=>$pwd));
+        if(false===$status){
+            $return['message']='修改失败!';
+            $return['status']=false;
+        }else{
+            $return['message']='修改成功!';
+            $return['status']=true;
+        }
+        $this->ajaxReturn($return);
+    }
+
+    //升级
+    public function level()
+    {
+        if(!IS_POST) exit;
+
+        $ck=A('CheckInput');
+        $cid=$ck->in('cid','cid','intval','',2,20);
+        $level=$ck->in('等级','level','intval','',1,20);
+
+        $status = D("Cus")->where(array("id"=>$cid))->save(array("level_id"=>$level));
+        if(false===$status){
+            $return['message']='修改失败!';
+            $return['status']=false;
+        }else{
+            $return['message']='修改成功!';
+            $return['status']=true;
+        }
+        $this->ajaxReturn($return);
     }
 
 }	

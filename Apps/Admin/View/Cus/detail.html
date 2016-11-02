@@ -1,30 +1,87 @@
 <body>
 <script>
-function add(url){
-    $('#od').form('submit',{
-        url:url,
-        onSubmit: function(param){
-            return $(this).form('validate');
-        },
-        success: function(result){
-            var result=eval('('+result+')');
-            if (!result.status){
-                    $.messager.alert('Warning','退款失败！' + result.message);
-            } else {
-                
-                if($.messager.confirm('提示','退款成功！',function(r){
-                    if(r){
-                        closeTab();
-                    }else{
-                        closeTab();
-                    }
-                
-                }));
-            }
-        }
-    });
-    
-}
+cusDetailObj = {
+    changeCard:function(){
+        $('#cdCardForm').form('submit',{
+            url:'{:U('Cus/changeCard')}',
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result=eval('('+result+')');
+                if(!result.status){
+                    $.messager.confirm('错误提示',result.message,function(r){
+                        $('#cdCardDialog').dialog('close');  
+                    });
+                }else{
+                    $('#cdCardDialog').dialog('close');
+                    flushTab();
+                }
+            },
+        });
+    },
+    recharge:function(){
+        $('#cdRechargeForm').form('submit',{
+            url:'{:U('Cus/recharge')}',
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result=eval('('+result+')');
+                if(!result.status){
+                    $.messager.confirm('错误提示',result.message,function(r){
+                        $('#cdRechargeDialog').dialog('close');  
+                    });
+                }else{
+                    $('#cdRechargeDialog').dialog('close');
+                    flushTab();
+                }
+            },
+        });
+    },
+    pw:function(){
+        $('#cdPwForm').form('submit',{
+            url:'{:U('Cus/pw')}',
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result=eval('('+result+')');
+                if(!result.status){
+                    $.messager.confirm('错误提示',result.message,function(r){
+                        $('#cdPwDialog').dialog('close');  
+                    });
+                }else{
+                    $('#cdPwDialog').dialog('close');
+                    flushTab();
+                }
+            },
+        });
+    },
+    level:function(){
+        $('#cdLevelForm').form('submit',{
+            url:'{:U('Cus/level')}',
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result=eval('('+result+')');
+                if(!result.status){
+                    $.messager.confirm('错误提示',result.message,function(r){
+                        $('#cdLevelDialog').dialog('close');  
+                    });
+                }else{
+                    $('#cdLevelDialog').dialog('close');
+                    flushTab();
+                }
+            },
+        });
+    },
+    dialogShow:function(obj)
+    {
+        obj.dialog('open');
+    }
+};
 
 
 </script>
@@ -63,19 +120,19 @@ function add(url){
                     <tr>
                         <td>
                             <div class="btn-box">
-                                <a href='javascript:;' onclick='add("{:U('Order/refund')}")' class='easyui-linkbutton button'>换卡</a>
+                                <a href='javascript:;' onclick='cusDetailObj.dialogShow($("#cdCardDialog"))' class='easyui-linkbutton button'>换卡</a>
                             </div>
                             <div class="btn-box">
-                                <a href='javascript:;' onclick='add("{:U('Order/refund')}")' class='easyui-linkbutton button'>修改密码</a>
+                                <a href='javascript:;' onclick='cusDetailObj.dialogShow($("#cdPwDialog"))' class='easyui-linkbutton button'>修改密码</a>
                             </div>
                             <div class="btn-box">
-                                <a href='javascript:;' onclick='add("{:U('Order/refund')}")' class='easyui-linkbutton button'>充值</a>
+                                <a href='javascript:;' onclick='cusDetailObj.dialogShow($("#cdRechargeDialog"))' class='easyui-linkbutton button'>充值</a>
                             </div>
                             <div class="btn-box">
-                                <a href='javascript:;' onclick='add("{:U('Order/refund')}")' class='easyui-linkbutton button'>消费</a>
+                                <a href='javascript:;' onclick="showTab('{:U(\'Pay/index\')}', '消费')" class='easyui-linkbutton button'>消费</a>
                             </div>
                             <div class="btn-box">
-                                <a href='javascript:;' onclick='add("{:U('Order/refund')}")' class='easyui-linkbutton button'>会员升级</a>
+                                <a href='javascript:;' onclick='cusDetailObj.dialogShow($("#cdLevelDialog"))' class='easyui-linkbutton button'>会员升级</a>
                             </div>
                         </td>
                         <td>
@@ -101,8 +158,106 @@ function add(url){
 </div>
 
 
+<!-- 换卡 -->
+<div id="cdCardDialog" class="easyui-dialog" style="width:400px;padding:10px 20px"
+        closed="true" buttons="#cdCardButtons"  modal="true" title="换卡">
+    <form id="cdCardForm" method="post" novalidate>          
+        <div class="fitem">
+            <label>旧卡</label>
+            <input name="cid" type="hidden" value="{$info.id}"/>
+            <input name="old_card_no" type="hidden" value="{$info.card_no}"/>
+            <input name="old_card_no" class="easyui-textbox" data-options="disabled:true,height:30" value="{$info.card_no}"/>
+        </div>
+        <div class="fitem">
+            <label>新卡</label>
+            <select class="easyui-combobox" name="card_no" id='card_no' data-options="required:true,height:30">
+                <option value="0">请选择</option>
+                <volist name="card_nos" id="vo">
+                    <option value="{$vo['card_no']}">{$vo['card_no']}</option>
+                </volist>                        
+            </select>
+        </div>
+    </form>
+</div>
+<div id="cdCardButtons">
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="cusDetailObj.changeCard()" style="width:90px">确认</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:
+$('#cdCardDialog').dialog('close')" style="width:90px">取消</a>
+</div>
+<!-- /换卡 -->   
 
-    
+
+<!-- 充值 -->
+<div id="cdRechargeDialog" class="easyui-dialog" style="width:400px;padding:10px 20px"
+        closed="true" buttons="#cdRechargeButtons"  modal="true" title="充值">
+    <form id="cdRechargeForm" method="post" novalidate>
+        <div class="fitem">
+            <label>可用积分：</label>{$info.jf}
+        </div>      
+        <div class="fitem">
+            <label>金额</label>
+            <input name="cid" type="hidden" value="{$info.id}"/>
+            <input name="jf" class="easyui-textbox" data-options="required:true,height:30,validType:['length[1,20]'],height:30"/>
+        </div>
+    </form>
+</div>
+<div id="cdRechargeButtons">
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="cusDetailObj.recharge()" style="width:90px">确认</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:
+$('#cdRechargeDialog').dialog('close')" style="width:90px">取消</a>
+</div>
+<!-- /充值 -->
+
+<!-- 改密码 -->
+<div id="cdPwDialog" class="easyui-dialog" style="width:400px;padding:10px 20px"
+        closed="true" buttons="#cdPwButtons"  modal="true" title="改密码">
+    <form id="cdPwForm" method="post" novalidate>          
+        <div class="fitem">
+            <label>老&nbsp;&nbsp;密&nbsp;&nbsp;码</label>
+            <input name="opwd" class="easyui-textbox" data-options="required:true,validType:['length[6,16]'],height:30" />
+        </div>
+        <div class="fitem">
+            <label>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码</label>
+            <input name="pwd" id="cdPwdE" class="easyui-textbox" data-options="validType:['length[6,16]','equals[\'#cdRepwdE\']'],height:30" />
+        </div>
+        <div class="fitem">
+            <label>确认密码</label>
+            <input name="repwd" id="cdRepwdE" class="easyui-textbox" data-options="height:30,validType:['length[6,16]','equals[\'#cdPwdE\']']" />
+        </div>
+    </form>
+</div>
+<div id="cdPwButtons">
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="cusDetailObj.pw()" style="width:90px">确认</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:
+$('#cdPwDialog').dialog('close')" style="width:90px">取消</a>
+</div>
+<!-- /改密码 -->    
+
+
+<!-- 升级 -->
+<div id="cdLevelDialog" class="easyui-dialog" style="width:400px;padding:10px 20px"
+        closed="true" buttons="#cdLevelButtons"  modal="true" title="升级">
+    <form id="cdLevelForm" method="post" novalidate>          
+        <div class="fitem">
+            <label>当前等级：</label>{$info.l_name}
+            <input name="cid" type="hidden" value="{$info.id}"/>
+        </div>
+        <div class="fitem">
+            <label>升级为：</label>
+            <select class="easyui-combobox" name="level" id='level' data-options="required:true,height:30">
+                <volist name="levels" id="vo">
+                    <option value="{$vo['id']}">{$vo['name']}</option>
+                </volist>                        
+            </select>
+        </div>
+    </form>
+</div>
+<div id="cdLevelButtons">
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="cusDetailObj.level()" style="width:90px">确认</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:
+$('#cdLevelDialog').dialog('close')" style="width:90px">取消</a>
+</div>
+<!-- /升级 -->
 
 
 </body>

@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost
-Source Server Version : 50716
-Source Host           : 192.168.200.101:3306
+Source Server         : 虚拟ubuntu
+Source Server Version : 50552
+Source Host           : 127.0.0.1:3306
 Source Database       : gy
 
 Target Server Type    : MYSQL
-Target Server Version : 50716
+Target Server Version : 50552
 File Encoding         : 65001
 
-Date: 2016-11-01 23:54:47
+Date: 2016-11-02 18:36:12
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -140,6 +140,7 @@ CREATE TABLE `think_auth_group_access` (
 INSERT INTO `think_auth_group_access` VALUES ('1', '1');
 INSERT INTO `think_auth_group_access` VALUES ('2', '5');
 INSERT INTO `think_auth_group_access` VALUES ('10', '6');
+INSERT INTO `think_auth_group_access` VALUES ('11', '2');
 
 -- ----------------------------
 -- Table structure for think_auth_rule
@@ -206,14 +207,15 @@ CREATE TABLE `think_auth_user` (
   `lang` varchar(6) NOT NULL DEFAULT '',
   PRIMARY KEY (`uid`),
   KEY `username` (`username`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='角色表';
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COMMENT='角色表';
 
 -- ----------------------------
 -- Records of think_auth_user
 -- ----------------------------
-INSERT INTO `think_auth_user` VALUES ('1', 'admin', 'e10adc3949ba59abbe56e057f20f', '192.168.56.1', '1477993513', '4445@126.com', '老黄', '6000', '', '');
+INSERT INTO `think_auth_user` VALUES ('1', 'admin', '8d014dee20a374dc7ad97e4d9809', '192.168.56.1', '1478080049', '4445@126.com', '老黄', '6000', '', '');
 INSERT INTO `think_auth_user` VALUES ('2', 'test001', 'e10adc3949ba59abbe56e057f20f', '0.0.0.0', '1422791964', 'xdsd@15.com', '黄生', '0', '', '');
 INSERT INTO `think_auth_user` VALUES ('10', 'test002', '8d014dee20a374dc7ad97e4d9809', '192.168.56.1', '1476943784', '', '', '0', '', '');
+INSERT INTO `think_auth_user` VALUES ('11', 'test003', '8d014dee20a374dc7ad97e4d9809', '', '0', 'aa@1.com', 'aa', '1', '', '');
 
 -- ----------------------------
 -- Table structure for think_c_balance_change
@@ -229,13 +231,14 @@ CREATE TABLE `think_c_balance_change` (
   PRIMARY KEY (`id`),
   KEY `act_id` (`act_id`,`add_time`) USING BTREE,
   KEY `c_id` (`c_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='顾客流水表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='顾客流水表';
 
 -- ----------------------------
 -- Records of think_c_balance_change
 -- ----------------------------
 INSERT INTO `think_c_balance_change` VALUES ('1', '13', '2', '-47.20', '13', '1477993638');
 INSERT INTO `think_c_balance_change` VALUES ('2', '13', '3', '47.20', '13', '1477993667');
+INSERT INTO `think_c_balance_change` VALUES ('3', '25', '1', '0.18', '0', '1478080978');
 
 -- ----------------------------
 -- Table structure for think_c_level
@@ -303,12 +306,12 @@ CREATE TABLE `think_card_detail` (
 -- ----------------------------
 -- Records of think_card_detail
 -- ----------------------------
-INSERT INTO `think_card_detail` VALUES ('1', '3', '3_15810792f1e9cf', '测试活动1', '0', '0', '1477474607');
+INSERT INTO `think_card_detail` VALUES ('1', '3', '3_15810792f1e9cf', '测试活动1', '1', '0', '1477474607');
 INSERT INTO `think_card_detail` VALUES ('2', '3', '3_25810792f1f130', '测试活动1', '0', '0', '1477474607');
 INSERT INTO `think_card_detail` VALUES ('3', '3', '3_35810792f1f391', '测试活动1', '0', '0', '1477474607');
 INSERT INTO `think_card_detail` VALUES ('4', '3', '3_45810792f1f5b5', '测试活动1', '1', '0', '1477474607');
 INSERT INTO `think_card_detail` VALUES ('5', '3', '3_55810792f1f9e6', '测试活动1', '1', '0', '1477474607');
-INSERT INTO `think_card_detail` VALUES ('6', '3', '3_65810792f1fea9', '测试活动1', '1', '0', '1477474607');
+INSERT INTO `think_card_detail` VALUES ('6', '3', '3_65810792f1fea9', '测试活动1', '-1', '0', '1477474607');
 INSERT INTO `think_card_detail` VALUES ('7', '3', '3_75810792f2042d', '测试活动1', '0', '0', '1477474607');
 INSERT INTO `think_card_detail` VALUES ('8', '3', '3_85810792f20673', '测试活动1', '0', '0', '1477474607');
 INSERT INTO `think_card_detail` VALUES ('9', '3', '3_95810792f2081d', '测试活动1', '0', '0', '1477474607');
@@ -512,7 +515,7 @@ INSERT INTO `think_customer` VALUES ('21', '3_45810792f1f5b5', './Public/Uploads
 INSERT INTO `think_customer` VALUES ('22', '3_45810792f1f5b5', './Public/Uploads/2016-10-27/5811b010e8c1d.jpg', '张三', '2', '1', '111111111111111111', '2016-10-26', '0', '11111111121', '6', '贵州六盘水水城县1401', '12.00', '123456', '0', '0', '1', '1477554192', '2016-10-27 16:56:41');
 INSERT INTO `think_customer` VALUES ('23', '3_45810792f1f5b5', './Public/Uploads/2016-10-27/5811b03daa8ce.jpg', '张三', '2', '1', '111111111111111111', '2016-10-26', '0', '11111111122', '6', '贵州六盘水水城县1401', '12.00', '123456', '0', '0', '1', '1477554237', '2016-10-27 16:56:37');
 INSERT INTO `think_customer` VALUES ('24', '3_55810792f1f9e6', './Public/Uploads/2016-10-27/5811b052d39e1.jpg', '张三', '2', '1', '111111111111111111', '2016-10-26', '0', '11111111123', '6', '贵州六盘水水城县1401', '112.00', '123456', '0', '0', '1', '1477554258', '2016-11-01 17:47:47');
-INSERT INTO `think_customer` VALUES ('25', '3_65810792f1fea9', './Public/Uploads/2016-10-27/5811b0570a023.jpg', '张三', '2', '1', '111111111111111111', '2016-10-26', '0', '11111111124', '6', '贵州六盘水水城县1401', '12.00', '123456', '0', '0', '1', '1477554263', '2016-10-27 16:56:17');
+INSERT INTO `think_customer` VALUES ('25', '3_15810792f1e9cf', './Public/Uploads/2016-10-27/5811b0570a023.jpg', '张三', '1', '1', '111111111111111111', '2016-10-26', '0', '11111111124', '6', '贵州六盘水水城县1401', '12.40', '123456', '0', '0', '1', '1477554263', '2016-11-02 18:31:25');
 
 -- ----------------------------
 -- Table structure for think_erate
