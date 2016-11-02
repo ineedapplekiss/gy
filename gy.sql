@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : 虚拟ubuntu
-Source Server Version : 50552
-Source Host           : 127.0.0.1:3306
+Source Server         : localhost
+Source Server Version : 50716
+Source Host           : 192.168.200.101:3306
 Source Database       : gy
 
 Target Server Type    : MYSQL
-Target Server Version : 50552
+Target Server Version : 50716
 File Encoding         : 65001
 
-Date: 2016-11-02 18:36:12
+Date: 2016-11-02 21:54:46
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -99,7 +99,6 @@ INSERT INTO `think_auth_group` VALUES ('3', '网站管理员', '1', '37,38,39,40
 INSERT INTO `think_auth_group` VALUES ('4', '编辑组', '1', '1,2,3,4,8,22,23', '拥有文章模块的所有权限');
 INSERT INTO `think_auth_group` VALUES ('5', '发布人员', '1', '', '拥有发布、修改文章的权限');
 INSERT INTO `think_auth_group` VALUES ('6', '测试组', '1', '6', '测试专用组');
-INSERT INTO `think_auth_group` VALUES ('8', 'shang', '1', '4,6', '111');
 
 -- ----------------------------
 -- Table structure for think_auth_group_2_shop
@@ -212,7 +211,7 @@ CREATE TABLE `think_auth_user` (
 -- ----------------------------
 -- Records of think_auth_user
 -- ----------------------------
-INSERT INTO `think_auth_user` VALUES ('1', 'admin', '8d014dee20a374dc7ad97e4d9809', '192.168.56.1', '1478080049', '4445@126.com', '老黄', '6000', '', '');
+INSERT INTO `think_auth_user` VALUES ('1', 'admin', '8d014dee20a374dc7ad97e4d9809', '192.168.200.1', '1478091564', '4445@126.com', '老黄', '6000', '', '');
 INSERT INTO `think_auth_user` VALUES ('2', 'test001', 'e10adc3949ba59abbe56e057f20f', '0.0.0.0', '1422791964', 'xdsd@15.com', '黄生', '0', '', '');
 INSERT INTO `think_auth_user` VALUES ('10', 'test002', '8d014dee20a374dc7ad97e4d9809', '192.168.56.1', '1476943784', '', '', '0', '', '');
 INSERT INTO `think_auth_user` VALUES ('11', 'test003', '8d014dee20a374dc7ad97e4d9809', '', '0', 'aa@1.com', 'aa', '1', '', '');
@@ -231,7 +230,7 @@ CREATE TABLE `think_c_balance_change` (
   PRIMARY KEY (`id`),
   KEY `act_id` (`act_id`,`add_time`) USING BTREE,
   KEY `c_id` (`c_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='顾客流水表';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='顾客流水表';
 
 -- ----------------------------
 -- Records of think_c_balance_change
@@ -239,6 +238,9 @@ CREATE TABLE `think_c_balance_change` (
 INSERT INTO `think_c_balance_change` VALUES ('1', '13', '2', '-47.20', '13', '1477993638');
 INSERT INTO `think_c_balance_change` VALUES ('2', '13', '3', '47.20', '13', '1477993667');
 INSERT INTO `think_c_balance_change` VALUES ('3', '25', '1', '0.18', '0', '1478080978');
+INSERT INTO `think_c_balance_change` VALUES ('4', '12', '2', '-1.20', '15', '1478092177');
+INSERT INTO `think_c_balance_change` VALUES ('5', '0', '1', '100.00', '26', '1478093503');
+INSERT INTO `think_c_balance_change` VALUES ('6', '0', '1', '200.00', '28', '1478093690');
 
 -- ----------------------------
 -- Table structure for think_c_level
@@ -275,17 +277,13 @@ CREATE TABLE `think_card` (
   `uid` int(10) NOT NULL DEFAULT '0' COMMENT '操作人',
   `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of think_card
 -- ----------------------------
-INSERT INTO `think_card` VALUES ('1', '', '0', '1', '1477461541');
-INSERT INTO `think_card` VALUES ('2', '1111', '11', '1', '1477462208');
-INSERT INTO `think_card` VALUES ('3', '测试活动1', '20', '1', '1477474607');
-INSERT INTO `think_card` VALUES ('4', '测试22', '10', '1', '1477474924');
-INSERT INTO `think_card` VALUES ('5', '测试33', '10', '1', '1477475035');
-INSERT INTO `think_card` VALUES ('6', '测试44', '50', '1', '1477477052');
+INSERT INTO `think_card` VALUES ('7', '双11会员卡', '5', '1', '1478092317');
+INSERT INTO `think_card` VALUES ('8', '双12会员卡', '50', '1', '1478092411');
 
 -- ----------------------------
 -- Table structure for think_card_detail
@@ -301,101 +299,66 @@ CREATE TABLE `think_card_detail` (
   `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '创建时间',
   PRIMARY KEY (`id`),
   KEY `card_no` (`card_no`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=146 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of think_card_detail
 -- ----------------------------
-INSERT INTO `think_card_detail` VALUES ('1', '3', '3_15810792f1e9cf', '测试活动1', '1', '0', '1477474607');
-INSERT INTO `think_card_detail` VALUES ('2', '3', '3_25810792f1f130', '测试活动1', '0', '0', '1477474607');
-INSERT INTO `think_card_detail` VALUES ('3', '3', '3_35810792f1f391', '测试活动1', '0', '0', '1477474607');
-INSERT INTO `think_card_detail` VALUES ('4', '3', '3_45810792f1f5b5', '测试活动1', '1', '0', '1477474607');
-INSERT INTO `think_card_detail` VALUES ('5', '3', '3_55810792f1f9e6', '测试活动1', '1', '0', '1477474607');
-INSERT INTO `think_card_detail` VALUES ('6', '3', '3_65810792f1fea9', '测试活动1', '-1', '0', '1477474607');
-INSERT INTO `think_card_detail` VALUES ('7', '3', '3_75810792f2042d', '测试活动1', '0', '0', '1477474607');
-INSERT INTO `think_card_detail` VALUES ('8', '3', '3_85810792f20673', '测试活动1', '0', '0', '1477474607');
-INSERT INTO `think_card_detail` VALUES ('9', '3', '3_95810792f2081d', '测试活动1', '0', '0', '1477474607');
-INSERT INTO `think_card_detail` VALUES ('10', '3', '3_105810792f209a9', '测试活动1', '0', '0', '1477474607');
-INSERT INTO `think_card_detail` VALUES ('11', '3', '3_115810792f20b5d', '测试活动1', '0', '0', '1477474607');
-INSERT INTO `think_card_detail` VALUES ('12', '3', '3_125810792f20cd9', '测试活动1', '0', '0', '1477474607');
-INSERT INTO `think_card_detail` VALUES ('13', '3', '3_135810792f20ed8', '测试活动1', '0', '0', '1477474607');
-INSERT INTO `think_card_detail` VALUES ('14', '3', '3_145810792f210f9', '测试活动1', '0', '0', '1477474607');
-INSERT INTO `think_card_detail` VALUES ('15', '3', '3_155810792f212a0', '测试活动1', '0', '0', '1477474607');
-INSERT INTO `think_card_detail` VALUES ('16', '3', '3_165810792f21452', '测试活动1', '0', '0', '1477474607');
-INSERT INTO `think_card_detail` VALUES ('17', '3', '3_175810792f21652', '测试活动1', '0', '0', '1477474607');
-INSERT INTO `think_card_detail` VALUES ('18', '3', '3_185810792f2184d', '测试活动1', '0', '0', '1477474607');
-INSERT INTO `think_card_detail` VALUES ('19', '3', '3_195810792f21a90', '测试活动1', '0', '0', '1477474607');
-INSERT INTO `think_card_detail` VALUES ('20', '3', '3_205810792f21d77', '测试活动1', '0', '0', '1477474607');
-INSERT INTO `think_card_detail` VALUES ('21', '4', '    4S    158107a6c81b5e', '测试22', '0', '0', '1477474924');
-INSERT INTO `think_card_detail` VALUES ('22', '4', '    4S    258107a6c8216d', '测试22', '0', '0', '1477474924');
-INSERT INTO `think_card_detail` VALUES ('23', '4', '    4S    358107a6c8251e', '测试22', '0', '0', '1477474924');
-INSERT INTO `think_card_detail` VALUES ('24', '4', '    4S    458107a6c826ca', '测试22', '0', '0', '1477474924');
-INSERT INTO `think_card_detail` VALUES ('25', '4', '    4S    558107a6c82901', '测试22', '0', '0', '1477474924');
-INSERT INTO `think_card_detail` VALUES ('26', '4', '    4S    658107a6c82cf0', '测试22', '0', '0', '1477474924');
-INSERT INTO `think_card_detail` VALUES ('27', '4', '    4S    758107a6c83873', '测试22', '0', '0', '1477474924');
-INSERT INTO `think_card_detail` VALUES ('28', '4', '    4S    858107a6c848c0', '测试22', '0', '0', '1477474924');
-INSERT INTO `think_card_detail` VALUES ('29', '4', '    4S    958107a6c84b73', '测试22', '0', '0', '1477474924');
-INSERT INTO `think_card_detail` VALUES ('30', '4', '    4S   1058107a6c84d2c', '测试22', '0', '0', '1477474924');
-INSERT INTO `think_card_detail` VALUES ('31', '5', '00005S0000158107adb6bba3', '测试33', '0', '0', '1477475035');
-INSERT INTO `think_card_detail` VALUES ('32', '5', '00005S0000258107adb6c269', '测试33', '0', '0', '1477475035');
-INSERT INTO `think_card_detail` VALUES ('33', '5', '00005S0000358107adb6c47c', '测试33', '0', '0', '1477475035');
-INSERT INTO `think_card_detail` VALUES ('34', '5', '00005S0000458107adb6c60f', '测试33', '0', '0', '1477475035');
-INSERT INTO `think_card_detail` VALUES ('35', '5', '00005S0000558107adb6c72f', '测试33', '0', '0', '1477475035');
-INSERT INTO `think_card_detail` VALUES ('36', '5', '00005S0000658107adb6c86a', '测试33', '0', '0', '1477475035');
-INSERT INTO `think_card_detail` VALUES ('37', '5', '00005S0000758107adb6cec6', '测试33', '0', '0', '1477475035');
-INSERT INTO `think_card_detail` VALUES ('38', '5', '00005S0000858107adb6d20c', '测试33', '0', '0', '1477475035');
-INSERT INTO `think_card_detail` VALUES ('39', '5', '00005S0000958107adb6d52a', '测试33', '0', '0', '1477475035');
-INSERT INTO `think_card_detail` VALUES ('40', '5', '00005S0001058107adb6da65', '测试33', '0', '0', '1477475035');
-INSERT INTO `think_card_detail` VALUES ('41', '6', '00006S00001581082bc45aca', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('42', '6', '00006S00002581082bc45e57', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('43', '6', '00006S00003581082bc45f32', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('44', '6', '00006S00004581082bc46037', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('45', '6', '00006S00005581082bc46124', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('46', '6', '00006S00006581082bc46215', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('47', '6', '00006S00007581082bc46303', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('48', '6', '00006S00008581082bc463ed', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('49', '6', '00006S00009581082bc464bb', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('50', '6', '00006S00010581082bc465ff', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('51', '6', '00006S00011581082bc467ed', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('52', '6', '00006S00012581082bc46a25', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('53', '6', '00006S00013581082bc46c48', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('54', '6', '00006S00014581082bc46df5', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('55', '6', '00006S00015581082bc470d6', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('56', '6', '00006S00016581082bc472d0', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('57', '6', '00006S00017581082bc47487', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('58', '6', '00006S00018581082bc4761a', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('59', '6', '00006S00019581082bc47793', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('60', '6', '00006S00020581082bc4799f', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('61', '6', '00006S00021581082bc47c5a', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('62', '6', '00006S00022581082bc47f1a', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('63', '6', '00006S00023581082bc48726', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('64', '6', '00006S00024581082bc48be2', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('65', '6', '00006S00025581082bc48de0', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('66', '6', '00006S00026581082bc48f3b', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('67', '6', '00006S00027581082bc4902c', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('68', '6', '00006S00028581082bc4913f', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('69', '6', '00006S00029581082bc49209', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('70', '6', '00006S00030581082bc492d2', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('71', '6', '00006S00031581082bc49393', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('72', '6', '00006S00032581082bc49476', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('73', '6', '00006S00033581082bc49535', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('74', '6', '00006S00034581082bc495f2', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('75', '6', '00006S00035581082bc496ae', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('76', '6', '00006S00036581082bc49766', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('77', '6', '00006S00037581082bc49831', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('78', '6', '00006S00038581082bc498ea', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('79', '6', '00006S00039581082bc499a2', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('80', '6', '00006S00040581082bc49a6c', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('81', '6', '00006S00041581082bc49b40', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('82', '6', '00006S00042581082bc49c3e', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('83', '6', '00006S00043581082bc49d1e', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('84', '6', '00006S00044581082bc49dfd', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('85', '6', '00006S00045581082bc49eba', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('86', '6', '00006S00046581082bc49f7c', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('87', '6', '00006S00047581082bc4a070', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('88', '6', '00006S00048581082bc4a13e', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('89', '6', '00006S00049581082bc4a208', '测试44', '0', '0', '1477477052');
-INSERT INTO `think_card_detail` VALUES ('90', '6', '00006S00050581082bc4a3ac', '测试44', '0', '0', '1477477052');
+INSERT INTO `think_card_detail` VALUES ('91', '7', '00007S000015819e61dd0b13', '双11会员卡', '1', '0', '1478092317');
+INSERT INTO `think_card_detail` VALUES ('92', '7', '00007S000025819e61dd0f0a', '双11会员卡', '0', '0', '1478092317');
+INSERT INTO `think_card_detail` VALUES ('93', '7', '00007S000035819e61dd1021', '双11会员卡', '0', '0', '1478092317');
+INSERT INTO `think_card_detail` VALUES ('94', '7', '00007S000045819e61dd112b', '双11会员卡', '0', '0', '1478092317');
+INSERT INTO `think_card_detail` VALUES ('95', '7', '00007S000055819e61dd123c', '双11会员卡', '0', '0', '1478092317');
+INSERT INTO `think_card_detail` VALUES ('96', '8', '00008S000015819e67be0856', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('97', '8', '00008S000025819e67be1a44', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('98', '8', '00008S000035819e67be1e5e', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('99', '8', '00008S000045819e67be2091', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('100', '8', '00008S000055819e67be222b', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('101', '8', '00008S000065819e67be2fba', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('102', '8', '00008S000075819e67be3126', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('103', '8', '00008S000085819e67be580d', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('104', '8', '00008S000095819e67be5c14', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('105', '8', '00008S000105819e67be5d01', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('106', '8', '00008S000115819e67be5da6', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('107', '8', '00008S000125819e67be5ee4', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('108', '8', '00008S000135819e67be5fe5', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('109', '8', '00008S000145819e67be60fb', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('110', '8', '00008S000155819e67be61ce', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('111', '8', '00008S000165819e67be6266', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('112', '8', '00008S000175819e67be62eb', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('113', '8', '00008S000185819e67be636e', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('114', '8', '00008S000195819e67be63fe', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('115', '8', '00008S000205819e67be6480', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('116', '8', '00008S000215819e67be6500', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('117', '8', '00008S000225819e67be657f', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('118', '8', '00008S000235819e67be6609', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('119', '8', '00008S000245819e67be6688', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('120', '8', '00008S000255819e67be6708', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('121', '8', '00008S000265819e67be6787', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('122', '8', '00008S000275819e67be6812', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('123', '8', '00008S000285819e67be68bb', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('124', '8', '00008S000295819e67be6964', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('125', '8', '00008S000305819e67be6a1c', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('126', '8', '00008S000315819e67be6a9d', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('127', '8', '00008S000325819e67be6b1d', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('128', '8', '00008S000335819e67be6ba2', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('129', '8', '00008S000345819e67be6c3f', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('130', '8', '00008S000355819e67be6cbe', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('131', '8', '00008S000365819e67be6d41', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('132', '8', '00008S000375819e67be6de5', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('133', '8', '00008S000385819e67be6e87', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('134', '8', '00008S000395819e67be6f28', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('135', '8', '00008S000405819e67be6fd5', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('136', '8', '00008S000415819e67be7077', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('137', '8', '00008S000425819e67be7119', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('138', '8', '00008S000435819e67be71f4', '双12会员卡', '1', '1478093690', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('139', '8', '00008S000445819e67be731b', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('140', '8', '00008S000455819e67be7474', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('141', '8', '00008S000465819e67be75dd', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('142', '8', '00008S000475819e67be76ff', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('143', '8', '00008S000485819e67be77d9', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('144', '8', '00008S000495819e67be787d', '双12会员卡', '0', '0', '1478092411');
+INSERT INTO `think_card_detail` VALUES ('145', '8', '00008S000505819e67be7921', '双12会员卡', '0', '0', '1478092411');
 
 -- ----------------------------
 -- Table structure for think_category
@@ -497,25 +460,13 @@ CREATE TABLE `think_customer` (
   KEY `card_no` (`card_no`) USING BTREE,
   KEY `shop_id` (`shop_id`) USING BTREE,
   KEY `atime` (`add_time`,`update_time`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8 COMMENT='顾客表consumer';
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COMMENT='顾客表consumer';
 
 -- ----------------------------
 -- Records of think_customer
 -- ----------------------------
-INSERT INTO `think_customer` VALUES ('12', '3_15810792f1e9cf', './Public/Uploads/2016-10-27/5811a7d74d8b3.jpg', '张三', '2', '1', '111111111111111111', '', '0', '11111111111', '6', '1401', '12.00', '111111', '0', '0', '0', '1477552087', '2016-10-27 15:08:07');
-INSERT INTO `think_customer` VALUES ('13', '3_25810792f1f130', './Public/Uploads/2016-10-27/5811a877f05ad.jpg', '张三', '1', '1', '111111111111111111', '', '0', '11111111112', '6', '1401', '12.00', '111111', '0', '0', '0', '1477552247', '2016-10-27 15:44:52');
-INSERT INTO `think_customer` VALUES ('14', '3_25810792f1f130', './Public/Uploads/2016-10-27/5811a8bf19cf3.jpg', '张三', '1', '1', '111111111111111111', '2016-10-26', '0', '11111111113', '6', '1401', '12.00', '111111', '0', '0', '0', '1477552319', '2016-10-27 15:44:57');
-INSERT INTO `think_customer` VALUES ('15', '3_25810792f1f130', './Public/Uploads/2016-10-27/5811a8d777c27.jpg', '张三', '1', '1', '111111111111111111', '2016-10-26', '0', '11111111114', '6', '广西北海铁山港区1401', '12.00', '111111', '0', '0', '0', '1477552343', '2016-10-27 15:44:59');
-INSERT INTO `think_customer` VALUES ('16', '3_45810792f1f5b5', './Public/Uploads/2016-10-27/5811af6c9067d.jpg', '张三', '2', '1', '111111111111111111', '2016-10-26', '0', '11111111115', '6', '1401', '12.00', '123456', '0', '0', '0', '1477554028', '2016-10-27 15:45:01');
-INSERT INTO `think_customer` VALUES ('17', '3_45810792f1f5b5', './Public/Uploads/2016-10-27/5811af73ee3f1.jpg', '张三', '2', '1', '111111111111111111', '2016-10-26', '0', '11111111116', '6', '贵州六盘水水城县1401', '12.00', '123456', '0', '0', '0', '1477554035', '2016-10-27 15:45:03');
-INSERT INTO `think_customer` VALUES ('18', '3_45810792f1f5b5', './Public/Uploads/2016-10-27/5811af809f23f.jpg', '张三', '2', '1', '111111111111111111', '2016-10-26', '0', '11111111117', '6', '贵州六盘水水城县1401', '12.00', '123456', '0', '0', '0', '1477554048', '2016-10-27 15:45:05');
-INSERT INTO `think_customer` VALUES ('19', '3_45810792f1f5b5', './Public/Uploads/2016-10-27/5811af854a9af.jpg', '张三', '2', '1', '111111111111111111', '2016-10-26', '0', '11111111118', '6', '贵州六盘水水城县1401', '12.00', '123456', '0', '0', '0', '1477554053', '2016-10-27 15:45:08');
-INSERT INTO `think_customer` VALUES ('20', '3_45810792f1f5b5', './Public/Uploads/2016-10-27/5811aff6d6c69.jpg', '张三', '2', '1', '111111111111111111', '2016-10-26', '0', '11111111119', '6', '贵州六盘水水城县1401', '12.00', '123456', '0', '0', '1', '1477554166', '2016-10-27 16:57:13');
-INSERT INTO `think_customer` VALUES ('21', '3_45810792f1f5b5', './Public/Uploads/2016-10-27/5811b0044aae2.jpg', '张三', '2', '1', '111111111111111111', '2016-10-26', '0', '11111111120', '6', '贵州六盘水水城县1401', '12.00', '123456', '0', '0', '0', '1477554180', '2016-10-27 15:45:25');
-INSERT INTO `think_customer` VALUES ('22', '3_45810792f1f5b5', './Public/Uploads/2016-10-27/5811b010e8c1d.jpg', '张三', '2', '1', '111111111111111111', '2016-10-26', '0', '11111111121', '6', '贵州六盘水水城县1401', '12.00', '123456', '0', '0', '1', '1477554192', '2016-10-27 16:56:41');
-INSERT INTO `think_customer` VALUES ('23', '3_45810792f1f5b5', './Public/Uploads/2016-10-27/5811b03daa8ce.jpg', '张三', '2', '1', '111111111111111111', '2016-10-26', '0', '11111111122', '6', '贵州六盘水水城县1401', '12.00', '123456', '0', '0', '1', '1477554237', '2016-10-27 16:56:37');
-INSERT INTO `think_customer` VALUES ('24', '3_55810792f1f9e6', './Public/Uploads/2016-10-27/5811b052d39e1.jpg', '张三', '2', '1', '111111111111111111', '2016-10-26', '0', '11111111123', '6', '贵州六盘水水城县1401', '112.00', '123456', '0', '0', '1', '1477554258', '2016-11-01 17:47:47');
-INSERT INTO `think_customer` VALUES ('25', '3_15810792f1e9cf', './Public/Uploads/2016-10-27/5811b0570a023.jpg', '张三', '1', '1', '111111111111111111', '2016-10-26', '0', '11111111124', '6', '贵州六盘水水城县1401', '12.40', '123456', '0', '0', '1', '1477554263', '2016-11-02 18:31:25');
+INSERT INTO `think_customer` VALUES ('26', '00007S000015819e61dd0b13', './Public/Uploads/2016-11-02/5819eabfc68f4.jpg', '11111', '6', '1', '111111111111111111', '2016-11-02', '1102', '11111111111', '9', '安徽蚌埠东市区阿斯顿', '100.00', '132132', '0', '0', '1', '1478093503', '2016-11-02 21:31:43');
+INSERT INTO `think_customer` VALUES ('28', '00008S000435819e67be71f4', './Public/Uploads/2016-11-02/5819eb7aa81dd.jpg', '2222', '2', '1', '11111111111111111', '2011-11-01', '1101', '11111111112', '8', '啊啊啊', '200.00', '111111', '0', '0', '1', '1478093690', '2016-11-02 21:34:50');
 
 -- ----------------------------
 -- Table structure for think_erate
@@ -551,7 +502,7 @@ CREATE TABLE `think_g_cate` (
   UNIQUE KEY `name` (`name`) USING BTREE,
   KEY `shop_id` (`shop_id`) USING BTREE,
   KEY `add_time` (`add_time`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='商品分类';
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='商品分类';
 
 -- ----------------------------
 -- Records of think_g_cate
@@ -565,6 +516,7 @@ INSERT INTO `think_g_cate` VALUES ('6', '美容', '0', '1', '1', '1476759721');
 INSERT INTO `think_g_cate` VALUES ('7', '护肤', '0', '1', '1', '1476759728');
 INSERT INTO `think_g_cate` VALUES ('8', '洗剪吹', '0', '1', '1', '1476759735');
 INSERT INTO `think_g_cate` VALUES ('9', 'cesas', '0', '1', '0', '1476761633');
+INSERT INTO `think_g_cate` VALUES ('10', '足疗足疗', '0', '1', '0', '1478091725');
 
 -- ----------------------------
 -- Table structure for think_g2shop
@@ -616,10 +568,10 @@ INSERT INTO `think_goods` VALUES ('6', '9', '面膜', 'bj1234543', '8', '30.00',
 INSERT INTO `think_goods` VALUES ('7', '6', '面膜', 'bj1234543', '8', '30.00', '1', '0', '1476871355', '2016-10-19 18:02:35');
 INSERT INTO `think_goods` VALUES ('8', '9', '面膜', 'bj1234543', '8', '30.00', '0', '0', '1476871355', '2016-10-20 13:59:40');
 INSERT INTO `think_goods` VALUES ('9', '6', 'aaaa', 'aaa', '7', '1.20', '1', '0', '1476871831', '2016-10-19 18:10:31');
-INSERT INTO `think_goods` VALUES ('10', '9', 'aaaa', 'aaa', '7', '1.20', '1', '0', '1476871831', '2016-10-19 18:10:31');
-INSERT INTO `think_goods` VALUES ('11', '6', '11', '111', '7', '12.00', '1', '0', '1476871847', '2016-10-19 18:10:47');
+INSERT INTO `think_goods` VALUES ('10', '9', 'aaaa', 'aaa', '7', '1.20', '0', '0', '1476871831', '2016-11-02 21:02:49');
+INSERT INTO `think_goods` VALUES ('11', '6', '11', '111', '7', '12.00', '0', '0', '1476871847', '2016-11-02 21:02:46');
 INSERT INTO `think_goods` VALUES ('12', '6', '11', '111', '8', '12.00', '0', '0', '1476872070', '2016-10-20 13:59:27');
-INSERT INTO `think_goods` VALUES ('13', '8', '123123', '123123', '7', '123123.00', '1', '0', '1477041845', '2016-10-21 17:24:05');
+INSERT INTO `think_goods` VALUES ('13', '8', '123123', '123123', '7', '123123.00', '0', '0', '1477041845', '2016-11-02 21:02:42');
 
 -- ----------------------------
 -- Table structure for think_member
@@ -777,7 +729,7 @@ CREATE TABLE `think_order` (
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '订单状态',
   `add_time` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of think_order
@@ -788,6 +740,8 @@ INSERT INTO `think_order` VALUES ('10', '24', '1', '6', '40', 'ccc', '12.72', '9
 INSERT INTO `think_order` VALUES ('11', '24', '1', '6', '0', 'dddd', '47.20', '47.20', '', '1', '1477971167');
 INSERT INTO `think_order` VALUES ('12', '24', '1', '6', '0', '', '0.00', '0.00', '', '0', '1477993539');
 INSERT INTO `think_order` VALUES ('13', '24', '1', '6', '0', '13581864a6ee9ed', '47.20', '47.20', '', '-1', '1477993638');
+INSERT INTO `think_order` VALUES ('14', '12', '1', '6', '0', '', '0.00', '0.00', '', '0', '1478091995');
+INSERT INTO `think_order` VALUES ('15', '12', '1', '6', '0', '155819e5911dacb', '1.20', '1.20', '', '1', '1478092177');
 
 -- ----------------------------
 -- Table structure for think_order_detail
@@ -807,7 +761,7 @@ CREATE TABLE `think_order_detail` (
   `yj` decimal(19,2) NOT NULL DEFAULT '0.00',
   `jf` decimal(19,2) NOT NULL DEFAULT '0.00',
   `count` int(10) NOT NULL DEFAULT '1',
-  `snapshot` text NOT NULL COMMENT '商品快照',
+  `snapshot` text COMMENT '商品快照',
   `add_time` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `cus_id` (`cus_id`) USING BTREE,
@@ -815,7 +769,7 @@ CREATE TABLE `think_order_detail` (
   KEY `goods_id` (`goods_id`) USING BTREE,
   KEY `pack_id` (`pack_id`) USING BTREE,
   KEY `add_time` (`add_time`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of think_order_detail
@@ -832,6 +786,7 @@ INSERT INTO `think_order_detail` VALUES ('14', '24', '1101test1', '2', '11', '0'
 INSERT INTO `think_order_detail` VALUES ('15', '24', 'aaaa', '1', '13', '9', '6', '0', '0', '0', '1.20', '1.20', '1', '', '1477971530');
 INSERT INTO `think_order_detail` VALUES ('16', '24', '11', '1', '13', '11', '6', '0', '0', '0', '12.00', '12.00', '1', '', '1477971530');
 INSERT INTO `think_order_detail` VALUES ('18', '24', '1101test1', '2', '13', '0', '6', '0', '7', '0', '34.00', '34.00', '1', '', '1477971770');
+INSERT INTO `think_order_detail` VALUES ('19', '12', 'aaaa', '1', '15', '9', '6', '0', '0', '0', '1.20', '1.20', '1', null, '1478091991');
 
 -- ----------------------------
 -- Table structure for think_package
@@ -4463,7 +4418,7 @@ CREATE TABLE `think_shop` (
   UNIQUE KEY `shop_name` (`shop_name`,`status`) USING BTREE,
   KEY `link_tel` (`link_tel`) USING BTREE,
   KEY `add_time` (`add_time`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of think_shop
@@ -4476,3 +4431,4 @@ INSERT INTO `think_shop` VALUES ('6', 'shang11', 'shang11', '11111111', 'shang11
 INSERT INTO `think_shop` VALUES ('7', 'shang22', 'shang22', '1111', 'shang22', 'shang22', '0', '1476672719', '2016-10-17 11:09:25');
 INSERT INTO `think_shop` VALUES ('8', 'shang33', 'shang331', '121212', 'shang33', 'shang33', '1', '1476672910', '2016-10-17 11:09:14');
 INSERT INTO `think_shop` VALUES ('9', 'shang44', 'shang44', '12312313', 'shang44', 'shang44', '1', '1476673778', '2016-10-17 11:09:38');
+INSERT INTO `think_shop` VALUES ('10', 'shang55', 'shang55', '111111111', 'shang55', 'shang55', '1', '1478091617', '2016-11-02 21:00:17');

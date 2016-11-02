@@ -30,6 +30,7 @@ class CusModel extends Model
 			//会员卡状态修改
 			$cardDetail = $map = array();
 			$cardDetail["status"]	= \Common\Model\CardDetailModel::STATUS_EN;
+			$cardDetail["activity_time"]	= NOW_TIME;
 
 			$map["card_no"]	= $info["card_no"];
 			$res = D("CardDetail")->where($map)->save($cardDetail);

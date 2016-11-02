@@ -32,6 +32,24 @@ class CardController extends CommonController {
             ->join("left join ".C('DB_PREFIX')."auth_user as u on c.uid=u.uid")
             ->order($sort.' '.$order)->page($page,$rows)->select();
 
+        if($count)
+        {
+            $ids = implode(",",array_column($info, "id"));
+            $CardDetail = D("CardDetail")->field('card_id, count(1) as n')->where(array(
+                "card_id" => array("in", $ids),
+                "status"    => \Common\Model\CardDetailModel::STATUS_DIS
+                ))->group("card_id")->select();
+            $map = array();
+            foreach ($CardDetail as $v) {
+                $map[$v["card_id"]] = $v['n'];
+            }
+
+            foreach ($info as $k => $v) {
+                $info[$k]["amount"] = $map[$v["id"]];
+            }
+
+        }
+
     	if(!empty($info)){
             $data['total']=$count;
             $data['rows']=$info;
