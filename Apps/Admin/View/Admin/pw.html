@@ -1,50 +1,57 @@
 <body>
 <script type="text/javascript">
-	
+	pwObj={
+        save:function(url){
+            $('#adminPwForm').form('submit',{
+                url: url,
+                onSubmit: function(){
+                    return $(this).form('validate');
+                },
+                success: function(result){
+                     var result=eval('('+result+')');
+                    if (!result.status){
+                        $.messager.confirm('错误提示',result.message,function(r){
+                            $('#adminPwDialog').dialog('close');
+                        });
+                    }else{
+                        if($.messager.confirm('提示','添加成功！是否继续添加',function(r){
+
+                            $('#adminPwDialog').dialog('close');   
+                            if(r){
+                                closeTab();
+                            }else{
+                                closeTab();
+                            }
+                        
+                        }));
+                    }
+                }
+            });
+        }
+    }
 </script>
 	
     <!-- 编辑用户 -->
-    <div id="authUserEditDialog" class="easyui-dialog" style="width:400px;padding:10px 20px" buttons="#authUserEditButtons">
-        <form id="authUserEditForm" method="post" novalidate>          
+    <div id="adminPwDialog" class="easyui-dialog" style="width:400px;padding:10px 20px" buttons="#adminPwButtons">
+        <form id="adminPwForm" method="post" novalidate>          
             <div class="fitem">
-                <label>用&nbsp;&nbsp;户&nbsp;&nbsp;名</label>
-                <input name="uid" id="authUserId" type="hidden" />
-                <input name="name" class="easyui-textbox" data-options="disabled:true,height:30" />
+                <label>老&nbsp;&nbsp;密&nbsp;&nbsp;码</label>
+                <input name="opwd" class="easyui-textbox" type="password" data-options="required:true,validType:['length[6,16]'],height:30" />
             </div>
             <div class="fitem">
                 <label>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码</label>
-                <input name="pwd" id="authUserPwdE" type="password"  class="easyui-textbox" data-options="validType:['length[6,16]','equals[\'#authUserRepwdE\']'],height:30" />
+                <input name="pwd" id="adminPwdE" type="password"  class="easyui-textbox" data-options="validType:['length[6,16]','equals[\'#adminRepwdE\']'],height:30" />
             </div>
             <div class="fitem">
                 <label>确认密码</label>
-                <input name="repwd" id="authUserRepwdE" type="password" class="easyui-textbox" data-options="height:30,validType:['length[6,16]','equals[\'#authUserPwdE\']']" />
+                <input name="repwd" id="adminRepwdE" type="password" class="easyui-textbox" data-options="height:30,validType:['length[6,16]','equals[\'#adminPwdE\']']" />
             </div>
-            <div class="fitem">
-                <label>姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名</label>
-                <input name="realname" id="authUserRealname" class="easyui-textbox" data-options="height:30" />
-            </div>
-            <div class="fitem">
-                <label>邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱</label>
-                <input name="email" id="authUserEmail" class="easyui-textbox" data-options="height:30,validType:['email','exists[\'邮箱\',\'#authUserId\',\'{:U('Auth/checkEmail','','')}\']']" />
-            </div>
-            <div class="fitem">
-                <label>积&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;分</label>
-                <input name="score" id="authUserScore" class="easyui-numberbox" data-options="height:30" />
-            </div>
-            <div class="fitem">
-                <label>角&nbsp;&nbsp;色&nbsp;&nbsp;组</label>
-                <select class="easyui-combobox" name="groupId" id='authUserGroupEdit' data-options="height:30,required:true,editable:false">
-                    <volist name="groupInfo" id="vo">
-                        <option value="{$vo['id']}">{$vo['title']}</option>
-                    </volist>                         
-                </select>   
-            </div>     
         </form>
     </div>
-    <div id="authUserEditButtons">
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="authUserObj.save('{:U('Auth/userSave')}')" style="width:90px">更新</a>
+    <div id="adminPwButtons">
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="pwObj.save('{:U('Admin/pwSave')}')" style="width:90px">更新</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:
-    $('#authUserEditDialog').dialog('close')" style="width:90px">取消</a>
+    $('#adminPwDialog').dialog('close')" style="width:90px">取消</a>
     </div>
     <!-- /编辑用户 -->    
 </body>
