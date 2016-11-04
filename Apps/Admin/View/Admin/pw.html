@@ -14,13 +14,13 @@
                             $('#adminPwDialog').dialog('close');
                         });
                     }else{
-                        if($.messager.confirm('提示','添加成功！是否继续添加',function(r){
+                        if($.messager.confirm('提示','修改成功！是否继续添加',function(r){
 
                             $('#adminPwDialog').dialog('close');   
                             if(r){
                                 closeTab();
                             }else{
-                                closeTab();
+                                flushTab();
                             }
                         
                         }));

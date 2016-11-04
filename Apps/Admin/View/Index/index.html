@@ -14,26 +14,29 @@
 	<script type="text/javascript" src="__PUBLIC__/Common/easyui/js/extends.js"></script>
 
 	<script>
-		function showTab(url,title){
-			if ($('#黄药师Tabs').tabs('exists',title)){
-				$('#黄药师Tabs').tabs('select',title);
-			} else {
-				$('#黄药师Tabs').tabs('add',{
-					title:title,
-					href:url,
-					closable:true,
-					onLoadError:function(data){
-						var info=eval('('+data.responseText+')');
-						$.messager.confirm('错误提示',info.message,function(r){
-							$('#黄药师Tabs').tabs('close',title);
-						});
-						return false;
-					}	
-				});
-			}
+		//打开tab
+		function showTab(href,title){
+		    var tt = $('#gyTabs');  
+		    if (tt.tabs('exists', title)){
+		        tt.tabs('select', title);  
+		        refreshTab({tabTitle:title,url:href});  
+		    } else {
+		        if (href){  
+		            var content = '<iframe marginheight="0" marginwidth="0" scrolling="auto" frameborder="0"  src="'+href+'" style="width:100%;height:99%;padding:0 0 5px"></iframe>';  
+		        } else {  
+		            var content = '未实现';  
+		        }  
+		        tt.tabs('add',{  
+		            title:title,  
+		            closable:true,  
+		            content:content,  
+		            fit : true
+		            //iconCls:icon||'icon-default'  
+		        });  
+		    }  
 		}
 		function refreshTab(cfg){  
-		    var refresh_tab = cfg.tabTitle?$('#黄药师Tabs').tabs('getTab',cfg.tabTitle):$('#黄药师Tabs').tabs('getSelected');  
+		    var refresh_tab = cfg.tabTitle?$('#gyTabs').tabs('getTab',cfg.tabTitle):$('#gyTabs').tabs('getSelected');  
 		    if(refresh_tab && refresh_tab.find('iframe').length > 0){  
 		    var _refresh_ifram = refresh_tab.find('iframe')[0];  
 		    var refresh_url = cfg.url?cfg.url:_refresh_ifram.src;  
@@ -44,15 +47,15 @@
 		//关闭tab
 		function closeTab(title){
 		    if(!title){
-		        var tab = $('#黄药师Tabs').tabs('getSelected');
-		        $('#黄药师Tabs').tabs('close',$('#黄药师Tabs').tabs('getTabIndex',tab));
+		        var tab = $('#gyTabs').tabs('getSelected');
+		        $('#gyTabs').tabs('close',$('#gyTabs').tabs('getTabIndex',tab));
 		    } 	
 		        
 		    else{
 		    
-		        if($('#黄药师Tabs').tabs('exists',title))
+		        if($('#gyTabs').tabs('exists',title))
 		            
-		            $('#黄药师Tabs').tabs('close',title);
+		            $('#gyTabs').tabs('close',title);
 		    
 		    }
 		    
@@ -62,9 +65,10 @@
 
 		    var tab;
 
-		    if(!title) tab = $('#黄药师Tabs').tabs('getSelected');
+		    if(!title) tab = $('#gyTabs').tabs('getSelected');
 		        
-		    else	tab = $('#黄药师Tabs').tabs('getTab',title);
+		    else	tab = $('#gyTabs').tabs('getTab',title);
+		    
 		    refreshTab({tabTitle:tab.title,url:tab.href});
 		}
 	</script>
@@ -104,7 +108,7 @@
 		</div>
 
 	 
-		<div id="黄药师Tabs" class="easyui-tabs" data-options="region:'center',border:'false'">
+		<div id="gyTabs" class="easyui-tabs" data-options="region:'center',border:'false'">
 		    <div title="首页" style="padding:10px">
 	            <p style="font-size:14px">欢迎你，{$Think.session.username}</p>
 	            <ul>
