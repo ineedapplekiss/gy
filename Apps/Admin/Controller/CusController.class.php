@@ -370,9 +370,9 @@ class CusController extends CommonController {
         if(!IS_POST) exit;
 
         $ck=A('CheckInput');
-        $cid=$ck->in('cid','cid','intval','',2,20);
-        $card_no=$ck->in('新卡号','card_no','cnennumstr','',1,20);
-        $old_card_no=$ck->in('旧卡号','old_card_no','cnennumstr','',1,20);
+        $cid=$ck->in('cid','cid','intval','',1,40);
+        $card_no=$ck->in('新卡号','card_no','cnennumstr','',1,40);
+        $old_card_no=$ck->in('旧卡号','old_card_no','cnennumstr','',1,40);
 
         $status = D("Cus")->changeCard($cid, $old_card_no, $card_no);
         if(false===$status){

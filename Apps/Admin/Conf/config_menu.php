@@ -5,7 +5,8 @@ return array(
 			'gname' => '快速操作',
 			'gicon' => 'icon-search',
 			'list' => array(
-				array('url'=>'Pay/index', 'icon'=>'icon-users', 'name'=>'消费')
+				array('url'=>'Pay/index', 'icon'=>'icon-users', 'name'=>'消费'),
+				array('url'=>'Cus/add', 'icon'=>'icon-users', 'name'=>'添加会员'),
 			),
 		),
 		array(

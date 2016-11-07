@@ -13,7 +13,7 @@ class PayController extends CommonController {
     public function userDetail()
     {
         $ck=A('CheckInput');
-        $cardNo=$ck->in('会员卡号','card_no','cnennumstr','',2,20);
+        $cardNo=$ck->in('会员卡号','card_no','cnennumstr','',2,40);
 
         $userDetail["cus"] = D("Cus")->alias("c")
             ->field("c.id, c.name, c.jf, c.mobile, cl.name as lname")
