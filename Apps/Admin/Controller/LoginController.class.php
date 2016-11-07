@@ -53,6 +53,11 @@ class LoginController extends Controller{
 		session('uid',$status['uid']);
 		session('logintime',$data['lastlogintime']);
 
+		$log['uid'] = session('uid');
+	    $log['user_name'] =session('username');
+	    $log['ip'] = get_client_ip();
+		action_log($log, "登录成功！");
+
 		$result['message']='登陆成功！';
 		$result['status']=true;
 		$this->ajaxReturn($result);

@@ -2,6 +2,8 @@
 namespace Admin\Controller;
 use Think\Controller;
 class CommonController extends Controller{
+	protected $_user;
+	
 	public function _initialize(){
 
         
@@ -16,6 +18,9 @@ class CommonController extends Controller{
 			$return['status']=false;
 			$this->ajaxReturn($return);			
 		}
+
+		//配置用户信息
+		$this->setUserInfo();
 		
 	}
 
@@ -23,5 +28,14 @@ class CommonController extends Controller{
         //$this->error('你请求的页面不存在!!');
         echo "<script>$.messager.alert('错误提示','你请求的页面不存在!!','error');</script>";
     }
+
+    /**
+	 * 配置用户信息
+	 */
+	public function setUserInfo(){
+	    $this->_user['uid'] = session('uid');
+	    $this->_user['user_name'] =session('username');
+	    $this->_user['ip'] = get_client_ip();
+	}
 }
 ?>

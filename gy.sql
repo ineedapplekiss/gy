@@ -10,72 +10,53 @@ Target Server Type    : MYSQL
 Target Server Version : 50716
 File Encoding         : 65001
 
-Date: 2016-11-02 21:54:46
+Date: 2016-11-08 01:11:31
 */
 
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for think_action
+-- Table structure for think_admin_log
 -- ----------------------------
-DROP TABLE IF EXISTS `think_action`;
-CREATE TABLE `think_action` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `name` char(30) NOT NULL DEFAULT '' COMMENT '行为唯一标识',
-  `title` char(80) NOT NULL DEFAULT '' COMMENT '行为说明',
-  `remark` char(140) NOT NULL DEFAULT '' COMMENT '行为描述',
-  `rule` text NOT NULL COMMENT '行为规则',
-  `log` text NOT NULL COMMENT '日志规则',
-  `type` tinyint(2) unsigned NOT NULL DEFAULT '1' COMMENT '类型',
-  `status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '状态',
-  `update_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='系统行为表';
-
--- ----------------------------
--- Records of think_action
--- ----------------------------
-INSERT INTO `think_action` VALUES ('1', 'user_login', '用户登录', '积分+10，每天一次', 'table:member|field:score|condition:uid={$self} AND status>-1|rule:score+10|cycle:24|max:1;', '[user|get_nickname]在[time|time_format]登录了后台', '1', '1', '1387181220');
-INSERT INTO `think_action` VALUES ('2', 'add_article', '发布文章', '积分+5，每天上限5次', 'table:member|field:score|condition:uid={$self}|rule:score+5|cycle:24|max:5', '', '2', '1', '1380173180');
-INSERT INTO `think_action` VALUES ('3', 'review', '评论', '评论积分+1，无限制', 'table:member|field:score|condition:uid={$self}|rule:score+1', '', '2', '1', '1383285646');
-INSERT INTO `think_action` VALUES ('4', 'add_document', '发表文档', '积分+10，每天上限5次', 'table:member|field:score|condition:uid={$self}|rule:score+10|cycle:24|max:5', '[user|get_nickname]在[time|time_format]发表了一篇文章。\r\n表[model]，记录编号[record]。', '2', '1', '1386139726');
-INSERT INTO `think_action` VALUES ('5', 'add_document_topic', '发表讨论', '积分+5，每天上限10次', 'table:member|field:score|condition:uid={$self}|rule:score+5|cycle:24|max:10', '', '2', '1', '1383285551');
-INSERT INTO `think_action` VALUES ('6', 'update_config', '更新配置', '新增或修改或删除配置', '', '', '1', '1', '1383294988');
-INSERT INTO `think_action` VALUES ('7', 'update_model', '更新模型', '新增或修改模型', '', '', '1', '1', '1383295057');
-INSERT INTO `think_action` VALUES ('8', 'update_attribute', '更新属性', '新增或更新或删除属性', '', '', '1', '1', '1383295963');
-INSERT INTO `think_action` VALUES ('9', 'update_channel', '更新导航', '新增或修改或删除导航', '', '', '1', '1', '1383296301');
-INSERT INTO `think_action` VALUES ('10', 'update_menu', '更新菜单', '新增或修改或删除菜单', '', '', '1', '1', '1383296392');
-INSERT INTO `think_action` VALUES ('11', 'update_category', '更新分类', '新增或修改或删除分类', '', '', '1', '1', '1383296765');
-
--- ----------------------------
--- Table structure for think_action_log
--- ----------------------------
-DROP TABLE IF EXISTS `think_action_log`;
-CREATE TABLE `think_action_log` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `action_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '行为id',
-  `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '执行用户id',
-  `action_ip` bigint(20) NOT NULL COMMENT '执行行为者ip',
-  `model` varchar(50) NOT NULL DEFAULT '' COMMENT '触发行为的表',
-  `record_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '触发行为的数据id',
-  `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '日志备注',
-  `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '状态',
-  `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '执行行为的时间',
+DROP TABLE IF EXISTS `think_admin_log`;
+CREATE TABLE `think_admin_log` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '日志id',
+  `uid` int(10) NOT NULL DEFAULT '0' COMMENT '后台用户id',
+  `user_name` char(20) NOT NULL DEFAULT '' COMMENT '用户名',
+  `action_code` char(32) NOT NULL DEFAULT '' COMMENT '类名.方法名',
+  `create_time` int(10) NOT NULL DEFAULT '0' COMMENT '时间',
+  `create_ip` char(15) NOT NULL DEFAULT '' COMMENT 'ip地址',
+  `act_id` int(10) NOT NULL DEFAULT '0',
+  `content` text NOT NULL COMMENT 'log内容',
   PRIMARY KEY (`id`),
-  KEY `action_ip_ix` (`action_ip`),
-  KEY `action_id_ix` (`action_id`),
-  KEY `user_id_ix` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='行为日志表';
+  KEY `uid` (`uid`) USING BTREE,
+  KEY `create_time` (`create_time`) USING BTREE,
+  KEY `action_code` (`action_code`) USING BTREE,
+  KEY `act_id` (`act_id`) USING BTREE,
+  KEY `user_name` (`user_name`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=3070 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of think_action_log
+-- Records of think_admin_log
 -- ----------------------------
-INSERT INTO `think_action_log` VALUES ('10', '1', '1', '3232249857', 'member', '1', 'admin在2016-10-12 11:12登录了后台', '1', '1476241977');
-INSERT INTO `think_action_log` VALUES ('5', '1', '1', '3232249857', 'member', '1', 'admin在2016-09-26 18:16登录了后台', '1', '1474885004');
-INSERT INTO `think_action_log` VALUES ('6', '1', '1', '3232249857', 'member', '1', 'admin在2016-09-27 14:38登录了后台', '1', '1474958307');
-INSERT INTO `think_action_log` VALUES ('7', '1', '1', '3232249857', 'member', '1', 'admin在2016-10-09 14:57登录了后台', '1', '1475996242');
-INSERT INTO `think_action_log` VALUES ('8', '1', '1', '3232249857', 'member', '1', 'admin在2016-10-10 13:47登录了后台', '1', '1476078436');
-INSERT INTO `think_action_log` VALUES ('9', '1', '1', '3232249857', 'member', '1', 'admin在2016-10-11 13:54登录了后台', '1', '1476165247');
+INSERT INTO `think_admin_log` VALUES ('3052', '0', '', 'Sale.edit', '1478534530', '', '0', '修改促销0');
+INSERT INTO `think_admin_log` VALUES ('3053', '0', '', 'Sale.edit', '1478534535', '', '0', '修改促销1');
+INSERT INTO `think_admin_log` VALUES ('3054', '11', 'test003', 'Login.checkLogin', '1478534615', '192.168.200.1', '0', '登陆成功！');
+INSERT INTO `think_admin_log` VALUES ('3055', '0', '', 'Sale.edit', '1478534634', '', '0', '修改促销0');
+INSERT INTO `think_admin_log` VALUES ('3056', '0', '', 'Sale.edit', '1478534646', '', '0', '修改促销1');
+INSERT INTO `think_admin_log` VALUES ('3057', '0', '', 'Sale.edit', '1478534724', '', '0', '修改促销0');
+INSERT INTO `think_admin_log` VALUES ('3058', '0', '', 'Sale.edit', '1478534765', '', '0', '修改促销0');
+INSERT INTO `think_admin_log` VALUES ('3059', '0', '', 'Sale.edit', '1478534794', '', '0', '修改促销1');
+INSERT INTO `think_admin_log` VALUES ('3060', '0', '', 'Sale.edit', '1478534837', '', '0', '修改促销1');
+INSERT INTO `think_admin_log` VALUES ('3061', '11', 'test003', 'Sale.edit', '1478534866', '192.168.200.1', '0', '修改促销1');
+INSERT INTO `think_admin_log` VALUES ('3062', '11', 'test003', 'Sale.edit', '1478534895', '192.168.200.1', '0', '修改促销40状态为1');
+INSERT INTO `think_admin_log` VALUES ('3063', '11', 'test003', 'Sale.edit', '1478534897', '192.168.200.1', '0', '修改促销39状态为1');
+INSERT INTO `think_admin_log` VALUES ('3064', '11', 'test003', 'Login.checkLogin', '1478534957', '192.168.200.1', '0', '登陆成功！');
+INSERT INTO `think_admin_log` VALUES ('3065', '1', 'admin', 'Login.checkLogin', '1478535166', '192.168.200.1', '0', '登录成功！');
+INSERT INTO `think_admin_log` VALUES ('3066', '1', 'admin', 'Index.logout', '1478537554', '192.168.200.1', '0', '用户退出');
+INSERT INTO `think_admin_log` VALUES ('3067', '1', 'admin', 'Login.checkLogin', '1478537573', '192.168.200.1', '0', '登录成功！');
+INSERT INTO `think_admin_log` VALUES ('3068', '1', 'admin', 'Index.logout', '1478537575', '192.168.200.1', '0', '用户退出');
+INSERT INTO `think_admin_log` VALUES ('3069', '1', 'admin', 'Login.checkLogin', '1478538067', '192.168.200.1', '0', '登录成功！');
 
 -- ----------------------------
 -- Table structure for think_auth_group
@@ -95,10 +76,10 @@ CREATE TABLE `think_auth_group` (
 -- ----------------------------
 INSERT INTO `think_auth_group` VALUES ('1', '超级管理员', '1', '', '拥有最大权限');
 INSERT INTO `think_auth_group` VALUES ('2', '默认组', '1', '3,7,8,22,23,32,37,39,40,41,42,44', '拥有常用权限');
-INSERT INTO `think_auth_group` VALUES ('3', '网站管理员', '1', '37,38,39,40', '拥有相对多的权限');
-INSERT INTO `think_auth_group` VALUES ('4', '编辑组', '1', '1,2,3,4,8,22,23', '拥有文章模块的所有权限');
-INSERT INTO `think_auth_group` VALUES ('5', '发布人员', '1', '', '拥有发布、修改文章的权限');
-INSERT INTO `think_auth_group` VALUES ('6', '测试组', '1', '6', '测试专用组');
+INSERT INTO `think_auth_group` VALUES ('3', '运营', '1', '37,38,39,40', '负责促销活动');
+INSERT INTO `think_auth_group` VALUES ('4', '店主', '1', '1,2,3,4,8,22,23', '可以创建商品');
+INSERT INTO `think_auth_group` VALUES ('5', '柜台', '1', '', '有消费权限');
+INSERT INTO `think_auth_group` VALUES ('6', '测试', '1', '22,23,70,71,72,73,74,75,76,77,107,108,109,110,111,117', '测试专用组');
 
 -- ----------------------------
 -- Table structure for think_auth_group_2_shop
@@ -139,7 +120,7 @@ CREATE TABLE `think_auth_group_access` (
 INSERT INTO `think_auth_group_access` VALUES ('1', '1');
 INSERT INTO `think_auth_group_access` VALUES ('2', '5');
 INSERT INTO `think_auth_group_access` VALUES ('10', '6');
-INSERT INTO `think_auth_group_access` VALUES ('11', '2');
+INSERT INTO `think_auth_group_access` VALUES ('11', '6');
 
 -- ----------------------------
 -- Table structure for think_auth_rule
@@ -156,38 +137,98 @@ CREATE TABLE `think_auth_rule` (
   `state` varchar(8) NOT NULL DEFAULT '' COMMENT '菜单是否打开,有子级时,关闭',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=MyISAM AUTO_INCREMENT=52 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=118 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of think_auth_rule
 -- ----------------------------
-INSERT INTO `think_auth_rule` VALUES ('3', 'Admin/Auth/rule', '规则管理', '1', '1', '', '17', '');
-INSERT INTO `think_auth_rule` VALUES ('4', 'Admin/Auth/userAdd', '用户添加', '1', '1', '', '17', '');
-INSERT INTO `think_auth_rule` VALUES ('6', 'Admin/Auth/ruleDel', '规则删除', '1', '1', '', '17', '');
-INSERT INTO `think_auth_rule` VALUES ('7', 'Admin/Auth/groupAdd', '角色添加', '1', '1', '', '17', '');
-INSERT INTO `think_auth_rule` VALUES ('8', 'Admin/Auth/groupSave', '角色更新', '1', '1', '', '17', '');
-INSERT INTO `think_auth_rule` VALUES ('22', 'Admin/Auth/index', '用户管理', '1', '1', '', '17', '');
+INSERT INTO `think_auth_rule` VALUES ('3', 'Admin/Auth/rule', '规则管理', '1', '1', '', '15', '');
+INSERT INTO `think_auth_rule` VALUES ('4', 'Admin/Auth/userAdd', '用户添加', '1', '1', '', '15', '');
+INSERT INTO `think_auth_rule` VALUES ('6', 'Admin/Auth/ruleDel', '规则删除', '1', '1', '', '15', '');
+INSERT INTO `think_auth_rule` VALUES ('7', 'Admin/Auth/groupAdd', '角色添加', '1', '1', '', '15', '');
+INSERT INTO `think_auth_rule` VALUES ('8', 'Admin/Auth/groupSave', '角色更新', '1', '1', '', '15', '');
+INSERT INTO `think_auth_rule` VALUES ('22', 'Admin/Auth/index', '用户管理', '1', '1', '', '15', '');
 INSERT INTO `think_auth_rule` VALUES ('15', '系统模块', '系统模块', '1', '1', '', '0', 'closed');
 INSERT INTO `think_auth_rule` VALUES ('16', '运营模块', '运营模块', '1', '1', '', '0', 'closed');
 INSERT INTO `think_auth_rule` VALUES ('17', '订单模块', '订单模块', '1', '1', '', '0', 'closed');
 INSERT INTO `think_auth_rule` VALUES ('18', '商品模块', '商品模块', '1', '1', '', '0', 'closed');
-INSERT INTO `think_auth_rule` VALUES ('19', '顾客模块', '顾客模块', '1', '1', '', '0', 'closed');
-INSERT INTO `think_auth_rule` VALUES ('20', '其他', '其他', '1', '1', '', '0', 'closed');
-INSERT INTO `think_auth_rule` VALUES ('23', 'Admin/Auth/group', '角色管理', '1', '1', '', '17', '');
-INSERT INTO `think_auth_rule` VALUES ('29', 'Admin/Auth/userSave', '更新用户', '1', '1', '', '17', '');
-INSERT INTO `think_auth_rule` VALUES ('30', 'Admin/Auth/userMove', '用户移动', '1', '1', '', '17', '');
-INSERT INTO `think_auth_rule` VALUES ('31', 'Admin/Auth/userDel', '用户删除', '1', '1', '', '17', '');
-INSERT INTO `think_auth_rule` VALUES ('32', 'Admin/Auth/ruleAdd', '规则添加', '1', '1', '', '17', '');
-INSERT INTO `think_auth_rule` VALUES ('33', 'Admin/Auth/ruleSave', '规则更新', '1', '1', '', '17', '');
-INSERT INTO `think_auth_rule` VALUES ('35', 'Admin/Auth/groupDel', '角色删除', '1', '1', '', '17', '');
-INSERT INTO `think_auth_rule` VALUES ('36', 'Admin/Auth/AccessSet', '权限设置', '1', '1', '', '17', '');
-INSERT INTO `think_auth_rule` VALUES ('37', 'Admin/Member/index', '会员管理', '1', '1', '', '18', '');
-INSERT INTO `think_auth_rule` VALUES ('39', 'Admin/Member/addHandle', '会员添加', '1', '1', '', '18', '');
-INSERT INTO `think_auth_rule` VALUES ('40', 'Admin/Member/editHandle', '会员编辑', '1', '1', '', '18', '');
-INSERT INTO `think_auth_rule` VALUES ('41', 'Admin/Member/delHandle', '会员删除', '1', '1', '', '18', '');
-INSERT INTO `think_auth_rule` VALUES ('42', 'Admin/Member/group', '会员组管理', '1', '1', '', '18', '');
-INSERT INTO `think_auth_rule` VALUES ('44', 'Admin/Member/groupAdd', '会员组添加', '1', '1', '', '18', '');
+INSERT INTO `think_auth_rule` VALUES ('19', '会员模块', '会员模块', '1', '1', '', '0', 'closed');
+INSERT INTO `think_auth_rule` VALUES ('20', '快速操作', '快速操作', '1', '1', '', '0', 'closed');
+INSERT INTO `think_auth_rule` VALUES ('23', 'Admin/Auth/group', '角色管理', '1', '1', '', '15', '');
+INSERT INTO `think_auth_rule` VALUES ('29', 'Admin/Auth/userSave', '更新用户', '1', '1', '', '15', '');
+INSERT INTO `think_auth_rule` VALUES ('30', 'Admin/Auth/userMove', '用户移动', '1', '1', '', '15', '');
+INSERT INTO `think_auth_rule` VALUES ('31', 'Admin/Auth/userDel', '用户删除', '1', '1', '', '15', '');
+INSERT INTO `think_auth_rule` VALUES ('32', 'Admin/Auth/ruleAdd', '规则添加', '1', '1', '', '15', '');
+INSERT INTO `think_auth_rule` VALUES ('33', 'Admin/Auth/ruleSave', '规则更新', '1', '1', '', '15', '');
+INSERT INTO `think_auth_rule` VALUES ('35', 'Admin/Auth/groupDel', '角色删除', '1', '1', '', '15', '');
+INSERT INTO `think_auth_rule` VALUES ('36', 'Admin/Auth/AccessSet', '权限设置', '1', '1', '', '15', '');
+INSERT INTO `think_auth_rule` VALUES ('56', 'Admin/Cus/cusList', '会员列表-数据', '1', '1', '', '19', '');
+INSERT INTO `think_auth_rule` VALUES ('55', 'Admin/Cus/detail', '查看会员', '1', '1', '', '19', '');
+INSERT INTO `think_auth_rule` VALUES ('54', 'Admin/Cus/edit', '会员停用（启用）', '1', '1', '', '19', '');
+INSERT INTO `think_auth_rule` VALUES ('53', 'Admin/Cus/add', '添加会员', '1', '1', '', '19', '');
+INSERT INTO `think_auth_rule` VALUES ('52', 'Admin/Cus/index', '会员列表-菜单', '1', '1', '', '19', '');
 INSERT INTO `think_auth_rule` VALUES ('49', 'Admin/System/clearCache', '删除缓存', '1', '1', '', '15', '');
+INSERT INTO `think_auth_rule` VALUES ('57', 'Admin/Cus/changeCard', '会员换卡', '1', '1', '', '19', '');
+INSERT INTO `think_auth_rule` VALUES ('58', 'Admin/Cus/recharge', '会员充值', '1', '1', '', '19', '');
+INSERT INTO `think_auth_rule` VALUES ('59', 'Admin/Cus/pw', '修改密码', '1', '1', '', '19', '');
+INSERT INTO `think_auth_rule` VALUES ('60', 'Admin/Cus/level', '会员升级', '1', '1', '', '19', '');
+INSERT INTO `think_auth_rule` VALUES ('61', 'Admin/Level/index', '会员等级-菜单', '1', '1', '', '19', '');
+INSERT INTO `think_auth_rule` VALUES ('62', 'Admin/Level/levelList', '会员等级-数据', '1', '1', '', '19', '');
+INSERT INTO `think_auth_rule` VALUES ('63', 'Admin/Level/add', '添加会员等级', '1', '1', '', '19', '');
+INSERT INTO `think_auth_rule` VALUES ('64', 'Admin/Level/edit', '编辑会员等级', '1', '1', '', '19', '');
+INSERT INTO `think_auth_rule` VALUES ('65', 'Admin/Level/delHandle', '删除会员等级', '1', '1', '', '19', '');
+INSERT INTO `think_auth_rule` VALUES ('66', 'Admin/Card/index', '生成会员卡-菜单', '1', '1', '', '19', '');
+INSERT INTO `think_auth_rule` VALUES ('67', 'Admin/Card/cardList', '生成会员卡-数据', '1', '1', '', '19', '');
+INSERT INTO `think_auth_rule` VALUES ('68', 'Admin/Card/add', '添加会员卡', '1', '1', '', '19', '');
+INSERT INTO `think_auth_rule` VALUES ('69', 'Admin/Card/carddetailList', '会员卡详情', '1', '1', '', '19', '');
+INSERT INTO `think_auth_rule` VALUES ('70', 'Admin/Shop/index', '店铺管理-菜单', '1', '1', '', '15', '');
+INSERT INTO `think_auth_rule` VALUES ('71', 'Admin/Shop/shopList', '店铺管理-数据', '1', '1', '', '15', '');
+INSERT INTO `think_auth_rule` VALUES ('72', 'Admin/Shop/addHandle', '添加店铺', '1', '1', '', '15', '');
+INSERT INTO `think_auth_rule` VALUES ('73', 'Admin/Shop/editHandle', '编辑店铺', '1', '1', '', '15', '');
+INSERT INTO `think_auth_rule` VALUES ('74', 'Admin/Shop/delHandle', '删除店铺', '1', '1', '', '15', '');
+INSERT INTO `think_auth_rule` VALUES ('75', 'Admin/Shop/checkShop', '检测店铺名', '1', '1', '', '15', '');
+INSERT INTO `think_auth_rule` VALUES ('76', 'Admin/Admin/pw', '修改密码', '1', '1', '', '15', '');
+INSERT INTO `think_auth_rule` VALUES ('77', 'Admin/Admin/log', '日志列表', '1', '1', '', '15', '');
+INSERT INTO `think_auth_rule` VALUES ('78', 'Admin/Pay/index', '消费', '1', '1', '', '20', '');
+INSERT INTO `think_auth_rule` VALUES ('79', 'Admin/Pay/userDetail', '消费-获取会员信息', '1', '1', '', '20', '');
+INSERT INTO `think_auth_rule` VALUES ('80', 'Admin/Pay/detailList', '消费-获取会员订单', '1', '1', '', '20', '');
+INSERT INTO `think_auth_rule` VALUES ('81', 'Admin/Pay/addGoods', '消费-添加商品', '1', '1', '', '20', '');
+INSERT INTO `think_auth_rule` VALUES ('82', 'Admin/Pay/addP', '消费-添加套餐', '1', '1', '', '20', '');
+INSERT INTO `think_auth_rule` VALUES ('83', 'Admin/Pay/getGoodsSales', '消费-获取商品促销', '1', '1', '', '20', '');
+INSERT INTO `think_auth_rule` VALUES ('84', 'Admin/Pay/getShopSales', '消费-获取商铺促销', '1', '1', '', '20', '');
+INSERT INTO `think_auth_rule` VALUES ('85', 'Admin/Pay/saveOd', '消费-设置数量折扣', '1', '1', '', '20', '');
+INSERT INTO `think_auth_rule` VALUES ('86', 'Admin/Pay/delHandle', '消费-删除订单列表项', '1', '1', '', '20', '');
+INSERT INTO `think_auth_rule` VALUES ('87', 'Admin/Pay/pay', '消费-支付', '1', '1', '', '20', '');
+INSERT INTO `think_auth_rule` VALUES ('88', 'Admin/Goods/index', '商品管理-菜单', '1', '1', '', '18', '');
+INSERT INTO `think_auth_rule` VALUES ('89', 'Admin/Goods/goodsList', '商品管理-数据', '1', '1', '', '18', '');
+INSERT INTO `think_auth_rule` VALUES ('90', 'Admin/Goods/add', '添加商品', '1', '1', '', '18', '');
+INSERT INTO `think_auth_rule` VALUES ('91', 'Admin/Goods/delHandle', '删除商品', '1', '1', '', '18', '');
+INSERT INTO `think_auth_rule` VALUES ('92', 'Admin/Package/index', '套餐管理-菜单', '1', '1', '', '18', '');
+INSERT INTO `think_auth_rule` VALUES ('93', 'Admin/Package/packageList', '套餐管理-数据', '1', '1', '', '18', '');
+INSERT INTO `think_auth_rule` VALUES ('94', 'Admin/Package/add', '添加套餐', '1', '1', '', '18', '');
+INSERT INTO `think_auth_rule` VALUES ('95', 'Admin/Package/edit', '停用套餐', '1', '1', '', '18', '');
+INSERT INTO `think_auth_rule` VALUES ('96', 'Admin/Package/delHandle', '删除套餐', '1', '1', '', '18', '');
+INSERT INTO `think_auth_rule` VALUES ('97', 'Admin/Cate/index', '商品类别管理-菜单', '1', '1', '', '18', '');
+INSERT INTO `think_auth_rule` VALUES ('98', 'Admin/Cate/cateList', '商品类别管理-数据', '1', '1', '', '18', '');
+INSERT INTO `think_auth_rule` VALUES ('99', 'Admin/Cate/addHandle', '添加分类', '1', '1', '', '18', '');
+INSERT INTO `think_auth_rule` VALUES ('100', 'Admin/Cate/editHandle', '编辑分类', '1', '1', '', '18', '');
+INSERT INTO `think_auth_rule` VALUES ('101', 'Admin/Cate/delHandle', '删除分类', '1', '1', '', '18', '');
+INSERT INTO `think_auth_rule` VALUES ('102', 'Admin/Cate/checkCate', '检测分类是否存在', '1', '1', '', '18', '');
+INSERT INTO `think_auth_rule` VALUES ('103', 'Admin/Order/index', '订单管理-菜单', '1', '1', '', '17', '');
+INSERT INTO `think_auth_rule` VALUES ('104', 'Admin/Order/orderList', '订单管理-数据', '1', '1', '', '17', '');
+INSERT INTO `think_auth_rule` VALUES ('105', 'Admin/Order/detail', '订单详细', '1', '1', '', '17', '');
+INSERT INTO `think_auth_rule` VALUES ('106', 'Admin/Order/refund', '订单退款', '1', '1', '', '17', '');
+INSERT INTO `think_auth_rule` VALUES ('107', 'Admin/Sale/index', '促销活动-菜单', '1', '1', '', '16', '');
+INSERT INTO `think_auth_rule` VALUES ('108', 'Admin/Sale/saleList', '促销活动-数据', '1', '1', '', '16', '');
+INSERT INTO `think_auth_rule` VALUES ('109', 'Admin/Sale/add', '促销活动-添加', '1', '1', '', '16', '');
+INSERT INTO `think_auth_rule` VALUES ('110', 'Admin/Sale/edit', '促销活动-停用', '1', '1', '', '16', '');
+INSERT INTO `think_auth_rule` VALUES ('111', 'Admin/Sale/delHandle', '促销活动-删除', '1', '1', '', '16', '');
+INSERT INTO `think_auth_rule` VALUES ('112', 'Admin/Recharge/index', '充值活动-菜单', '1', '1', '', '16', '');
+INSERT INTO `think_auth_rule` VALUES ('113', 'Admin/Recharge/configList', '充值活动-数据', '1', '1', '', '16', '');
+INSERT INTO `think_auth_rule` VALUES ('114', 'Admin/Recharge/add', '充值活动-添加', '1', '1', '', '16', '');
+INSERT INTO `think_auth_rule` VALUES ('115', 'Admin/Recharge/edit', '充值活动-停用', '1', '1', '', '16', '');
+INSERT INTO `think_auth_rule` VALUES ('116', 'Admin/Recharge/delHandle', '充值活动-删除', '1', '1', '', '16', '');
+INSERT INTO `think_auth_rule` VALUES ('117', 'Admin/Erate/index', '积分兑换设置', '1', '1', '', '16', '');
 
 -- ----------------------------
 -- Table structure for think_auth_user
@@ -211,10 +252,10 @@ CREATE TABLE `think_auth_user` (
 -- ----------------------------
 -- Records of think_auth_user
 -- ----------------------------
-INSERT INTO `think_auth_user` VALUES ('1', 'admin', '8d014dee20a374dc7ad97e4d9809', '192.168.200.1', '1478091564', '4445@126.com', '老黄', '6000', '', '');
+INSERT INTO `think_auth_user` VALUES ('1', 'admin', '8d014dee20a374dc7ad97e4d9809', '192.168.200.1', '1478538067', '4445@126.com', '老黄', '6000', '', '');
 INSERT INTO `think_auth_user` VALUES ('2', 'test001', 'e10adc3949ba59abbe56e057f20f', '0.0.0.0', '1422791964', 'xdsd@15.com', '黄生', '0', '', '');
 INSERT INTO `think_auth_user` VALUES ('10', 'test002', '8d014dee20a374dc7ad97e4d9809', '192.168.56.1', '1476943784', '', '', '0', '', '');
-INSERT INTO `think_auth_user` VALUES ('11', 'test003', '8d014dee20a374dc7ad97e4d9809', '', '0', 'aa@1.com', 'aa', '1', '', '');
+INSERT INTO `think_auth_user` VALUES ('11', 'test003', '8d014dee20a374dc7ad97e4d9809', '192.168.200.1', '1478534957', 'aa@1.com', 'aa', '1', '', '');
 
 -- ----------------------------
 -- Table structure for think_c_balance_change
@@ -4332,8 +4373,8 @@ INSERT INTO `think_sale` VALUES ('35', '特价15', '3', '6', '0', '0.00', '1.00'
 INSERT INTO `think_sale` VALUES ('36', '双11', '1', '6', '0', '11.00', '0.00', '0.00', '1', '18-20', '1', '1477216742', '1478880000', '1477303156', '2016-10-24 18:01:29');
 INSERT INTO `think_sale` VALUES ('37', 'shang状态1', '2', '9', '0', '0.80', '0.00', '0.00', '0', '', '1', '1477363145', '1477621636', '1477362442', '2016-10-25 10:27:34');
 INSERT INTO `think_sale` VALUES ('38', '1030', '1', '6', '0', '10.00', '0.00', '0.00', '0', '', '1', '1477888014', '1478889014', '1477888958', '2016-10-31 12:44:55');
-INSERT INTO `think_sale` VALUES ('39', '满100减5', '3', '6', '0', '0.00', '100.00', '5.00', '0', '', '1', '1475479901', '1508484705', '1477899130', '2016-10-31 16:12:50');
-INSERT INTO `think_sale` VALUES ('40', '满10打7折', '4', '6', '0', '0.00', '10.00', '0.70', '0', '', '1', '1475396380', '1478247583', '1477901990', '2016-10-31 16:20:01');
+INSERT INTO `think_sale` VALUES ('39', '满100减5', '3', '6', '0', '0.00', '100.00', '5.00', '0', '', '1', '1475479901', '1508484705', '1477899130', '2016-11-08 00:08:17');
+INSERT INTO `think_sale` VALUES ('40', '满10打7折', '4', '6', '0', '0.00', '10.00', '0.70', '0', '', '1', '1475396380', '1478247583', '1477901990', '2016-11-08 00:06:34');
 
 -- ----------------------------
 -- Table structure for think_sale_goods

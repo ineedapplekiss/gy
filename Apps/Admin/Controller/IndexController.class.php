@@ -4,7 +4,23 @@ use Admin\Controller\CommonController;
 class IndexController extends CommonController {
     public function index(){
     	$this->assign('webName','会员交易管理系统');
-    	$this->assign('menus',C("MENU"));
+
+        $auth=new \Think\Auth();
+        //获取当前uid所在的角色组id
+        $groups=$auth->getGroups(session('uid'));
+        $ret = C("MENU");
+        foreach ($ret as $mk => $menu)
+        {
+            foreach ($menu['list'] as $lk => $item)
+            {
+                $check_url = $item['module'] ? $item['url'] : 'Admin/'.$item['url'];
+                if(!$item['url'] or !authCheck($check_url,session('uid')))
+                {
+                    unset($ret[$mk]['list'][$lk]);
+                }
+            }
+        }
+    	$this->assign('menus',$ret);
         $this->display();
     }
 
@@ -27,6 +43,7 @@ class IndexController extends CommonController {
 
     //退出
 	public function logout(){
+        action_log($this->_user, "用户退出");
 		unset($_SESSION['username']);
 		unset($_SESSION['uid']);
 		unset($_SESSION['gid']);

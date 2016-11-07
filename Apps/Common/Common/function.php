@@ -637,3 +637,22 @@ function rulAutoAdd($str,$pid,$des=''){
 			return $auth->check($rule,$uid,$type,$mode,$relation)?true:false;
 		}
 	}
+
+/**
+ * 后台日志记录函数
+ * @param array $user 用户信息
+ * @param string $content 记录内容
+ * @param string $actionCode 动作标志包括,array('index.login','index.logout','user.edit','user.add')等 默认为控制器名。方法名
+ */
+function action_log($user,$content,$act_id = 0, $action_code =  NULL){
+       $model = D('AdminLog');
+       if(!$action_code) $action_code = CONTROLLER_NAME.".".ACTION_NAME;
+       $data['uid'] = $user['uid'];
+       $data['user_name'] = $user['user_name'];
+       $data['create_ip'] = $user['ip'];
+       $data['action_code'] = $action_code;
+       $data['act_id'] =  $act_id;
+       $data['content'] = $content;
+       $data['create_time'] = NOW_TIME;
+       return $model->data($data)->add();
+}

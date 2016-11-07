@@ -203,6 +203,7 @@ class SaleController extends CommonController {
                 $return['status']=true;
             }
         }
+        action_log($this->_user,"修改促销{$id}状态为".$data['status']);
         $this->ajaxReturn($return);
     }
 

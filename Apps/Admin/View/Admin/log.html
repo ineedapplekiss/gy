@@ -1,0 +1,57 @@
+<body>
+    <table id="logdg" title="日志列表" class="easyui-datagrid" style="width:100%;" url="{:U('Admin/log')}"  toolbar="#logtoolbar" pagination="true" pageSize='15' pageNumber='1' multiSort='true' sortOrder="desc" pageList="[2,5,10,15,20,25,30,40,50]" rownumbers="true" fitColumns="true" singleSelect="true">
+        <thead>
+            <tr>
+                <th field="user_name" width="10" sortable="true">姓名</th>
+                <th field="content" width="50" sortable="true">操作事项</th>
+                <th field="action_code" width="50">类别</th>
+                <th field="shop_name">所属店铺</th>
+                <th field="create_ip">ip</th>
+                <th field="create_time" width="50" formatter="timestampToDateTime">操作时间</th>
+            </tr>
+        </thead>
+    </table>
+
+    <div id="logtoolbar">
+        <form id="logSearch" method="post" novalidate style="display:inline-block;margin-left:50px;">
+            <select name="shopId" class="easyui-combobox">
+                <option value="0">全部店铺</option>
+                <volist name="shops" id="vo">
+                    <option value="{$vo['id']}">{$vo['shop_name']}</option>
+                </volist>  
+            </select>
+            <select name="logCate" class="easyui-combobox">
+                <option value="0">日志类别</option>
+                <volist name="logCate" id="vo">
+                    <option value="{$vo['id']}">{$vo['name']}</option>
+                </volist>  
+            </select>
+            
+            <input name="user_name" class="easyui-textbox" data-options="prompt:'用户名'">
+            <input name="stime" class = 'easyui-datebox' title='开始时间'>
+            <input name="etime" class = 'easyui-datebox' title='结束时间'>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="cusObj.doSearch()">Search</a>
+        </form>
+    </div>
+    
+
+   <script type="text/javascript">
+
+        //搜索
+        var cusObj = {
+            'doSearch':function()
+            {
+                $('#logdg').datagrid('load',$("#logSearch").serializeObject());
+                return false;
+            }
+        }
+
+    </script>
+    <style type="text/css">
+        #fm{
+            margin:0;
+            padding:10px;
+        }
+    </style>
+    
+</body>
