@@ -6,7 +6,7 @@
 			'DEFAULT_TIMEZONE'	=>  'Asia/Shanghai',  // 默认时区
 			'COOKIE_EXPIRE'         =>  0,    // Cookie有效期
 			'COOKIE_PATH'           =>  '/',     // Cookie路径
-			'SHOW_PAGE_TRACE'=>true,    // 显示页面Trace信息
+			'SHOW_PAGE_TRACE'=>false,    // 显示页面Trace信息
 			'URL_MODEL'=>'2', //URL模式
 			'URL_CASE_INSENSITIVE'=>false, //URL访问不再区分大小写
 			'DB_PARAMS'=>array(\PDO::ATTR_CASE=>\PDO::CASE_NATURAL),

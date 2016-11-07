@@ -12,11 +12,10 @@ $(function(){
 		{field:'uid',title:'id',checkbox:true},
 		{field:'name',title:'用户',sortable:true},
 		{field:'realname',title:'姓名'},
-		{field:'email',title:'邮箱'},
-		{field:'score',title:'积分',sortable:true},
 		{field:'title',title:'角色',sortable:true},
 		{field:'lastloginip',title:'最后一次登录ip'},
-		{field:'lastlogintime',title:'最后一次登录时间',formatter:timestampToDateTime}
+		{field:'lastlogintime',title:'最后一次登录时间',formatter:timestampToDateTime},
+        {field:'shops',title:'操作店铺'}
 		]],
 		onLoadError:function(data){
 			var info=eval('('+data.responseText+')');

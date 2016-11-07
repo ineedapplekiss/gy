@@ -46,6 +46,23 @@ class AuthController extends CommonController{
         }else{
             $info=$m->alias('AU')->join(C('DB_PREFIX').'auth_group_access as AGA on AGA.uid=AU.uid','left')->join(C('DB_PREFIX').'auth_group as AG on AG.id=AGA.group_id','left')->field('AU.uid,AU.username as name,AU.email,AU.lastloginip,AU.lastlogintime,AU.realname,AU.score,AG.title,AG.id as groupId')->where($map)->order($sort.' '.$order)->cache('authAserListB',30)->select();
         }
+        //显示可操作商铺
+        if($count)
+        {
+            $gids = array_column($info, "groupId");
+            $g2shop = M()->table(C('DB_PREFIX').'auth_group_2_shop')->where(array("id"=>array("in", $gids)))->getField('id,rules');
+            foreach ($info as $k => $v) {
+                if($g2shop[$v["groupId"]])
+                {
+                    $shopNames = D("Shop")->where(array("id"=>array("in", $g2shop[$v["groupId"]])))->getField('id,shop_name');
+                    $info[$k]["shops"] = implode(",", $shopNames);
+                }
+                else
+                {
+                    $info[$k]["shops"] = "无";
+                }
+            }
+        }
         if(!empty($info)){
             $data['total']=$count;
             $data['rows']=$info;

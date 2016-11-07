@@ -49,7 +49,7 @@ return array(
 			'gicon' => 'icon-lock',
 			'list' => array(
 				array('url'=>'Auth/index', 'icon'=>'icon-users', 'name'=>'用户管理'),
-				array('url'=>'Auth/group', 'icon'=>'icon-group_go', 'name'=>'角色管理'),
+				array('url'=>'Auth/group', 'icon'=>'icon-group_go', 'name'=>'用户组管理'),
 				array('url'=>'Auth/rule', 'icon'=>'icon-rule', 'name'=>'规则管理'),
 				array('url'=>'Shop/index', 'icon'=>'icon-rule', 'name'=>'店铺管理'),
 				array('url'=>'Admin/pw', 'icon'=>'icon-rule', 'name'=>'修改密码'),

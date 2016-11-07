@@ -47,14 +47,6 @@
                 <input name="realname" id="authUserRealname" class="easyui-textbox" data-options="height:30" />
             </div>
             <div class="fitem">
-                <label>邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱</label>
-                <input name="email" id="authUserEmail" class="easyui-textbox" data-options="height:30,validType:['email','exists[\'邮箱\',\'{:U('Auth/checkEmail','','')}\']']" />
-            </div>
-            <div class="fitem">
-                <label>积&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;分</label>
-                <input name="score" id="authUserScore" class="easyui-numberbox" data-options="height:30" />
-            </div>
-            <div class="fitem">
                 <label>角&nbsp;&nbsp;色&nbsp;&nbsp;组</label>
                 <select class="easyui-combobox" name="group" id='authUserGroup' data-options="height:30,required:true,editable:false">
                     <volist name="groupInfo" id="vo">
@@ -77,7 +69,6 @@
             <input id='authUsersearchInput' class="easyui-searchbox" data-options="height:30,menu:'#authUserSearchbox',searcher:authUserSearch"  style="width:300px"/>
             <div id="authUserSearchbox">
                 <div data-options="name:'name',iconCls:'icon icon-msn'">用户名</div>
-                <div data-options="name:'email',iconCls:'icon-email'">邮箱</div>
                 <div data-options="name:'title',iconCls:'icon-group_go'">角色</div>
             </div>
         </form>
