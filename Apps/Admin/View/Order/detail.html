@@ -70,7 +70,9 @@ function add(url){
         </tr>
     </table>
         <div class="btn-box">
+            <if condition="$status eq '可退款'">
             <a href='javascript:;' onclick='add("{:U('Order/refund')}")' class='easyui-linkbutton button'>退款</a>
+            </if>
         </div>
 </form>
 

@@ -4,6 +4,8 @@ use Admin\Controller\CommonController;
 class PayController extends CommonController {
 
 	public function index(){
+        $orderSn = D("Order")->orderSn(12334, 31133);
+        exit;
         $this->assign('cates',D("Cate")->allCate());
         $this->assign('shops',D("Shop")->getShopsByUid(session('uid')));
         $this->display();

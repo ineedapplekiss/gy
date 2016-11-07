@@ -136,7 +136,7 @@ class OrderModel extends Model
 			$data["yj"] = $yj;
 			$data["jf"] = $jf;
 			$data["status"] = \Common\Model\OrderModel::STATUS_EN;
-			$data["order_sn"] = uniqid($order_id);
+			$data["order_sn"] = $this->orderSn($order_id, $cusId);
 			$res = $this->where(array("id"=>$order_id))->save($data);
 			if(!$res) throw new \Exception("更新订单失败", 1);
 
@@ -213,5 +213,14 @@ class OrderModel extends Model
             return false;
         }
 		return true;
+	}
+
+	/**
+	 * 生成订单号
+	 * 日期+用户id 6位+每日订单序号4位
+	 */
+	public function orderSn($orderId, $cId)
+	{
+		return sprintf("%s%06d%04d", date("Ymd"), $cId, $orderId%10000);
 	}
 }
