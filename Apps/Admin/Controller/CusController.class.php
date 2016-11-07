@@ -407,6 +407,7 @@ class CusController extends CommonController {
             $return['status']=false;
             $this->ajaxReturn($return);
         }
+        //todo 查找合适的充值策略
 
         $status = D("Cbc")->balanceChange($cid, \Common\Model\CbcModel::TYPE_RECHARGE, $jf);
         if(false===$status){

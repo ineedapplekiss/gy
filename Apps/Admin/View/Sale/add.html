@@ -37,19 +37,19 @@ function(){
         onChange:function(type){
             if(type == 1)
             {
-                $("#cl").html('特价 <input name="price" class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:[\'length[2,20]\']" style=\'width:150px\' />');
+                $("#cl").html('特价 <input name="price" class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:[\'length[2,20]\']" style=\'width:50px\' />');
             }
             else if(type == 2)
             {
-                $("#cl").html('折扣 <input name="price" class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:[\'length[2,20]\']" style=\'width:150px\' />（1折填写0.1）');
+                $("#cl").html('折扣 <input name="price" class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:[\'length[2,20]\']" style=\'width:50px\' />（1折填写0.1）');
             }
             else if(type == 3)
             {
-                $("#cl").html('满 <input name="full" class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:[\'length[2,20]\']" style=\'width:150px\' /> 减 <input name="cut" class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:[\'length[2,20]\']" style=\'width:150px\' />');
+                $("#cl").html('满 <input name="full" class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:[\'length[2,20]\']" style=\'width:50px\' /> 减 <input name="cut" class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:[\'length[2,20]\']" style=\'width:50px\' />');
             }
             else if(type == 4)
             {
-                $("#cl").html('满（不设条件留空） <input name="full" class="easyui-textbox" data-options="required:true,delay:1000,height:30" style=\'width:150px\' /> 打折 <input name="cut" class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:[\'length[2,20]\']" style=\'width:150px\' />（1折填写0.1）');
+                $("#cl").html('满（不设条件留空） <input name="full" class="easyui-textbox" data-options="required:true,delay:1000,height:30" style=\'width:50px\' /> 打折 <input name="cut" class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:[\'length[2,20]\']" style=\'width:50px\' />（1折填写0.1）');
             }
         }
      });
@@ -102,9 +102,6 @@ saleObj = {
         <h1>添加促销
         <span></span>
         </h1>
-        <div class="btn-box">
-            <a href='javascript:;' onclick='add("{:U('Sale/add')}")' class='easyui-linkbutton button'>保存</a>
-        </div>
     </div>
     <table>
         <tr>
@@ -177,6 +174,16 @@ saleObj = {
                 <input name="stime" class = 'easyui-datetimebox' title='开始时间'>至
                 <input name="etime" class = 'easyui-datetimebox' title='结束时间'>
             </td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>
+            </td>
+            <td>
+                <div class="btn-box">
+                    <a href='javascript:;' onclick='add("{:U('Sale/add')}")' class='easyui-linkbutton button'>保存</a>
+                </div></td>
             <td></td>
             <td></td>
         </tr>

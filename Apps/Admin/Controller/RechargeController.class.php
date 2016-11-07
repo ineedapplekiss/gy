@@ -144,8 +144,8 @@ class RechargeController extends CommonController {
                     "return"        => $return,
                     "rule_gender"   => $gender,
                     "rule_age"      => $age,
-                    "sta_time"      => $stime,
-                    "end_time"      => $etime,
+                    "sta_time"      => strtotime($stime),
+                    "end_time"      => strtotime($etime),
                     "add_time"      => NOW_TIME
                     );
             }
