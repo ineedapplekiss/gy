@@ -26,7 +26,7 @@
             </div>
             <div class="fitem">
                 <label>活动名称</label>
-                <input name="activity_name" class="easyui-textbox" data-options="delay:1000,required:true,height:30,validType:['length[4,20]']" />
+                <input name="activity_name" class="easyui-textbox" data-options="delay:1000,required:true,height:30,validType:['length[1,20]']" />
             </div>
         </form>
     </div>
@@ -38,7 +38,7 @@
 
 
     <!-- 会员卡查看 -->
-    <div id="cardview" class="easyui-dialog" title="查看会员卡" style="width:400px;padding:10px 20px"
+    <div id="cardview" class="easyui-dialog" title="查看会员卡" style="width:800px;padding:10px 20px"
             closed="true" modal="true">
         <table id="carddetaildg" title="会员卡列表" class="easyui-datagrid" style="width:100%;" toolbar="#carddbar" pagination="true" pageSize='15' pageNumber='1' multiSort='true' sortOrder="desc" pageList="[2,5,10,15,20,25,30,40,50]" rownumbers="true" fitColumns="true" singleSelect="true">
             <thead>
@@ -61,7 +61,7 @@
 
         //添加card对话窗
         function newCard(){
-            $('#cardadddlg').dialog('open').dialog('setTitle','添加会员卡');
+            $('#cardadddlg').dialog('open').dialog('setTitle','生成会员卡');
             $('#cardadd').form('clear');
             url ="{:U('Card/add')}";
         }
