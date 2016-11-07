@@ -31,6 +31,10 @@ class CardModel extends Model
 				$cdId = D("CardDetail")->add($cardDetail);
 				if(!$cdId) throw new \Exception("生成详细会员卡失败".$i, 1);
 			}
+			//卡号规则 8868开头+6位顺序id
+			$res = $this->execute("update think_card_detail set card_no = CONCAT('8868',LPAD(id,6,0)) where card_id=".$cardId);
+			if(!$res) throw new \Exception("卡号生成失败，已经超出规则定义范围".$i, 1);
+
 			$this->commit();
 		} catch(Exception $e) {
             $this->error = $e->getMessage();
