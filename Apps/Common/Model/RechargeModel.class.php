@@ -28,21 +28,21 @@ class RechargeModel extends Model
      */
 	public function getStatus($status, $sta, $end)
 	{
-		if($status == \Common\Model\SaleModel::STATUS_DEL) return \Common\Model\SaleModel::STATUS_DEL;
+		if($status == \Common\Model\RechargeModel::STATUS_DEL) return \Common\Model\RechargeModel::STATUS_DEL;
 		if($sta>=NOW_TIME)
 		{
-			return \Common\Model\SaleModel::STATUS_SOON;
+			return \Common\Model\RechargeModel::STATUS_SOON;
 		}
 		elseif($end<NOW_TIME)
 		{
-			return \Common\Model\SaleModel::STATUS_PASS;
+			return \Common\Model\RechargeModel::STATUS_PASS;
 		}
 		else//时间范围内
 		{
-			if($status == \Common\Model\SaleModel::STATUS_EN)
-				return \Common\Model\SaleModel::STATUS_ALIVE;
+			if($status == \Common\Model\RechargeModel::STATUS_EN)
+				return \Common\Model\RechargeModel::STATUS_ALIVE;
 			else
-				return \Common\Model\SaleModel::STATUS_OFFLINE;
+				return \Common\Model\RechargeModel::STATUS_OFFLINE;
 		}
 	}
 
@@ -54,11 +54,11 @@ class RechargeModel extends Model
 	public function formatStatus($status)
 	{
 		$arr = array(
-			\Common\Model\SaleModel::STATUS_DEL 		=> "删除",
-			\Common\Model\SaleModel::STATUS_ALIVE 	=> "进行中",
-			\Common\Model\SaleModel::STATUS_SOON 	=> "定时",
-			\Common\Model\SaleModel::STATUS_PASS 	=> "失效",
-			\Common\Model\SaleModel::STATUS_OFFLINE 	=> "暂停"
+			\Common\Model\RechargeModel::STATUS_DEL 		=> "删除",
+			\Common\Model\RechargeModel::STATUS_ALIVE 	=> "进行中",
+			\Common\Model\RechargeModel::STATUS_SOON 	=> "定时",
+			\Common\Model\RechargeModel::STATUS_PASS 	=> "失效",
+			\Common\Model\RechargeModel::STATUS_OFFLINE 	=> "暂停"
 			);
 		return $arr[$status];
 	}
@@ -71,5 +71,45 @@ class RechargeModel extends Model
 	public function formatCond($cond_egt, $cond_elt, $return)
 	{
 		return sprintf("充%s-%s返%s ", $cond_egt, $cond_elt, $return);
+	}
+
+	/**
+     * @describe 查找充值策略
+     * @param $info 提交的数据
+     * @return arr
+     */
+	public function findConf($cid)
+	{
+		$cusInfo = D("Cus")->find($cid);
+		$age = date("Y") - substr($cusInfo["birthday"], 0, 4);
+
+		$map["status"] = \Common\Model\RechargeModel::STATUS_EN;
+		$map["shop_id"] = $cusInfo["shop_id"];
+		$map["sta_time"] = array("elt",NOW_TIME);
+		$map["end_time"] = array("gt",NOW_TIME);
+		if($cusInfo["gender"])
+			$map["rule_gender"] = array("in","0,".$cusInfo["gender"]);
+		else
+			$map["rule_gender"] = 0;
+		$conf = $this->where($map)->select();
+		if($conf)
+		{
+			foreach ($conf as $k => $v) {
+				if($v["rule_age"])
+				{
+					list($min,$max) = explode("-", $v["rule_age"]);
+					if(($max!=0 && $age>$max) || ($min!=0 &&$age<$min))
+					{
+						unset($conf[$k]);
+					}	
+				}
+			}
+			return array_shift($conf);
+
+		}
+		else
+		{
+			return false;
+		}
 	}
 }

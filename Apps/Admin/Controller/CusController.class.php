@@ -403,13 +403,22 @@ class CusController extends CommonController {
         $jf=$ck->in('充值金额','jf','float(17,2)','',0,0);
         if($jf<=0)
         {
-            $return['message']=D("Cus")->getError();
+            $return['message']="请输入充值金额";
             $return['status']=false;
             $this->ajaxReturn($return);
         }
-        //todo 查找合适的充值策略
+        //查找合适的充值策略
+        $conf = D("Recharge")->findConf($cid);
+        if($conf && $jf>=$conf["cond_egt"] && $jf<=$conf["cond_elt"])
+        {
+            $jf = bcadd($jf, $conf["return"], 2);
+            $status = D("Cbc")->balanceChange($cid, \Common\Model\CbcModel::TYPE_RECHARGE, $jf, $conf['id']);
+        }
+        else
+        {
+            $status = D("Cbc")->balanceChange($cid, \Common\Model\CbcModel::TYPE_RECHARGE, $jf);
+        }
 
-        $status = D("Cbc")->balanceChange($cid, \Common\Model\CbcModel::TYPE_RECHARGE, $jf);
         if(false===$status){
             $return['message']=D("Cus")->getError();
             $return['status']=false;
