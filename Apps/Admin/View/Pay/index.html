@@ -58,7 +58,7 @@
             <table cellpadding="5" style="width:100%;">
                 <tr>
                     <td width="5%">备注:</td>
-                    <td width="45%"><input class="easyui-textbox" type="text" id="remark" name="remark" data-options="required:true"></input></td>
+                    <td width="45%"><input class="easyui-textbox" type="text" id="remark" name="remark"></input></td>
                     <td width="25%"></td>
                     <td width="25%">
                         选择优惠:<select class="easyui-combobox" name="orderSaleId" id='orderSaleId' data-options="required:true,height:30,width:100">
@@ -232,6 +232,7 @@
             //添加商品
             addgoods:function(){
                 $('#paygoodsdlg').dialog('open').dialog('setTitle','选择商品');
+                orderObj.goodsSearch();
             },
             goodsSearch:function(){
                 $('#paygoodsdg').datagrid({
@@ -284,6 +285,7 @@
             //添加套餐
             addpackage:function(){
                 $('#payPdlg').dialog('open').dialog('setTitle','选择套餐');
+                orderObj.PSearch();
             },
             PSearch:function(){
                 
