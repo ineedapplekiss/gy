@@ -86,7 +86,7 @@ cusDetailObj = {
 
 </script>
 
-<div class="easyui-tabs" data-options="tools:'#tab-tools'" style="width:100%">
+<div id="tt" class="easyui-tabs" data-options="tools:'#tab-tools'" style="width:100%">
         <div title="基本信息" style="padding:10px;">
             <form id="od" method="post" class="bootstrap-frm">
                 <table>
@@ -260,4 +260,11 @@ $('#cdLevelDialog').dialog('close')" style="width:90px">取消</a>
 <!-- /升级 -->
 
 
+<if condition="$Think.get.type eq 1">
+<script>
+$(window).load(function(){
+    $('#tt').tabs('select', 1);
+});
+</script>
+</if>
 </body>
