@@ -6,8 +6,7 @@ class CommonController extends Controller{
 	
 	public function _initialize(){
 
-        
-        layout('Common/layout');//add layout
+       	if(CONTROLLER_NAME != "Index")layout('Common/layout');//add layout
 		//验证登陆,没有登陆则跳转到登陆页面
 		if(empty($_SESSION['username'])) $this->redirect('Admin/Login/index');
 

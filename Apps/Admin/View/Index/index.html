@@ -71,6 +71,28 @@
 		    
 		    refreshTab({tabTitle:tab.title,url:tab.href});
 		}
+		//关闭当前tab并打开新tab
+		function closeAndShow(href,title){
+			closeTab();
+		    var tt = $('#gyTabs');  
+		    if (tt.tabs('exists', title)){
+		        tt.tabs('select', title);  
+		        refreshTab({tabTitle:title,url:href});  
+		    } else {
+		        if (href){  
+		            var content = '<iframe marginheight="0" marginwidth="0" scrolling="auto" frameborder="0"  src="'+href+'" style="width:100%;height:99%;padding:0 0 5px"></iframe>';  
+		        } else {  
+		            var content = '未实现';  
+		        }  
+		        tt.tabs('add',{  
+		            title:title,  
+		            closable:true,  
+		            content:content,  
+		            fit : true
+		            //iconCls:icon||'icon-default'  
+		        });  
+		    }  
+		}
 	</script>
 </head>
 <body>

@@ -484,9 +484,7 @@
                     },
                     function(result){
                     if (result.status){
-                        orderObj.cus_id = 0;
-                        orderObj.sale_id = 0;
-                        closeTab();
+                        closeAndShow('{:U(\'Cus/detail\')}'+'?id='+orderObj.cus_id+'&type=1', '会员详情');
                     }else{
                         $.messager.alert('错误提示',result.message,'error');
                     }
