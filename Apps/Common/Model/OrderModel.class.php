@@ -156,6 +156,10 @@ class OrderModel extends Model
 			$data["last_pay_time"] = NOW_TIME;
 			$res = D("Cus")->where(array("id"=>$cusId,"pay_num"=>$cusDetail["pay_num"]))->save($data);
 			if(!$res) throw new \Exception("更新用户支付次数失败", 1);
+
+			//log
+            $msg = sprintf("生成订单 %s", $data["order_sn"]);
+            action_log($this->_user, $msg, $shop_id); 
 			
 			$this->commit();
 		} catch(Exception $e) {

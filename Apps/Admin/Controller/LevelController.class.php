@@ -52,10 +52,13 @@ class LevelController extends CommonController {
             $data['add_time']   = NOW_TIME;
             $addStatus = D("Level")->add($data);
             if($addStatus){
-                $result['message']='添加套餐成功!';
-                $result['status']=true; 
+                $result['message']='添加成功!';
+                $result['status']=true;
+                //log
+                $msg = sprintf("设置等级%s", $name);
+                action_log($this->_user, $msg); 
             }else{
-                $result['message']='添加套餐失败!';
+                $result['message']='添加失败!';
                 $result['status']=false;    
             }
             $this->ajaxReturn($result);
@@ -97,6 +100,9 @@ class LevelController extends CommonController {
                 }else{
                     $return['message']='编辑成功!';
                     $return['status']=true;
+                    //log
+                    $msg = sprintf("编辑等级(%s) %s %s", $map['id'], $data['money'], $data['rebate']);
+                    action_log($this->_user, $msg); 
                 }
             }
             $this->ajaxReturn($return);
@@ -128,6 +134,9 @@ class LevelController extends CommonController {
 			}else{
                 $return['message']='删除成功!';
                 $return['status']=true;
+                //log
+                $msg = sprintf("删除等级(%s)", $map['id']);
+                action_log($this->_user, $msg); 
 			}
 		}
 		$this->ajaxReturn($return);

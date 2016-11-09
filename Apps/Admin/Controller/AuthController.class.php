@@ -177,6 +177,8 @@ class AuthController extends CommonController{
         }
         $return['message']='添加用户成功!';
         $return['status']=true; 
+        //log
+        action_log($this->_user, "添加用户".$data['username']);
         $this->ajaxReturn($return);
 
     }
@@ -210,6 +212,8 @@ class AuthController extends CommonController{
         }
         $return['message']='更新用户成功!';
         $return['status']=true; 
+        //log
+        action_log($this->_user, "更新用户成功,uid:".$map['uid'].json_encode($data));
         $this->ajaxReturn($return);
     }
 
@@ -233,6 +237,9 @@ class AuthController extends CommonController{
         }else{
             $return['message']='移动用户成功';
             $return['status']=true;
+            //log
+            $msg = sprintf("移动用户%s到组%s", $uid, $data['group_id']);
+            action_log($this->_user, $msg);
         }
         $this->ajaxReturn($return);
     }
@@ -259,6 +266,9 @@ class AuthController extends CommonController{
                 $return['message']='删除用户成功!';
                 $return['status']=true; 
             }
+            //log
+            $msg = sprintf("删除用户%s", $uid);
+            action_log($this->_user, $msg);
         }        
         $this->ajaxReturn($return);
     }
@@ -406,7 +416,9 @@ class AuthController extends CommonController{
             $return['status']=true;
             S('authGroupListA',null);//清除缓存
             S('authGroupListB',null);//清除缓存
-
+            //log
+            $msg = sprintf("添加角色%s", $data['title']);
+            action_log($this->_user, $msg);
         }        
         $this->ajaxReturn($return);
     }
@@ -431,6 +443,9 @@ class AuthController extends CommonController{
                 $return['status']=true;
                 S('authGroupListA',null);//清除缓存
                 S('authGroupListB',null);//清除缓存
+                //log
+                $msg = sprintf("删除角色%s", $map['id']);
+                action_log($this->_user, $msg);
             }
         }        
         $this->ajaxReturn($return);

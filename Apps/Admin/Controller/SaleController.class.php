@@ -168,6 +168,9 @@ class SaleController extends CommonController {
             if($addStatus){
                 $result['message']='添加促销成功!';
                 $result['status']=true; 
+                //log
+                $msg = sprintf("添加促销 %s", $name);
+                action_log($this->_user, $msg, $shopId); 
             }else{
                 $result['message']='添加促销失败!'.D("Sale")->error;
                 $result['status']=false;    
@@ -232,6 +235,9 @@ class SaleController extends CommonController {
 			}else{
                 $return['message']='删除成功!';
                 $return['status']=true;
+                //log
+                $msg = sprintf("删除促销 %s", $map['id']);
+                action_log($this->_user, $msg); 
 			}
 		}
 		$this->ajaxReturn($return);

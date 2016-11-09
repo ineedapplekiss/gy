@@ -128,6 +128,9 @@ class PackageController extends CommonController {
             if($addStatus){
                 $result['message']='添加套餐成功!';
                 $result['status']=true; 
+                //log
+                $msg = sprintf("添加套餐%s", $name);
+                action_log($this->_user, $msg, $shopId); 
             }else{
                 $result['message']='添加套餐失败!';
                 $result['status']=false;    
@@ -191,6 +194,9 @@ class PackageController extends CommonController {
 			}else{
                 $return['message']='删除成功!';
                 $return['status']=true;
+                //log
+                $msg = sprintf("删除套餐%s", $map['id']);
+                action_log($this->_user, $msg, $shopId); 
 			}
 		}
 		$this->ajaxReturn($return);

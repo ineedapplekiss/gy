@@ -148,6 +148,9 @@ class RechargeController extends CommonController {
                     "end_time"      => strtotime($etime),
                     "add_time"      => NOW_TIME
                     );
+                //log
+                $msg = sprintf("创建充值活动 %s", $name);
+                action_log($this->_user, $msg, $shopId); 
             }
             $addStatus = D("Recharge")->addAll($data);
             if($addStatus){
@@ -216,6 +219,9 @@ class RechargeController extends CommonController {
 			}else{
                 $return['message']='删除成功!';
                 $return['status']=true;
+                //log
+                $msg = sprintf("删除充值活动 %s", $map['id']);
+                action_log($this->_user, $msg); 
 			}
 		}
 		$this->ajaxReturn($return);

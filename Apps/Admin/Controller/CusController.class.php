@@ -206,6 +206,9 @@ class CusController extends CommonController {
             if($addStatus){
                 $result['message']='添加会员成功!';
                 $result['status']=true; 
+                //log
+                $msg = sprintf("添加会员 %s ", $name);
+                action_log($this->_user, $msg, $shopId);
             }else{
                 $result['message']='添加会员失败!';
                 $result['status']=false;    
@@ -239,6 +242,9 @@ class CusController extends CommonController {
             }else{
                 $return['message']='修改成功!';
                 $return['status']=true;
+                //log
+                $msg = sprintf("启用（停用）会员 %s ", $map['id']);
+                action_log($this->_user, $msg);
             }
         }
         $this->ajaxReturn($return);

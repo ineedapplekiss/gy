@@ -139,6 +139,9 @@ class OrderController extends CommonController {
             if($res){
                 $return['message']='退款成功!';
                 $return['status']=true; 
+                //log
+                $msg = sprintf("订单退款(%s)", $map['id']);
+                action_log($this->_user, $msg); 
             }else{
                 $return['message']=D("Order")->getError();
                 $return['status']=false;    

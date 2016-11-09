@@ -20,6 +20,9 @@ class ErateController extends CommonController {
             if($res){
                 $result['message']='设置汇率成功!';
                 $result['status']=true; 
+                //log
+                $msg = sprintf("设置汇率 %s ", $rate);
+                action_log($this->_user, $msg);
             }else{
                 $result['message']='设置汇率失败!';
                 $result['status']=false;    

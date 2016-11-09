@@ -58,6 +58,9 @@ class CateController extends CommonController {
 		if($addStatus){
 	    	$result['message']='添加分类成功!';
 	    	$result['status']=true;	
+            //log
+            $msg = sprintf("添加分类 %s ", $data['name']);
+            action_log($this->_user, $msg);
 		}else{
 			$result['message']='添加分类失败!';
 	    	$result['status']=false;	
@@ -91,6 +94,9 @@ class CateController extends CommonController {
 			}else{
 				$return['message']='分类更新成功!';
 				$return['status']=true;
+                //log
+                $msg = sprintf("分类id %s 更新： %s ", $map['id'], $data['name']);
+                action_log($this->_user, $msg);
 			}
 		}
 		$this->ajaxReturn($return);
@@ -122,6 +128,9 @@ class CateController extends CommonController {
 			}else{
                 $return['message']='删除成功!';
                 $return['status']=true;
+                //log
+                $msg = sprintf("分类id %s 删除", $map['id']);
+                action_log($this->_user, $msg);
 			}
 		}
 		$this->ajaxReturn($return);

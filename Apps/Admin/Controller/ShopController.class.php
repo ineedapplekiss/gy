@@ -70,6 +70,9 @@ class ShopController extends CommonController {
 		if($addStatus){
 	    	$result['message']='添加商铺成功!';
 	    	$result['status']=true;	
+            //log
+            $msg = sprintf("添加商铺 %s", $data['shop_name']);
+            action_log($this->_user, $msg, $addStatus); 
 		}else{
 			$result['message']='添加商铺失败!';
 	    	$result['status']=false;	
@@ -106,6 +109,9 @@ class ShopController extends CommonController {
 			}else{
 				$return['message']='店铺更新成功!';
 				$return['status']=true;
+                //log
+                $msg = sprintf("店铺更新 %s", $data['shop_name']);
+                action_log($this->_user, $msg, $map['id']); 
 			}
 		}
 		$this->ajaxReturn($return);
@@ -148,6 +154,9 @@ class ShopController extends CommonController {
 			}else{
                 $return['message']='删除成功!';
                 $return['status']=true;
+                //log
+                $msg = sprintf("店铺删除");
+                action_log($this->_user, $msg, $map['id']); 
 			}
 		}
 		$this->ajaxReturn($return);

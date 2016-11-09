@@ -128,6 +128,9 @@ class CardController extends CommonController {
             if($addStatus){
                 $result['message']='添加会员卡成功!';
                 $result['status']=true; 
+                //log
+                $msg = sprintf("添加会员卡 %s", $activityName);
+                action_log($this->_user, $msg);
             }else{
                 $result['message']='添加会员卡失败!';
                 $result['status']=false;    
@@ -156,10 +159,10 @@ class CardController extends CommonController {
             $status=D('Package')->where($map)->save($data);
 
             if(false===$status){
-                $return['message']='删除出错!';
+                $return['message']='操作出错!';
                 $return['status']=false;
             }else{
-                $return['message']='删除成功!';
+                $return['message']='操作成功!';
                 $return['status']=true;
             }
         }

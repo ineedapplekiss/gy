@@ -22,6 +22,9 @@ class AdminController extends CommonController{
             }else{
                 $return['message']='更新用户成功!';
                 $return['status']=true; 
+                //log
+                $msg = sprintf("用户修改密码 %s", $map["uid"]);
+                action_log($this->_user, $msg);
                 $this->ajaxReturn($return);
             }
         }

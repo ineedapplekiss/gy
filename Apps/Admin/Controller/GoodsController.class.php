@@ -110,13 +110,16 @@ class GoodsController extends CommonController {
                     "price"     => $goodsPrice,
                     "add_time"  => NOW_TIME
                     );
+                //log
+                $msg = sprintf("添加商品%s", $goodsName);
+                action_log($this->_user, $msg, $shopId);
             }
             $addStatus = D("Goods")->addAll($data);
             if($addStatus){
-                $result['message']='添加分类成功!';
+                $result['message']='添加商品成功!';
                 $result['status']=true; 
             }else{
-                $result['message']='添加分类失败!';
+                $result['message']='添加商品失败!';
                 $result['status']=false;    
             }
             $this->ajaxReturn($result);
@@ -180,6 +183,9 @@ class GoodsController extends CommonController {
 			}else{
                 $return['message']='删除成功!';
                 $return['status']=true;
+                //log
+                $msg = sprintf("删除商品%s", $map['id']);
+                action_log($this->_user, $msg);
 			}
 		}
 		$this->ajaxReturn($return);
