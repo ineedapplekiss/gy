@@ -80,7 +80,7 @@ class PackageController extends CommonController {
         foreach ($info as $k => $v) {
             $info[$k]['logic_status'] = D('Package')->getStatus($v["status"], $v["sta_time"], $v["end_time"]);
             $info[$k]['logic_status'] = D('Package')->formatStatus($info[$k]['logic_status']);
-            $info[$k]['setime'] = date("Y-m-d H:i:s", $v["sta_time"]) . "~" . date("Y-m-d H:i:s", $v["end_time"]);
+            $info[$k]['setime'] = ($v["sta_time"] ? date("Y-m-d H:i:s", $v["sta_time"]) : "无") . "~" . ($v["end_time"]?date("Y-m-d H:i:s", $v["end_time"]):"无");
             $info[$k]['goods_info'] = implode("+", array_column(json_decode($v["goods_info"],true), "name"));
         }
     	

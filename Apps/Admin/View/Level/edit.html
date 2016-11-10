@@ -9,17 +9,9 @@ function add(url){
         success: function(result){
             var result=eval('('+result+')');
             if (!result.status){
-                    $.messager.alert('Warning','添加失败！' + result.message);
+                $.messager.alert('Warning','添加失败！' + result.message);
             } else {
-                
-                if($.messager.confirm('提示','添加成功！是否继续添加',function(r){
-                    if(r){
-                        closeTab();
-                    }else{
-                        closeTab();
-                    }
-                
-                }));
+                closeAndShow('{:U(\'Level/index\')}', '会员等级');
             }
         }
     });

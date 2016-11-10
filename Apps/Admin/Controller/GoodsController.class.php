@@ -96,7 +96,7 @@ class GoodsController extends CommonController {
 
             $ck=A('CheckInput');
             $goodsName=$ck->in('商品名称','name','cnennumstr','',2,20);  
-            $goodsCode=$ck->in('商品代码','code','cnennumstr','0',2,20);
+            $goodsCode=0;
             $goodsPrice=$ck->in('商品价格','price','float(17,2)','',0,0);
             $data['add_time']=NOW_TIME;
             $data = array();

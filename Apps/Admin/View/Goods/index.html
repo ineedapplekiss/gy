@@ -2,7 +2,6 @@
     <table id="goodsdg" title="商品列表" class="easyui-datagrid" style="width:100%;" url="{:U('Goods/goodsList')}"  toolbar="#goodstoolbar" pagination="true" pageSize='15' pageNumber='1' multiSort='true' sortOrder="desc" pageList="[2,5,10,15,20,25,30,40,50]" rownumbers="true" fitColumns="true" singleSelect="true">
         <thead>
             <tr>
-                <th field="code" width="10" sortable="true">编码</th>
                 <th field="name" width="50" sortable="true">商品名称</th>
                 <th field="cate_name" sortable="true">类别</th>
                 <th field="shop_name" width="50">商铺</th>
@@ -41,7 +40,6 @@
 
             <input id='searchBox' class="easyui-searchbox" data-options="height:30,menu:'#searchboxSelect',searcher:doSearch"  style="width:300px"/>
                 <div id="searchboxSelect">
-                    <div data-options="name:'code',iconCls:'icon-application'">商品编码</div>
                     <div data-options="name:'name',iconCls:'icon-group_go'">商品名称</div>
                 </div>
         

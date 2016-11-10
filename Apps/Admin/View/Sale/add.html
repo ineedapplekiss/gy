@@ -38,18 +38,30 @@ function(){
         onChange:function(type){
             if(type == 1)
             {
+                $('#sgoodsdg').datagrid({
+                    singleSelect: true
+                });
                 $("#cl").html('特价 <input name="price" class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:[\'length[2,20]\']" style=\'width:50px\' />');
             }
             else if(type == 2)
             {
+                $('#sgoodsdg').datagrid({
+                    singleSelect: true
+                });
                 $("#cl").html('折扣 <input name="price" class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:[\'length[2,20]\']" style=\'width:50px\' />（1折填写0.1）');
             }
             else if(type == 3)
             {
+                $('#sgoodsdg').datagrid({
+                    singleSelect: false
+                });
                 $("#cl").html('满 <input name="full" class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:[\'length[2,20]\']" style=\'width:50px\' /> 减 <input name="cut" class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:[\'length[2,20]\']" style=\'width:50px\' />');
             }
             else if(type == 4)
             {
+                $('#sgoodsdg').datagrid({
+                    singleSelect: false
+                });
                 $("#cl").html('满（不设条件留空） <input name="full" class="easyui-textbox" data-options="required:true,delay:1000,height:30" style=\'width:50px\' /> 打折 <input name="cut" class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:[\'length[2,20]\']" style=\'width:50px\' />（1折填写0.1）');
             }
         }
@@ -116,9 +128,9 @@ saleObj = {
             <td width='40%'>
                 <select class="easyui-combobox" name="type" id='type' data-options="required:true,height:30">
                     <option value="1">商品特价</option>
-                    <option value="2">商品打折</option>
+                    <!-- <option value="2">商品打折</option> -->
                     <option value="3">商铺满减</option>
-                    <option value="4">商铺打折</option>                  
+                    <!-- <option value="4">商铺打折</option> -->              
                 </select>
             </td>
             <td width='10%'></td>
@@ -195,7 +207,6 @@ saleObj = {
     <table id="sgoodsdg" title="选择商品" class="easyui-datagrid" style="width:550px;height:250px" toolbar="#sgoodstoolbar" singleSelect="false" modal="true">
         <thead>
             <tr>
-                <th field="code" sortable="true">编码</th>
                 <th field="name" sortable="true">商品名称</th>
                 <th field="cate_name" sortable="true">类别</th>
                 <th field="shop_name">商铺</th>
