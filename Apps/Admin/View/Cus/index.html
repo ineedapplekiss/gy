@@ -1,5 +1,5 @@
 <body>
-    <table id="cusdg" title="会员列表" class="easyui-datagrid" style="width:100%;" url="{:U('Cus/cusList')}"  toolbar="#custoolbar" pagination="true" pageSize='15' pageNumber='1' multiSort='true' sortOrder="desc" pageList="[2,5,10,15,20,25,30,40,50]" rownumbers="true" fitColumns="true" singleSelect="true">
+    <table id="cusdg" title="会员列表" class="easyui-datagrid" style="width:100%;" url="{:U('Cus/cusList')}"  toolbar="#custoolbar" pagination="true" pageSize='15' pageNumber='1' multiSort='true' sortOrder="desc" pageList="[2,5,10,15,20,25,30,40,50]" rownumbers="true" fitColumns="true" singleSelect="false">
         <thead>
             <tr>
                 <th field="name" width="10" sortable="true">姓名</th>
@@ -65,12 +65,19 @@
 
         //启用停用
         function editCus(){
-            var row = $('#cusdg').datagrid('getSelected');
-            if (row){
+            var row = $('#cusdg').datagrid('getSelections');
+
+            if (row.length>0){
+                var ids=[];
+                var statuss=[];
+                for(var i=0;i<row.length;i++){
+                    ids.push(row[i].id);
+                    statuss.push(row[i].status);
+                }
                 $.messager.confirm('状态提示','真的要改变此会员的状态吗?',function(r){
                     if (r){
                         var durl='{:U("Cus/edit")}';
-                        $.post(durl,{id:row.id,status:row.status},function(result){
+                        $.post(durl,{id:ids.join(','),status:statuss.join(',')},function(result){
                             if (result.status){
                                 $('#cusdg').datagrid('reload');    // reload the user data
                             } else {
@@ -85,10 +92,21 @@
                     }
                 });
             }
+            else
+            {
+                $.messager.alert('提示','请选择会员!','info');
+                return false;
+            }
         }
 
         //查看会员
         function viewCus(){
+            var row = $('#cusdg').datagrid('getSelections');
+            if (row.length>1){
+                $.messager.alert('提示','请选择一条数据查看!','info');
+                return false;
+            }
+
             var oRow=$('#cusdg').datagrid('getSelected');
             if(oRow){
                 showTab('{:U(\'Cus/detail\')}'+'?id='+oRow.id, '会员详情');

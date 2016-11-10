@@ -226,15 +226,19 @@ class CusController extends CommonController {
     public function edit($id, $status){
 
         if(!IS_POST||$issystem=='1') exit;
-        $map['id']=(int)$id;
 
-        if(empty($map['id'])){
+        if(empty($id)){
             $return['message']='id不能为空!';
             $return['status']=false;
         }else{
-            $data = array();
-            $data['status'] = $status == \Common\Model\CusModel::STATUS_DIS ? \Common\Model\CusModel::STATUS_EN : \Common\Model\CusModel::STATUS_DIS;
-            $status=D('Cus')->where($map)->save($data);
+            $ids = explode(",", $id);
+            $statuss = explode(",", $status);
+            foreach ($ids as $k => $v) {
+                $data = $map = array();
+                $map['id']=$v;
+                $data['status'] = !$statuss[$k];
+                $status=D('Cus')->where($map)->save($data);
+            }
 
             if(false===$status){
                 $return['message']='修改出错!';
