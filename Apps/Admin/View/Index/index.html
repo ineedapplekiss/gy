@@ -93,6 +93,11 @@
 		        });  
 		    }  
 		}
+		$(window).load(function(){
+			if (self != top) {  
+			    window.parent.location.href="index";
+			}
+		});
 	</script>
 </head>
 <body>

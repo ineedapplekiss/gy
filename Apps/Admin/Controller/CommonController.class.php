@@ -8,7 +8,7 @@ class CommonController extends Controller{
 
        	if(CONTROLLER_NAME != "Index")layout('Common/layout');//add layout
 		//验证登陆,没有登陆则跳转到登陆页面
-		if(empty($_SESSION['username'])) $this->redirect('Admin/Login/index');
+		if(empty($_SESSION['username']))$this->redirect('Admin/Login/index');
 
 		//权限验证		
 		if(!authCheck(MODULE_NAME."/".CONTROLLER_NAME."/".ACTION_NAME,session('uid'))){
