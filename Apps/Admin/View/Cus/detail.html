@@ -129,7 +129,7 @@ cusDetailObj = {
                                 <a href='javascript:;' onclick='cusDetailObj.dialogShow($("#cdRechargeDialog"))' class='easyui-linkbutton button'>充值</a>
                             </div>
                             <div class="btn-box">
-                                <a href='javascript:;' onclick="showTab('{:U(\'Pay/index\')}', '消费')" class='easyui-linkbutton button'>消费</a>
+                                <a href='javascript:;' onclick="showTab('{:U(\'Pay/index\')}'+'?card_no={$info.card_no}', '消费')" class='easyui-linkbutton button'>消费</a>
                             </div>
                             <div class="btn-box">
                                 <a href='javascript:;' onclick='cusDetailObj.dialogShow($("#cdLevelDialog"))' class='easyui-linkbutton button'>会员升级</a>

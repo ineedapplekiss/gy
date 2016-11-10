@@ -507,6 +507,41 @@
             $('#paydg').datagrid({ queryParams:''});
         }
 
+        <if condition="$Think.get.card_no != null">
+            $(window).load(function(){
+                $("#card_no").textbox('setValue',"{$Think.get.card_no}");
+                var userDetailUrl = '{:U('Pay/userDetail')}';
+                $.post(userDetailUrl,{card_no:$("#card_no").val()},function(result){
+                    if (result.status){
+                        //console.log(result);
+                        $("#cusname").html(result.cus.name);
+                        $("#cuslevel").html(result.cus.lname);
+                        $("#cusprice").html(result.cus.jf);
+                        $("#cusmobile").html(result.cus.mobile);
+                        orderObj.cus_id = result.cus.id;
+                        //$('#paydg').datagrid('loadData', result.detail);
+                        $('#paydg').datagrid({
+                            url:"{:U('Pay/detailList')}",
+                            queryParams:{
+                                cus_id: orderObj.cus_id
+                            },
+                            onLoadSuccess: function(data){
+                                orderObj.total();
+                            }
+                        });
+                    }else{
+                        $.messager.alert('错误提示',result.message,'error');
+                        orderObj.cleanDg();
+                    }
+                },'json').error(function(data){
+                    var info=eval('('+data.responseText+')');
+                    $.messager.confirm('错误提示',info.message,function(r){
+                        orderObj.cleanDg();
+                    });
+                });
+            });
+        </if>
+
        
 
     </script>
