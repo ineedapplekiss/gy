@@ -8,9 +8,10 @@ class CbcModel extends Model
 {	
 	protected $tableName = 'c_balance_change';
 
-	const TYPE_RECHARGE = 1;//充值
+	const TYPE_RECHARGE = 1;//充值jf
 	const TYPE_CONSUMER = 2;//消费
 	const TYPE_REFUND = 3;//退款
+	const TYPE_RECHARGE_RMB = 4;//充值rmb,只作为记录用
 
 	/**
      * @describe 操作用户账户，产生流水

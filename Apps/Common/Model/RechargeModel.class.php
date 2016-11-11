@@ -112,4 +112,24 @@ class RechargeModel extends Model
 			return false;
 		}
 	}
+
+
+	/**
+     * @describe 充值，人民币换算积分逻辑
+     * @param $cid $rmb
+     * @return arr
+     */
+	public function rmbToJf($cid, $rmb)
+	{
+		$rechargeConf = $this->findConf($cid);
+		if($conf && $jf>=$conf["cond_egt"] && $jf<=$conf["cond_elt"])
+        {
+            $jf = bcadd($jf, $conf["return"], 2);
+            $status = D("Cbc")->balanceChange($cid, \Common\Model\CbcModel::TYPE_RECHARGE, $jf, $conf['id']);
+        }
+        else
+        {
+            $status = D("Cbc")->balanceChange($cid, \Common\Model\CbcModel::TYPE_RECHARGE, $jf);
+        }
+	}
 }
