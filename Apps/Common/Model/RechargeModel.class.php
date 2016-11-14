@@ -122,14 +122,51 @@ class RechargeModel extends Model
 	public function rmbToJf($cid, $rmb)
 	{
 		$rechargeConf = $this->findConf($cid);
-		if($conf && $jf>=$conf["cond_egt"] && $jf<=$conf["cond_elt"])
+		if($rechargeConf && $rmb>=$rechargeConf["cond_egt"] && $rmb<=$rechargeConf["cond_elt"])
         {
-            $jf = bcadd($jf, $conf["return"], 2);
-            $status = D("Cbc")->balanceChange($cid, \Common\Model\CbcModel::TYPE_RECHARGE, $jf, $conf['id']);
+        	$rmbRes = bcadd($rmb, bcdiv(bcmul($rmb, $rechargeConf["return"], 4), 100 ,4), 2);
         }
         else
         {
-            $status = D("Cbc")->balanceChange($cid, \Common\Model\CbcModel::TYPE_RECHARGE, $jf);
+            $rmbRes = $rmb;
         }
+        $eRate = D("Erate")->getErate();
+        return bcmul($rmbRes, $eRate, 2);
+	}
+
+	/**
+     * @describe 充值
+     * @param $cid $jf
+     * @return arr
+     */
+	public function doRecharge($cid, $rmb)
+	{
+		$rechargeConf = D("Recharge")->findConf($cid);
+		if($rechargeConf && $rmb>=$rechargeConf["cond_egt"] && $rmb<=$rechargeConf["cond_elt"])
+        {
+        	$act_id = $rechargeConf["id"];
+        }
+        else
+        {
+        	$act_id = 0;
+        }
+
+		$jf = $this->rmbToJf($cid, $rmb);
+		try{
+			$this->startTrans();
+			$res = D("Cbc")->balanceChange($cid, \Common\Model\CbcModel::TYPE_RECHARGE, $jf, $act_id);
+			if(!$res) throw new \Exception("充值失败", 1);
+
+			//会员卡状态修改
+			$res = D("Cbc")->balanceChange($cid, \Common\Model\CbcModel::TYPE_RECHARGE_RMB, $rmb, $res);
+			if(!$res) throw new \Exception("rmb流水添加失败", 1);
+			
+			$this->commit();
+		} catch(Exception $e) {
+            $this->error = $e->getMessage();
+            $this->rollback();
+            return false;
+        }
+        return true;
 	}
 }

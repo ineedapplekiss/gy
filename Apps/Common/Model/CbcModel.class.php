@@ -38,6 +38,9 @@ class CbcModel extends Model
 			case \Common\Model\CbcModel::TYPE_REFUND:
 				$res = D("Cus")->where(array("id"=>$id))->setInc('jf',$jf);
 				if(!$res) throw new \Exception("返还积分失败", 1);
+				break;
+			case \Common\Model\CbcModel::TYPE_RECHARGE_RMB:
+				//什么也不做
 				break;	
 			default:
 				throw new \Exception("类型错误", 1);
@@ -54,7 +57,7 @@ class CbcModel extends Model
 		$res = $this->add($data);
 		if(!$res) throw new \Exception("添加流水失败", 1);
 
-		return true;
+		return $res;
 	}
 
 	public function formatType($type)

@@ -22,6 +22,8 @@ class CusModel extends Model
      */
 	public function addCus($info)
 	{
+		$rmb = $info['jf'];
+		$info['jf'] = 0;
 		try{
 			$this->startTrans();
 			$cusId = $this->add($info);
@@ -36,13 +38,7 @@ class CusModel extends Model
 			$res = D("CardDetail")->where($map)->save($cardDetail);
 			if(!$res) throw new \Exception("会员卡激活失败", 1);
 
-			//添加流水
-			$cbcInfo["type"]	= \Common\Model\CbcModel::TYPE_RECHARGE;
-			$cbcInfo["jf"]		= $info["jf"];
-			$cbcInfo["act_id"]	= $cusId;
-			$cbcInfo["add_time"]= NOW_TIME;
-			$res = D("Cbc")->add($cbcInfo);
-			if(!$res) throw new \Exception("流水添加失败", 1);
+			
 			
 			$this->commit();
 		} catch(Exception $e) {
@@ -50,6 +46,14 @@ class CusModel extends Model
             $this->rollback();
             return false;
         }
+        //充值
+        $res = D("Recharge")->doRecharge($cusId, $rmb);
+		if(!$res) 
+		{
+			$this->error = "充值失败";
+			return false;
+		}
+
         return true;
 	}
 

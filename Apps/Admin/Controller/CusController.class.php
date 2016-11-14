@@ -418,19 +418,10 @@ class CusController extends CommonController {
             $this->ajaxReturn($return);
         }
         //查找合适的充值策略
-        $conf = D("Recharge")->findConf($cid);
-        if($conf && $jf>=$conf["cond_egt"] && $jf<=$conf["cond_elt"])
-        {
-            $jf = bcadd($jf, $conf["return"], 2);
-            $status = D("Cbc")->balanceChange($cid, \Common\Model\CbcModel::TYPE_RECHARGE, $jf, $conf['id']);
-        }
-        else
-        {
-            $status = D("Cbc")->balanceChange($cid, \Common\Model\CbcModel::TYPE_RECHARGE, $jf);
-        }
+        $status = D("Recharge")->doRecharge($cid, $jf);
 
         if(false===$status){
-            $return['message']=D("Cus")->getError();
+            $return['message']=D("Recharge")->getError();
             $return['status']=false;
         }else{
             $return['message']='修改成功!';
