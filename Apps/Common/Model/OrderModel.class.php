@@ -162,7 +162,7 @@ class OrderModel extends Model
             action_log($this->_user, $msg, $shop_id); 
 			
 			$this->commit();
-		} catch(Exception $e) {
+		} catch(\Exception $e) {
             $this->error = $e->getMessage();
             $this->rollback();
             return false;
@@ -211,7 +211,7 @@ class OrderModel extends Model
 			$res = D("Cbc")->balanceChange($oInfo["c_id"], \Common\Model\CbcModel::TYPE_REFUND, $oInfo["jf"], $id);
 
 			$this->commit();
-        } catch(Exception $e) {
+        } catch(\Exception $e) {
             $this->error = $e->getMessage();
             $this->rollback();
             return false;

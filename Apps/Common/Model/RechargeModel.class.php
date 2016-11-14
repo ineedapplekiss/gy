@@ -162,7 +162,7 @@ class RechargeModel extends Model
 			if(!$res) throw new \Exception("rmb流水添加失败", 1);
 			
 			$this->commit();
-		} catch(Exception $e) {
+		} catch(\Exception $e) {
             $this->error = $e->getMessage();
             $this->rollback();
             return false;

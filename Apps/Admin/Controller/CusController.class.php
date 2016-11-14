@@ -340,6 +340,8 @@ class CusController extends CommonController {
             $id = I("get.id",0,"intval");
 
             $map["o.c_id"] = $id;
+            //不显示错误订单
+            $map['o.status']= array("neq", \Common\Model\OrderModel::STATUS_DIS);
 
             $count=D('Order')->alias("o")
                 ->field("o.*, c.name as uname, c.card_no, s.shop_name")
@@ -417,7 +419,7 @@ class CusController extends CommonController {
             $return['status']=false;
             $this->ajaxReturn($return);
         }
-        //查找合适的充值策略
+        //充值
         $status = D("Recharge")->doRecharge($cid, $jf);
 
         if(false===$status){

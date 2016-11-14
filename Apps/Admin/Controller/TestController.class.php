@@ -5,7 +5,5 @@ class TestController extends Controller {
     public function index(){
     	dump(C("MENU"));
     }
-
   
-
 }

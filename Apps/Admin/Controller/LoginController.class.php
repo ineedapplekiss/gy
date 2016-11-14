@@ -58,6 +58,12 @@ class LoginController extends Controller{
 	    $log['ip'] = get_client_ip();
 		action_log($log, "登录成功！");
 
+		//设置当前店铺
+		$shops = D("Shop")->getShopsByUid(session('uid'));
+        $shops = array_shift($shops);
+		session('curshopid',$shops["id"]);
+    	session('curshopname',$shops["shop_name"]);
+
 		$result['message']='登陆成功！';
 		$result['status']=true;
 		$this->ajaxReturn($result);

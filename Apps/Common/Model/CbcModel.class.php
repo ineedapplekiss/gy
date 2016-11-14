@@ -31,7 +31,7 @@ class CbcModel extends Model
 			case \Common\Model\CbcModel::TYPE_CONSUMER:
 				$res = D("Cus")->where(array("id"=>$id,
 					"jf"=>array("egt",$jf)))->setDec('jf',$jf);
-				if(!$res) throw new \Exception("消费积分失败", 1);
+				if(!$res) throw new \Exception("会员余额不足，请及时充值", 1);
 				//流水记录正负值
 				$jf = bcsub(0, $jf, 2);
 				break;

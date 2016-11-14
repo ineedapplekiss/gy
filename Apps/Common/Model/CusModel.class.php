@@ -41,7 +41,7 @@ class CusModel extends Model
 			
 			
 			$this->commit();
-		} catch(Exception $e) {
+		} catch(\Exception $e) {
             $this->error = $e->getMessage();
             $this->rollback();
             return false;
@@ -94,7 +94,7 @@ class CusModel extends Model
 			if(!$res) throw new \Exception("修改老卡状态失败", 1);
 			
 			$this->commit();
-		} catch(Exception $e) {
+		} catch(\Exception $e) {
             $this->error = $e->getMessage();
             $this->rollback();
             return false;

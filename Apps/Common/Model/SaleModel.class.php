@@ -111,7 +111,7 @@ class SaleModel extends Model
             $saleGoodsId = D("SaleGoods")->addAll($goods_info);
             if(!$saleGoodsId) throw new \Exception("添加促销商品失败", 1);
 			$this->commit();
-		} catch(Exception $e) {
+		} catch(\Exception $e) {
             $this->error = $e->getMessage();
             $this->rollback();
             return false;

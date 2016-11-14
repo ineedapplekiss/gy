@@ -36,7 +36,7 @@ class CardModel extends Model
 			if(!$res) throw new \Exception("卡号生成失败，已经超出规则定义范围".$i, 1);
 
 			$this->commit();
-		} catch(Exception $e) {
+		} catch(\Exception $e) {
             $this->error = $e->getMessage();
             $this->rollback();
             return false;

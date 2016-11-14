@@ -67,6 +67,9 @@ class OrderController extends CommonController {
         $etime=$ck->in('结束时间','etime','datetime','',0,0);
 
         $map = array();
+        //不显示错误订单
+        $map['o.status']= array("neq", \Common\Model\OrderModel::STATUS_DIS);
+
         !empty($uname)?$map['c.name']=array('like','%'.$uname.'%'):'';
         !empty($card_no)?$map['c.card_no']=array('like','%'.$card_no.'%'):'';
         !empty($stime) && $map['o.add_time']= array("gt", strtotime($stime));
