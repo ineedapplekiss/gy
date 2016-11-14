@@ -1,0 +1,70 @@
+<body>
+<script>
+
+</script>
+<form id="SaleAdd" method="post" class="bootstrap-frm">
+    <div class="tit-wrap">
+        <h1>促销详情
+        <span></span>
+        </h1>
+    </div>
+    <table>
+        <tr>
+            <td width='10%'>名称：</td>
+            <td width='40%'>{$info.name}</td>
+            <td width='10%'></td>
+            <td width='40%'></td>
+        </tr>
+        <tr>
+            <td width='10%'>活动类型：</td>
+            <td width='40%'>{$info.type_f}
+            </td>
+            <td width='10%'></td>
+            <td width='40%'></td>
+        </tr>
+
+        <tr>
+            <td>具体策略：</td>
+            <td>{$info.detail}</td>
+            <td></td>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <td>商品：</td>
+            <td>
+                <volist name="sgoodsInfo" id="vo">
+                    商品 : {$vo['name']} - 原价格 : {$vo['jf']} <br />
+                </volist> 
+            </td>
+            <td></td>
+            <td></td>
+            
+        </tr>
+        <tr>
+            <td>会员性别：</td>
+            <td>{$info.gender_f}</td>
+            <td></td>
+            <td></td>
+            
+        </tr>
+        <tr>
+            <td>会员年龄：</td>
+            <td>{$info["rule_age"]?$info["rule_age"]:"不限"}</td>
+            <td></td>
+            <td></td>
+            
+        </tr>
+        <tr>
+            <td>有效期：</td>
+            <td>
+                {$info.stime|date="Y-m-d H:i:s",###} 至 {$info.etime|date="Y-m-d H:i:s",###}
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+</form>
+
+
+</body>

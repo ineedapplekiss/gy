@@ -243,4 +243,53 @@ class SaleController extends CommonController {
 		$this->ajaxReturn($return);
     }
 
+    /**
+     * 查看促销详情
+     * @param $id 
+     * @param $M 模型 
+     * 
+     * @author shang
+     */
+    public function detail($id){
+        $map['id']=(int)$id;
+
+        //促销info
+        $info=D('Sale')
+            ->alias("c")
+            ->field("c.*, s.shop_name")
+            ->join("left join ".C('DB_PREFIX')."shop as s on c.shop_id=s.id")
+            ->where(array("c.id"=>$id))
+            ->find();
+        $info["type_f"] = D("Sale")->formatType($info["type"]);
+        if($info["type"] == \Common\Model\SaleModel::TYPE_G_ZJ)
+        {
+            $info["detail"] = sprintf("商品特价%.2f", $info["price"]);
+        }
+        elseif($info["type"] == \Common\Model\SaleModel::TYPE_S_MJ)
+        {
+            $info["detail"] = sprintf("商铺满%.2f减%.2f",$info["full"], $info["cut"]);
+        }
+
+        $gMap = array(
+                0 => "不限",
+                1 => "男",
+                2 => "女"
+                );
+        $info["gender_f"] = $gMap[$info["rule_gender"]];
+        $this->assign('info',$info);
+
+        //促销goods info
+        $sgoodsInfo=D('SaleGoods')
+            ->alias("sg")
+            ->field("sg.*, g.name")
+            ->join("left join ".C('DB_PREFIX')."goods as g on sg.goods_id=g.id")
+            ->where(array("sg.s_id"=>$id))
+            ->select();
+        $this->assign('sgoodsInfo',$sgoodsInfo);
+
+        $this->assign('cates',D("Cate")->allCate());
+        $this->assign('shops',D("Shop")->getShopsByUid(session('uid')));
+        $this->display();
+    }
+
 }	
