@@ -12,14 +12,7 @@ function add(url){
                     $.messager.alert('Warning','添加失败！' + result.message);
             } else {
                 
-                if($.messager.confirm('提示','添加成功！是否继续添加',function(r){
-                    if(r){
-                        closeTab();
-                    }else{
-                        closeTab();
-                    }
-                
-                }));
+                $.messager.alert('提示','添加成功！','info',function(){closeAndShow('{:U(\'Goods/index\')}', '商品列表')});
             }
         }
     });
