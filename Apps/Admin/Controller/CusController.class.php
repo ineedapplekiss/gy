@@ -219,7 +219,7 @@ class CusController extends CommonController {
     }
 
     /**
-     * 套餐启用停用
+     * 会员生效失效
      *@author shang
      *
      */
@@ -252,6 +252,97 @@ class CusController extends CommonController {
             }
         }
         $this->ajaxReturn($return);
+    }
+
+    /**
+     * 会员编辑
+     *@author shang
+     *
+     */
+    public function editCus(){
+
+        if(!IS_POST){
+            $id = I("get.id", 0, "intval");
+        
+            $info=D('Cus')
+                ->alias("c")
+                ->field("c.*, s.shop_name, l.name as l_name")
+                ->join("left join ".C('DB_PREFIX')."shop as s on c.shop_id=s.id")
+                ->join("left join ".C('DB_PREFIX')."c_level as l on c.level_id=l.id")
+                ->where(array("c.id"=>$id))
+                ->find();
+            $gMap = array(
+                0 => "未选",
+                1 => "男",
+                2 => "女"
+                );
+            $info["gender_map"] = $gMap[$info["gender"]];
+            $this->assign('info',$info);
+
+
+            $this->assign('curshopid',session('curshopid'));
+            $this->assign('curshopname',session('curshopname'));
+            $this->assign('card_nos',D("CardDetail")->getCs());
+            $this->assign('levels',D("Level")->where(array("status"=>\Common\Model\LevelModel::STATUS_EN))->select());
+            $this->assign('shops',D("Shop")->getShopsByUid(session('uid')));
+            $this->assign('shengs', D("Region")->getByPid(1));
+            $this->assign('erate', D("Erate")->getErate());
+            $this->display();
+        }else{
+            $id = I("post.id", 0, "intval");
+            if($_FILES["photo"]["name"])
+            {
+                $upload = new \Think\Upload();// 实例化上传类
+                $upload->maxSize   =     3145728 ;// 设置附件上传大小
+                $upload->exts      =     array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型
+                $upload->rootPath  =     './Public/Uploads/'; // 设置附件上传根目录
+                $upload->savePath  =     ''; // 设置附件上传（子）目录
+                // 上传文件 
+                $info   =   $upload->upload();
+                if(!$info) {// 上传错误提示错误信息
+                    $result['message']=$upload->getError();
+                    $result['status']=false;  
+                    $this->ajaxReturn($result);
+                }else{// 上传成功
+                    $photo = $upload->rootPath.$info["photo"]["savepath"].$info["photo"]["savename"];
+                }
+            }
+
+            $ck=A('CheckInput');
+            $name=$ck->in('姓名','name','cnennumstr','',2,20);
+            $gender=$ck->in('性别','gender','intval',0,0,0);
+            $idNo=$ck->in('身份证','id_no','cnennumstr','',0,0);
+            $birthday=$ck->in('生日','birthday','date','',0,0);
+            $mobile=$ck->in('手机','mobile','intval','',0,0);
+            $address=$ck->in('联系地址','address','cnennumstr','',0,0);
+
+            $region = D("Region")->where(array("region_id" => array("in", I("post.sheng",0,'intval').",".I("post.shi",0,'intval').",".I("post.xian",0,'intval'))))->select();
+            $address = implode("", array_column($region, "region_name")).$address;
+
+
+            $data = array();
+            if($_FILES["photo"]["name"])$data['photo']      = $photo;
+            if($name)$data['name'] = $name;
+            if($gender)$data['gender']     = $gender;
+            if($idNo)$data['id_no']      = $idNo;
+            if($birthday)
+            {
+                $data['birthday']   = $birthday;
+                $data['birthday_cond'] = substr($birthday,5,2).substr($birthday,-2);
+            }
+            if($mobile)$data['mobile']     = $mobile;
+            if($address)$data['address']    = $address;
+            $status = D("Cus")->where(array("id"=>$id))->save($data);
+            if($status){
+                $result['message']='编辑会员成功!';
+                $result['status']=true; 
+            }else{
+                $result['message']='添加会员失败!';
+                $result['status']=false;    
+            }
+            $this->ajaxReturn($result);
+        }
+
     }
 
     /**

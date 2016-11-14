@@ -455,7 +455,7 @@
                         //判断满减条件
                         if(sale_total>=parseFloat(rec.full))
                         {
-                            if(parseInt(rec.full) == 3)
+                            if(parseInt(rec.type) == 3)
                             {
                                 total = total + sale_total - parseFloat(rec.cut);
                             }

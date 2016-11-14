@@ -1,0 +1,204 @@
+<body>
+<script>
+function add(url){
+    $('#CusAdd').form('submit',{
+        url:url,
+        onSubmit: function(param){
+            return $(this).form('validate');
+        },
+        success: function(result){
+            var result=eval('('+result+')');
+            if (!result.status){
+                    $.messager.alert('Warning','添加失败！' + result.message);
+            } else {
+                
+                if($.messager.confirm('提示','添加成功！是否继续添加',function(r){
+                    if(r){
+                        flushTab();
+                    }else{
+                        closeTab();
+                    }
+                
+                }));
+            }
+        }
+    });
+    
+}
+
+window.onload=function(){  
+      
+    //获取界面上隐藏的地区  
+    var shengUID=$("#shengyincang").val();  
+    var shiUID=$("#shiyincang").val();  
+    var xianUID=$("#xianyincang").val();  
+    //var opts=document.getElementById("sheng");  
+    //设置地区被选中  
+    $("#sheng").combobox('select',shengUID);  
+    $("#shi").combobox('select',shiUID);  
+    $("#xian").combobox('select',xianUID);  
+
+    //赋默认值
+    $("#name").textbox('setValue',"{$info.name}");
+    $("#gender").combobox('select',"{$info.gender}");
+    $("#id_no").textbox('setValue',"{$info.id_no}");
+    $("#birthday").textbox('setValue',"{$info.birthday}");
+    $("#mobile").textbox('setValue',"{$info.mobile}");
+          
+}  
+  
+//三级联动事件，选择省份，相应所有市跟着出来，选中市相应的县跟着出来。  
+$(function(){                                                            
+        //触发省选项  
+        $("#sheng").combobox({  
+            onSelect:function(record){  
+                $("#shi").combobox("setValue",''); //清空市  
+                $("#xian").combobox("setValue",''); //清空县  
+                var shengid=$('#sheng').combobox('getValue');  
+                  
+                $.ajax({  
+                    async:false,  
+                    url:"{:U('Cus/apiCity')}",    
+                    data:{pid:shengid},  
+                    type:"POST",  
+                    dataType:"json",  
+                    success:function(data){  
+                        //alert(data);  
+                        $("#shi").combobox("loadData",data);  
+                    }  
+                      
+                });  
+            }  
+              
+        });  
+        $('#shi').combobox({       
+            editable:false, //不可编辑状态    
+            cache: false,    
+            panelHeight: '150',//自动高度适合    
+            valueField:'region_id',       
+            textField:'region_name'    
+           });   
+  
+        //触发市选项时  
+        $("#shi").combobox({  
+            onSelect:function(record){  
+                $("#xian").combobox("setValue",''); //清空县  
+                var shiid=$('#shi').combobox('getValue');  
+                  
+                $.ajax({  
+                    async : false,
+                    url:"{:U('Cus/apiCity')}",    
+                    data:{pid:shiid},  
+                    cache:false,
+                    type:"POST",  
+                    dataType:"json",  
+                    success:function(data){  
+                        $("#xian").combobox("loadData",data);  
+                    }  
+                      
+                });  
+            }  
+        });  
+          
+          
+        $('#xian').combobox({       
+            editable:false, //不可编辑状态    
+            cache: false,    
+            panelHeight: '150',//自动高度适合    
+            valueField:'region_id',       
+            textField:'region_name'    
+           });   
+});
+
+</script>
+<form id="CusAdd" enctype="multipart/form-data" method="post" class="bootstrap-frm">
+    <div class="tit-wrap">
+        <h1>编辑会员
+        <span>
+            <input type='hidden' name='id' id='id' value="{$info.id}" />
+        </span>
+        </h1>
+        <div class="btn-box">
+            <a href='javascript:;' onclick='add("{:U('Cus/editCus')}")' class='easyui-linkbutton button'>保存</a>
+        </div>
+    </div>
+    <table>
+        <tr>
+            <td width='10%'>上传照片：</td>
+            <td width='40%'>
+                <input class="easyui-filebox" name="photo" data-options="prompt:'Choose a file...'" style="width:60%">
+            </td>
+            <td width='10%'></td>
+            <td width='40%'><img src="__ROOT__.{$info.photo}" style="width:100px;"></td>
+        </tr>
+        <tr>
+            <td>会员卡号：</td>
+            <td>{$info.card_no}</td>
+            <td>姓名：</td>
+            <td>
+                <input id="name" name="name" class="easyui-textbox" data-options="required:true,delay:1000,height:30,validType:['length[2,20]']" style='width:150px' />
+            </td>
+        </tr>
+        <tr>
+            <td>会员等级：</td>
+            <td>{$info.l_name}</td>
+            <td>性别：</td>
+            <td>
+                <select class="easyui-combobox" name="gender" id='gender' data-options="height:30">
+                    <option value="0">请选择</option>       
+                    <option value="1">男</option> 
+                    <option value="2">女</option>                
+                </select>
+            </td>
+            
+        </tr>
+        <tr>
+            <td>身份证号：</td>
+            <td>
+                <input id="id_no" name="id_no" class="easyui-textbox" data-options="height:30" style='width:150px' />
+            </td>
+            <td>生日：</td>
+            <td>
+                <input id="birthday" name="birthday" class="easyui-datebox" style='width:150px' />
+            </td>
+        </tr>
+        <tr>
+            <td>手机号码：</td>
+            <td>
+                <input id="mobile" name="mobile" class="easyui-textbox" data-options="height:30" style='width:150px' />
+            </td>
+            <td>登记店铺：</td>
+            <td>{$info.shop_name}</td>
+        </tr>
+        <tr>
+            <td>
+                <input id="shengyincang" style="display:none;" value="{$sheng}"/>  
+                <input id="shiyincang" style="display:none;" value="{$shi}"/>  
+                <input id="xianyincang" style="display:none;" value="{$xian}"/>  
+            联系地址：</td>
+            <td colspan="3">
+                <select id="sheng" class="easyui-combobox" name="sheng">
+                    <option value="请选择">请选择</option>
+                <volist name="shengs" id="vo">
+                    <option value="{$vo['region_id']}">{$vo['region_name']}</option>
+                </volist>  
+                </select>  
+                <input id="shi" class="easyui-combobox"  name="shi"/>  
+                <input id="xian" class="easyui-combobox"  name="xian"/> 
+
+                <input name="address" class="easyui-textbox" data-options="height:30" style='width:50px' />
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td colspan="3">
+               {$info.address}
+            </td>
+        </tr>
+    </table>
+</form>
+
+    
+
+
+</body>
