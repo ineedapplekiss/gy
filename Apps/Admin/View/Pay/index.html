@@ -61,7 +61,7 @@
                     <td width="45%"><input class="easyui-textbox" type="text" id="remark" name="remark"></input></td>
                     <td width="25%"></td>
                     <td width="25%">
-                        选择优惠:<select class="easyui-combobox" name="orderSaleId" id='orderSaleId' data-options="required:true,height:30,width:100">
+                        选择优惠:<select class="easyui-combobox" name="orderSaleId" id='orderSaleId' data-options="required:true,panelHeight:'auto',width:100">
                         <option value="0">无</option>
                         </select>
                     </td>
@@ -104,14 +104,14 @@
         <div id="paygoodstoolbar">
            <form id="paySearch" method="post" novalidate style="display:inline-block;margin-left:50px;">
                 <span>店铺:</span>
-                <select class="easyui-combobox" name="shopId" id='shopId' data-options="required:true,height:30">
+                <select class="easyui-combobox" name="shopId" id='shopId' data-options="required:true,panelHeight:'auto'">
                     <volist name="shops" id="vo">
                         <option value="{$vo['id']}">{$vo['shop_name']}</option>
                     </volist>  
                 </select>
 
                 <span>类别:</span>
-                <select class="easyui-combobox" name="cateId" id='cateId' data-options="required:true,height:30">
+                <select class="easyui-combobox" name="cateId" id='cateId' data-options="required:true,panelHeight:'auto'">
                     <option value="0">请选择</option>
                     <volist name="cates" id="vo">
                         <option value="{$vo['id']}">{$vo['name']}</option>
@@ -147,7 +147,7 @@
         <div id="payPtoolbar">
            <form id="payPSearch" method="post" novalidate style="display:inline-block;margin-left:50px;">
                 <span>店铺:</span>
-                <select class="easyui-combobox" name="PshopId" id='PshopId' data-options="required:true,height:30">
+                <select class="easyui-combobox" name="PshopId" id='PshopId' data-options="required:true,panelHeight:'auto'">
                     <volist name="shops" id="vo">
                         <option value="{$vo['id']}">{$vo['shop_name']}</option>
                     </volist>  

@@ -13,7 +13,7 @@
 		</td>
 		<td>类别</td>
 		<td>
-			<select class="easyui-combobox" name="proxy_type" data-options="height:30" style='width:150px'>
+			<select class="easyui-combobox" name="proxy_type" data-options="panelHeight:'auto'" style='width:150px'>
 				<option value="0">请选择</option>
 				<?php foreach(D('Agent')->proxyTypeArr as $k=>$v):?>
 				<option value="<?=$k?>"><?=$v?></option>

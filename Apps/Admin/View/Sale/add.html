@@ -118,7 +118,7 @@ saleObj = {
         <tr>
             <td width='10%'>活动类型：</td>
             <td width='40%'>
-                <select class="easyui-combobox" name="type" id='type' data-options="required:true,height:30">
+                <select class="easyui-combobox" name="type" id='type' data-options="required:true,panelHeight:'auto'">
                     <option value="1">商品特价</option>
                     <!-- <option value="2">商品打折</option> -->
                     <option value="3">商铺满减</option>
@@ -154,7 +154,7 @@ saleObj = {
         <tr>
             <td>会员性别：</td>
             <td>
-                <select class="easyui-combobox" name="gender" id='gender' data-options="required:true,height:30">
+                <select class="easyui-combobox" name="gender" id='gender' data-options="required:true,panelHeight:'auto'">
                     <option value="0">不限</option>
                     <option value="1">男</option>
                     <option value="2">女</option>              
@@ -210,14 +210,14 @@ saleObj = {
     <div id="sgoodstoolbar">
        <form id="saleSearch" method="post" novalidate style="display:inline-block;margin-left:50px;">
             <span>店铺:</span>
-            <select class="easyui-combobox" name="shopId" id='shopId' data-options="required:true,height:30">
+            <select class="easyui-combobox" name="shopId" id='shopId' data-options="required:true,panelHeight:'auto'">
                 <volist name="shops" id="vo">
                     <option value="{$vo['id']}">{$vo['shop_name']}</option>
                 </volist>  
             </select>
 
             <span>类别:</span>
-            <select class="easyui-combobox" name="cateId" id='cateId' data-options="required:true,height:30">
+            <select class="easyui-combobox" name="cateId" id='cateId' data-options="required:true,panelHeight:'auto'">
                 <option value="0">请选择</option>
                 <volist name="cates" id="vo">
                     <option value="{$vo['id']}">{$vo['name']}</option>

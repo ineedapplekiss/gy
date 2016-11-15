@@ -173,7 +173,7 @@ cusDetailObj = {
         </div>
         <div class="fitem">
             <label>新卡</label>
-            <select class="easyui-combobox" name="card_no" id='card_no' data-options="required:true,height:30">
+            <select class="easyui-combobox" name="card_no" id='card_no' data-options="required:true,panelHeight:'auto'">
                 <option value="0">请选择</option>
                 <volist name="card_nos" id="vo">
                     <option value="{$vo['card_no']}">{$vo['card_no']}</option>
@@ -247,7 +247,7 @@ $('#cdPwDialog').dialog('close')" style="width:90px">取消</a>
         </div>
         <div class="fitem">
             <label>升级为：</label>
-            <select class="easyui-combobox" name="level" id='level' data-options="required:true,height:30">
+            <select class="easyui-combobox" name="level" id='level' data-options="required:true,panelHeight:'auto'">
                 <volist name="levels" id="vo">
                     <option value="{$vo['id']}">{$vo['name']}</option>
                 </volist>                        

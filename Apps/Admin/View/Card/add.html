@@ -141,14 +141,14 @@ packageObj = {
     <div id="pgoodstoolbar">
        <form id="packageSearch" method="post" novalidate style="display:inline-block;margin-left:50px;">
             <span>店铺:</span>
-            <select class="easyui-combobox" name="shopId" id='shopId' data-options="required:true,height:30">
+            <select class="easyui-combobox" name="shopId" id='shopId' data-options="required:true,panelHeight:'auto'">
                 <volist name="shops" id="vo">
                     <option value="{$vo['id']}">{$vo['shop_name']}</option>
                 </volist>  
             </select>
 
             <span>类别:</span>
-            <select class="easyui-combobox" name="cateId" id='cateId' data-options="required:true,height:30">
+            <select class="easyui-combobox" name="cateId" id='cateId' data-options="required:true,panelHeight:'auto'">
                 <option value="0">请选择</option>
                 <volist name="cates" id="vo">
                     <option value="{$vo['id']}">{$vo['name']}</option>
