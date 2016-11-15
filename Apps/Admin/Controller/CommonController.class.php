@@ -36,5 +36,18 @@ class CommonController extends Controller{
 	    $this->_user['user_name'] =session('username');
 	    $this->_user['ip'] = get_client_ip();
 	}
+
+	public function csvHeader()
+	{
+        header("Content-Type: application/vnd.ms-excel; charset=GB2312");
+        header("Pragma: public");   
+        header("Expires: 0");   
+        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");   
+        header("Content-Type: application/force-download");   
+        header("Content-Type: application/octet-stream");   
+        header("Content-Type: application/download");   
+        header("Content-Disposition: attachment;filename=".date("Ymd_His").".csv");   
+        header("Content-Transfer-Encoding: binary ");
+	}
 }
 ?>

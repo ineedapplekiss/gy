@@ -14,7 +14,7 @@
 
     <div id="goodstoolbar">
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="showTab('{:U(\'Goods/add\')}', '添加商品')">添加</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-redo" plain="true" onclick="importGoods()">导入</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-redo" plain="true" onclick="showImportGoods()">导入</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-print" plain="true" onclick="exportGoods()">导出</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyGoods()">删除</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon icon-switch" plain="true" onclick="showTab('{:U(\'Package/index\')}', '套餐管理')">套餐管理</a>
@@ -46,6 +46,26 @@
         </form>
     </div>
     
+    <!-- 商品导入 -->
+    <div id="importDialog" class="easyui-dialog" style="width:400px;padding:10px 20px"
+            title="商品导入" closed="true" buttons="#importButtons"  modal="true">
+        <form id="importForm" enctype="multipart/form-data" method="post" novalidate>          
+            <div class="fitem">
+                <label>文件</label>
+                <input class="easyui-filebox" name="goodsCsv" data-options="prompt:'选择文件'">
+            </div>
+            <div class="fitem">
+                <label>模板参考</label>
+                <a href="{:U('Goods/demo')}">模板</a>
+            </div>
+        </form>
+    </div>
+    <div id="importButtons">
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="importGoods('{:U('Goods/importGoods')}')" style="width:90px">上传</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:
+    $('#importDialog').dialog('close');$('#importForm').form('clear')" style="width:90px">取消</a>
+    </div>
+    <!-- /商品导入 -->
     
 
    <script type="text/javascript">
@@ -105,6 +125,38 @@
         //显示全部数据
         function showAll(){
             $('#goodsdg').datagrid({ queryParams:''});
+        }
+
+        function exportGoods()
+        {
+            var shopId = $('#shopId').combobox("getValue");
+            var cateId = $('#cateId').combobox("getValue");
+            window.open("<?php echo U('Goods/export');?>?shopId="+shopId+"&cateId="+cateId);
+        }
+        function showImportGoods()
+        {
+            $('#importDialog').dialog('open');
+            $('#importForm').form('clear');
+        }
+        function importGoods(url)
+        {
+            $('#importForm').form('submit',{
+                url:url,
+                onSubmit: function(){
+                    return $(this).form('validate');
+                },
+                success: function(result){
+                    var result=eval('('+result+')');
+                    if(!result.status){
+                        $.messager.confirm('错误提示',result.message,function(r){
+                            $('#importDialog').dialog('close');  
+                        });
+                    }else{
+                        $('#importDialog').dialog('close');       
+                        $('#goodsdg').datagrid('reload'); 
+                    }
+                },
+            });
         }
 
        
